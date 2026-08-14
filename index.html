@@ -122,57 +122,62 @@
   <div class="card-head"><span class="arrow">▶</span><span class="card-title">下列关于算法空间复杂度的说法中，正确的是（　）。</span><span class="tag book">数据结构</span><span class="tag easy">简单</span></div>
   <div class="card-body">
     <div class="q"><div class="opt">A. 空间复杂度统计的是输入数据本身所占用的存储空间</div><div class="opt">B. 空间复杂度为 O(1) 的算法一定不需要任何辅助空间</div><div class="opt">C. 递归算法的空间复杂度通常需要考虑递归调用栈所占的空间</div><div class="opt">D. 原地（in-place）算法的空间复杂度一定为 O(0)</div></div>
+    <img src="images/2026-08-15_p0.png" style="width:100%;border-radius:10px;margin-top:10px;border:1px solid #e5e7eb">
     <button class="ans-btn">✅ 查看答案与解析</button>
     <div class="ans-box">
       <div class="ans">答案：C</div>
       <div class="exp"><b>📖 解析：</b>空间复杂度衡量算法运行过程中所需的辅助存储空间（额外空间），不含输入数据本身占用的空间，故 A 错。O(1) 表示辅助空间为常数级，并非「不需要任何辅助空间」，B 错。递归算法每次调用都要在系统栈上分配一个栈帧，空间复杂度与递归深度成正比，故 C 正确。原地算法指辅助空间为 O(1)（常数级），不存在 O(0) 的写法，D 错。考点回顾：S(n)=O(f(n))，分析时重点关注临时变量的个数与递归调用的最大深度。</div>
     </div>
   </div>
-</div>
+ </div>
 <div class="card open">
   <div class="card-head"><span class="arrow">▶</span><span class="card-title">某计算机主频为 2 GHz，某程序共执行 10⁹ 条指令，平均每条指令的 CPI 为 2，则该程序的 CPU 执行时间约为（　）。</span><span class="tag book">计组</span><span class="tag mid">中等</span></div>
   <div class="card-body">
     <div class="q"><div class="opt">A. 0.5 s</div><div class="opt">B. 1 s</div><div class="opt">C. 2 s</div><div class="opt">D. 4 s</div></div>
+    <img src="images/2026-08-15_p1.png" style="width:100%;border-radius:10px;margin-top:10px;border:1px solid #e5e7eb">
     <button class="ans-btn">✅ 查看答案与解析</button>
     <div class="ans-box">
       <div class="ans">答案：B</div>
       <div class="exp"><b>📖 解析：</b>CPU 执行时间 = 指令条数 × CPI × 时钟周期 = 指令条数 × CPI ÷ 主频 = 10⁹ × 2 ÷ (2×10⁹) = 1 s。主频 2 GHz 即每秒 2×10⁹ 个时钟周期，时钟周期 = 1/主频 = 0.5 ns。考点回顾：CPU 时间 = 指令数 × CPI / 主频；MIPS = 主频 / (CPI × 10⁶)（每秒百万条指令）；MFLOPS 用于衡量浮点运算性能。注意区分主频、CPI、MIPS、MFLOPS 四个性能指标的物理含义。</div>
     </div>
   </div>
-</div>
+ </div>
 <div class="card open">
   <div class="card-head"><span class="arrow">▶</span><span class="card-title">下列关于系统调用的叙述中，错误的是（　）。</span><span class="tag book">OS</span><span class="tag hard">困难</span></div>
   <div class="card-body">
     <div class="q"><div class="opt">A. 系统调用是操作系统提供给应用程序的编程接口，其执行位于内核态</div><div class="opt">B. 应用程序通过陷入指令（trap/访管指令）从用户态切换到内核态以执行系统调用</div><div class="opt">C. 库函数（如 printf）的调用一定会触发系统调用</div><div class="opt">D. 系统调用相当于内核与应用程序之间的服务契约，参数可通过寄存器或栈传递</div></div>
+    
     <button class="ans-btn">✅ 查看答案与解析</button>
     <div class="ans-box">
       <div class="ans">答案：C</div>
       <div class="exp"><b>📖 解析：</b>库函数属于用户程序的一部分，运行在用户态；printf 等库函数内部通常封装了 write 等系统调用，但并非所有库函数都会触发系统调用——如 strlen、strcpy、sqrt 等纯计算型库函数完全在用户态完成，故 C 错误。A 正确：系统调用由内核实现，用户程序只能通过陷入指令进入内核态后执行。B 正确：陷入/访管指令是用户态进入内核态的唯一途径，执行后由硬件切换到内核态。D 正确：系统调用号与参数可通过寄存器、栈或内存块指针传递。考点回顾：系统调用与库函数的区别、陷入指令的作用、用户态/内核态的切换过程。</div>
     </div>
   </div>
-</div>
+ </div>
 <div class="card open">
   <div class="card-head"><span class="arrow">▶</span><span class="card-title">在 TCP/IP 五层模型中，数据依次经过传输层、网络层、数据链路层封装后，各层 PDU 的名称依次是（　）。</span><span class="tag book">网络</span><span class="tag easy">简单</span></div>
   <div class="card-body">
     <div class="q"><div class="opt">A. 报文段、数据报、帧</div><div class="opt">B. 数据报、报文段、帧</div><div class="opt">C. 帧、数据报、报文段</div><div class="opt">D. 报文段、帧、数据报</div></div>
+    
     <button class="ans-btn">✅ 查看答案与解析</button>
     <div class="ans-box">
       <div class="ans">答案：A</div>
       <div class="exp"><b>📖 解析：</b>应用层的 PDU 为报文；传输层封装为报文段（TCP 的 segment，UDP 则称为用户数据报）；网络层封装为 IP 数据报（或分组）；数据链路层封装为帧；物理层传输比特流。发送时自上而下逐层封装：每层把上层 PDU 作为数据部分，加上自己的首部（链路层还加尾部）构成新的 PDU；接收时自下而上逐层解封装。考点回顾：各层 PDU 名称（报文→报文段→数据报→帧→比特流）与封装/解封装过程。</div>
     </div>
   </div>
-</div>
+ </div>
 <div class="card open">
   <div class="card-head"><span class="arrow">▶</span><span class="card-title">网络协议的三要素是（　）。</span><span class="tag book">网络</span><span class="tag easy">简单</span></div>
   <div class="card-body">
     <div class="q"><div class="opt">A. 语法、语义、时序（同步）</div><div class="opt">B. 语法、层次、接口</div><div class="opt">C. 语义、接口、服务</div><div class="opt">D. 时序、服务、层次</div></div>
+    
     <button class="ans-btn">✅ 查看答案与解析</button>
     <div class="ans-box">
       <div class="ans">答案：A</div>
       <div class="exp"><b>📖 解析：</b>网络协议是为进行网络中的数据交换而建立的规则、标准或约定，其三要素为：语法——数据与控制信息的结构或格式（规定「怎么传」）；语义——发出何种控制信息、完成何种动作及作出何种应答（规定「传什么、怎么解释」）；时序——事件实现顺序的详细说明，即同步（规定「先后顺序」）。选项 B、C、D 中的「层次、接口、服务」是计算机网络体系结构的三个相关概念，不属于协议三要素。考点回顾：注意区分「协议三要素（语法/语义/时序）」与「体系结构三要素（层次/接口/服务）」。</div>
     </div>
   </div>
-</div>
+ </div>
 </div>
 <div class="group"><div class="group-title">🇬🇧 考研单词 <span class="badge">5 词</span></div>
 <div class="card open">
