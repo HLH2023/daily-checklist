@@ -3,53 +3,23 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>每日学习清单 · 2026-08-15</title>
+<title>今日学习清单 · 2026-08-15</title>
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
-  body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Noto Sans SC", sans-serif;
-    background: #f5f6fa;
-    color: #1f2329;
-    max-width: 640px;
-    margin: 0 auto;
-    padding: 16px 14px 40px;
-  }
-  .hero {
-    background: linear-gradient(135deg, #4f6ef7 0%, #7c5cfc 100%);
-    border-radius: 16px;
-    padding: 20px 18px;
-    color: #fff;
-    margin-bottom: 14px;
-  }
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Noto Sans SC", sans-serif; background: #f5f6fa; color: #1f2329; max-width: 640px; margin: 0 auto; padding: 16px 14px 40px; }
+  .hero { background: linear-gradient(135deg, #4f6ef7 0%, #7c5cfc 100%); border-radius: 16px; padding: 20px 18px; color: #fff; margin-bottom: 14px; }
   .hero h1 { font-size: 20px; font-weight: 700; margin-bottom: 6px; }
   .hero .date { font-size: 13px; opacity: 0.85; margin-bottom: 12px; }
   .progress-row { display: flex; align-items: center; gap: 10px; }
   .progress-bar { flex: 1; height: 8px; background: rgba(255,255,255,0.25); border-radius: 4px; overflow: hidden; }
-  .progress-bar .fill { height: 100%; background: #fff; border-radius: 4px; width: 27%; }
+  .progress-bar .fill { height: 100%; background: #fff; border-radius: 4px; }
   .progress-num { font-size: 13px; font-weight: 600; }
   .group { margin-bottom: 16px; }
-  .group-title {
-    display: flex; align-items: center; gap: 6px;
-    font-size: 15px; font-weight: 700;
-    margin: 14px 0 8px; padding-left: 2px;
-  }
+  .group-title { display: flex; align-items: center; gap: 6px; font-size: 15px; font-weight: 700; margin: 14px 0 8px; padding-left: 2px; }
   .group-title .badge { font-size: 11px; background: #eef1ff; color: #4f6ef7; border-radius: 10px; padding: 2px 8px; font-weight: 600; }
-  .card {
-    background: #fff; border-radius: 12px;
-    box-shadow: 0 1px 3px rgba(31,35,41,0.08);
-    margin-bottom: 10px; overflow: hidden;
-  }
-  .card-head {
-    display: flex; align-items: center; gap: 8px;
-    padding: 12px 14px; cursor: pointer;
-    user-select: none;
-  }
-  .card-head .arrow {
-    width: 18px; height: 18px; flex-shrink: 0;
-    display: flex; align-items: center; justify-content: center;
-    color: #8f959e; transition: transform 0.2s;
-    font-size: 12px;
-  }
+  .card { background: #fff; border-radius: 12px; box-shadow: 0 1px 3px rgba(31,35,41,0.08); margin-bottom: 10px; overflow: hidden; }
+  .card-head { display: flex; align-items: center; gap: 8px; padding: 12px 14px; cursor: pointer; user-select: none; }
+  .card-head .arrow { width: 18px; height: 18px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; color: #8f959e; transition: transform 0.2s; font-size: 12px; }
   .card.open .card-head .arrow { transform: rotate(90deg); }
   .card-title { flex: 1; font-size: 14px; font-weight: 600; line-height: 1.4; }
   .tag { font-size: 11px; padding: 2px 7px; border-radius: 8px; flex-shrink: 0; font-weight: 600; }
@@ -57,11 +27,12 @@
   .tag.mid  { background: #fff7e6; color: #d48806; }
   .tag.hard { background: #fde8e8; color: #e54e4e; }
   .tag.book { background: #eef1ff; color: #4f6ef7; }
-  .card-body { display: none; padding: 0 14px 14px; font-size: 13.5px; line-height: 1.7; color: #4b5563; }
-  .card.open .card-body { display: block; }
+  .card-body { padding: 0 14px 14px; font-size: 13.5px; line-height: 1.7; color: #4b5563; }
   .card-body .q { color: #1f2329; font-weight: 500; margin-bottom: 8px; }
   .card-body .opt { margin: 3px 0; padding: 6px 10px; background: #f7f8fa; border-radius: 8px; }
   .card-body .ans { margin-top: 8px; padding: 8px 10px; background: #f0faf4; border-radius: 8px; color: #1f7a4d; font-weight: 600; }
+  .ans-btn { margin-top: 10px; padding: 7px 16px; background: #eef1ff; color: #4f6ef7; border: none; border-radius: 8px; font-size: 12.5px; font-weight: 600; cursor: pointer; }
+  .ans-box { display: none; margin-top: 4px; }
   .card-body .exp { margin-top: 6px; }
   .card-body .exp b { color: #1f2329; }
   .card-body .word-row { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
@@ -70,152 +41,127 @@
   .card-body .def { color: #4f6ef7; font-weight: 600; margin: 4px 0; }
   .card-body .example { color: #6b7280; font-style: italic; margin-top: 4px; }
   .card-body .link { display: inline-block; margin-top: 8px; color: #4f6ef7; text-decoration: none; font-weight: 600; }
-  .card-body .code { display: block; background: #f0f1f5; border-radius: 8px; padding: 8px 10px; margin: 6px 0; font-family: "SF Mono", Menlo, Consolas, monospace; font-size: 12.5px; color: #374151; }
+  .card-body pre.code { background: #1e293b; color: #e2e8f0; border-radius: 8px; padding: 10px 12px; font-size: 12.5px; overflow-x: auto; margin-top: 8px; }
   .footer { text-align: center; color: #b0b6bf; font-size: 12px; margin-top: 20px; }
 </style>
 </head>
 <body>
 
 <div class="hero">
-  <h1>📋 今日学习清单 · 2026-08-15</h1>
+  <h1>📋 今日学习清单</h1>
   <div class="date">2026 年 8 月 15 日 · 星期六 · 🔥 连续学习第 3 天</div>
   <div class="progress-row">
-    <div class="progress-bar"><div class="fill"></div></div>
+    <div class="progress-bar"><div class="fill" style="width:27%"></div></div>
     <div class="progress-num">27%</div>
   </div>
 </div>
 
-<!-- 🔥 今日重点 -->
-<div class="group">
-  <div class="group-title">🔥 今日重点 <span class="badge">2 项</span></div>
-
-  <div class="card open">
-    <div class="card-head"><span class="arrow">▶</span><span class="card-title">数学：极限定义（ε-δ 语言）</span><span class="tag book">📐 高数</span><span class="tag mid">中等</span></div>
-    <div class="card-body">
-      <div class="q">极限是高等数学的第一块基石。ε-δ 语言把"无限接近"翻译成精确的数学不等式，是证明极限存在与否的唯一严格工具。</div>
-      <div class="exp"><b>核心定义：</b>lim(x→x₀) f(x)=A ⟺ 对任意 ε&gt;0，存在 δ&gt;0，当 0&lt;|x−x₀|&lt;δ 时，恒有 |f(x)−A|&lt;ε。数列版本（ε-N 语言）：lim(n→∞) xₙ=A ⟺ ∀ε&gt;0，∃N∈N⁺，当 n&gt;N 时 |xₙ−A|&lt;ε。</div>
-      <div class="exp"><b>记忆口诀：</b>"ε 任意小，δ 跟着找；ε-N 证数列，ε-δ 证函数"。</div>
-    </div>
-  </div>
-
-  <div class="card">
-    <div class="card-head"><span class="arrow">▶</span><span class="card-title">LeetCode：Maximum Length Substring With Two Occurrences</span><span class="tag easy">简单</span></div>
-    <div class="card-body">
-      <div class="q">给定字符串 s，求最长子串的长度，使其中每个字符出现的次数都不超过 2 次。</div>
-      <div class="exp"><b>思路：</b>滑动窗口。右指针扩展，当窗口内某字符计数 &gt; 2 时左指针收缩直到合法；每次更新最大长度。O(n) 时间。</div>
-      <div class="exp"><b>关键点：</b>字符计数用频率数组/哈希即可；注意"子串"连续，"子序列"不连续。</div>
-      <a class="link" href="https://leetcode.com/problems/maximum-length-substring-with-two-occurrences/" target="_blank">打开题目 →</a>
-    </div>
+<div class="group"><div class="group-title">🔥 今日重点 <span class="badge">2 项</span></div>
+<div class="card open">
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">🧩 LeetCode 每日一题：Maximum Length Substring With Two Occurrences</span><span class="tag easy">Easy</span></div>
+  <div class="card-body">
+    <div class="q">求最长子串长度，使其中每个字符出现次数不超过 2 次。</div>
+    <div class="exp"><b>💡 解题思路：</b>滑动窗口：右指针扩展，计数超过 2 时左指针收缩</div>
+    <div class="exp"><b>🔧 题解：</b>维护窗口内字符计数数组，O(n) 一次遍历。</div>
+    <pre class="code">def maxLength(s):
+    cnt = {}
+    l = ans = 0
+    for r, ch in enumerate(s):
+        cnt[ch] = cnt.get(ch, 0) + 1
+        while cnt[ch] &gt; 2:
+            cnt[s[l]] -= 1
+            l += 1
+        ans = max(ans, r - l + 1)
+    return ans</pre>
+    <a class="link" href="https://leetcode.com/problems/maximum-length-substring-with-two-occurrences/" target="_blank">🚀 去 LeetCode 做题 →</a>
   </div>
 </div>
-
-<!-- 💻 408 -->
-<div class="group">
-  <div class="group-title">💻 408 选择题 <span class="badge">5 题 · 3 简 1 中 1 难</span></div>
-
-  <div class="card">
-    <div class="card-head"><span class="arrow">▶</span><span class="card-title">① 数据结构：下列程序段的时间复杂度为？</span><span class="tag book">数据结构</span><span class="tag easy">简单</span></div>
-    <div class="card-body">
-      <div class="q">A. O(√n)　B. O(log₂n)　C. O(n)　D. O(nlog₂n)</div>
-      <div class="code">int i = 1, s = 0;
-while (i &lt;= n) {
-    s += i;
-    i *= 2;
-}</div>
-      <div class="ans">答案：B</div>
-      <div class="exp"><b>解析：</b>循环变量 i 按 2 的幂增长（1, 2, 4, 8, …），设循环执行 k 次，则 2ᵏ ≤ n，即 k ≤ log₂n。循环体为常数时间，故时间复杂度为 O(log₂n)。常见复杂度排序：O(1) &lt; O(log n) &lt; O(n) &lt; O(nlog n) &lt; O(n²) &lt; O(2ⁿ)。</div>
-    </div>
+<div class="card open">
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">📐 数学：行列式定义与性质</span><span class="tag mid">中等</span></div>
+  <div class="card-body">
+    <div class="q">D = Σ (-1)^t a1j1·a2j2·...·anjn</div>
+    <div class="exp"><b>📌 要点：</b>n 阶行列式是所有取自不同行不同列元素的带符号乘积之和</div>
+    <div class="exp">• 转置值不变</div><div class="exp">• 互换两行变号</div><div class="exp">• 两行相同为 0</div><div class="exp">• 某行公因子可提出</div><div class="exp">• 倍加不变值</div>
+    <div class="exp"><b>🧭 套路：</b>先用倍加化三角，再求主对角积</div>
   </div>
-
-  <div class="card">
-    <div class="card-head"><span class="arrow">▶</span><span class="card-title">② 计组：关于冯·诺依曼"存储程序"思想，正确的是？</span><span class="tag book">计组</span><span class="tag easy">简单</span></div>
-    <div class="card-body">
-      <div class="q">A. 只有指令存放在存储器中，数据存放在运算器中<br>B. 指令和数据以同等地位存放在存储器中，按地址访问<br>C. 程序只能顺序执行，不能跳转<br>D. 存储器中只能存放数据，指令由控制器直接产生</div>
-      <div class="ans">答案：B</div>
-      <div class="exp"><b>解析：</b>存储程序思想的核心：指令和数据均以二进制形式、以同等地位存放在存储器中，按地址寻访（指令按地址顺序取出执行，也可跳转）。A 错：数据同样存放在存储器；C 错：程序可跳转，这正是存储程序方式的优势；D 错：指令由程序员预先编写存入内存，控制器负责取指执行而非凭空产生。</div>
-    </div>
-  </div>
-
-  <div class="card">
-    <div class="card-head"><span class="arrow">▶</span><span class="card-title">③ OS（融合计组）：用户程序执行陷入指令请求系统服务，下列说法错误的是？</span><span class="tag book">操作系统</span><span class="tag mid">中等</span></div>
-    <div class="card-body">
-      <div class="q">A. 用户态与内核态由程序状态字寄存器 PSW 中的状态位标识<br>B. 用户态下 CPU 只能执行非特权指令，不能执行特权指令<br>C. 陷入指令属于特权指令，只能在用户态执行<br>D. 从用户态切换到内核态的唯一途径是中断/异常（含陷入），返回用户态需执行特权指令</div>
-      <div class="ans">答案：C</div>
-      <div class="exp"><b>解析：</b>陷入（访管）指令是<b>非特权指令</b>——恰恰是用户态下唯一能主动触发"请求内核服务"的指令；而特权指令（如 I/O 指令、置中断屏蔽字、清 TLB 等）只能在内核态执行，用户态执行特权指令会触发非法指令异常陷入内核。A、B、D 均正确。融合考点：CPU 状态由 PSW 标识（计组）、中断/异常是用户态→内核态的唯一途径（OS）。</div>
-    </div>
-  </div>
-
-  <div class="card">
-    <div class="card-head"><span class="arrow">▶</span><span class="card-title">④ 网络：OSI 中实现"端到端"可靠传输并负责差错控制、流量控制的层次是？</span><span class="tag book">网络</span><span class="tag easy">简单</span></div>
-    <div class="card-body">
-      <div class="q">A. 物理层　B. 数据链路层　C. 网络层　D. 传输层</div>
+</div>
+</div>
+<div class="group"><div class="group-title">💻 408 选择题 <span class="badge">5 题</span></div>
+<div class="card open">
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">下列哪项不属于数据结构三要素？</span><span class="tag book">数据结构</span><span class="tag easy">简单</span></div>
+  <div class="card-body">
+    <div class="q"><div class="opt">A. 逻辑结构</div><div class="opt">B. 存储结构</div><div class="opt">C. 数据运算</div><div class="opt">D. 数据保密性</div></div>
+    <button class="ans-btn">✅ 查看答案与解析</button>
+    <div class="ans-box">
       <div class="ans">答案：D</div>
-      <div class="exp"><b>解析：</b>传输层提供<b>端到端</b>（进程到进程）的传输服务，负责差错控制、流量控制、拥塞控制（如 TCP）。区分三个关键词：物理层传比特流；数据链路层是相邻结点间的<b>点到点</b>传输；网络层是主机到主机的分组转发（尽力而为、不可靠）。"端到端"是传输层的标志词。</div>
+      <div class="exp"><b>📖 解析：</b>三要素=逻辑结构+存储结构+运算，保密性无关。</div>
     </div>
   </div>
-
-  <div class="card">
-    <div class="card-head"><span class="arrow">▶</span><span class="card-title">⑤ 网络（融合）：TCP/IP 模型与 OSI 参考模型的对应关系，正确的是？</span><span class="tag book">网络</span><span class="tag hard">困难</span></div>
-    <div class="card-body">
-      <div class="q">A. TCP/IP 的网络接口层对应 OSI 的网络层<br>B. TCP/IP 的应用层对应 OSI 的会话层、表示层和应用层<br>C. TCP/IP 的网际层对应 OSI 的数据链路层<br>D. TCP/IP 模型共七层，与 OSI 逐层完全对应</div>
+</div>
+<div class="card open">
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">冯诺依曼机基本工作方式？</span><span class="tag book">计组</span><span class="tag easy">简单</span></div>
+  <div class="card-body">
+    <div class="q"><div class="opt">A. 控制流驱动</div><div class="opt">B. 数据流驱动</div><div class="opt">C. 存储程序</div><div class="opt">D. 多指令多数据</div></div>
+    <button class="ans-btn">✅ 查看答案与解析</button>
+    <div class="ans-box">
+      <div class="ans">答案：C</div>
+      <div class="exp"><b>📖 解析：</b>存储程序思想。</div>
+    </div>
+  </div>
+</div>
+<div class="card open">
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">OS 给应用程序的接口是？</span><span class="tag book">OS</span><span class="tag easy">简单</span></div>
+  <div class="card-body">
+    <div class="q"><div class="opt">A. 系统调用</div><div class="opt">B. 库函数</div><div class="opt">C. 汇编指令</div><div class="opt">D. 中断向量</div></div>
+    <button class="ans-btn">✅ 查看答案与解析</button>
+    <div class="ans-box">
+      <div class="ans">答案：A</div>
+      <div class="exp"><b>📖 解析：</b>系统调用是程序接口。</div>
+    </div>
+  </div>
+</div>
+<div class="card open">
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">计算机网络最本质功能？</span><span class="tag book">网络</span><span class="tag mid">中等</span></div>
+  <div class="card-body">
+    <div class="q"><div class="opt">A. 数据通信</div><div class="opt">B. 资源共享</div><div class="opt">C. 分布式处理</div><div class="opt">D. 可靠性</div></div>
+    <button class="ans-btn">✅ 查看答案与解析</button>
+    <div class="ans-box">
       <div class="ans">答案：B</div>
-      <div class="exp"><b>解析：</b>TCP/IP 四层与 OSI 七层的压缩对应：网络接口层 ≈ 物理层 + 数据链路层（A、C 错）；网际层 ≈ 网络层；传输层 ≈ 传输层；应用层 ≈ 会话层 + 表示层 + 应用层三层合一（B 对，TCP/IP 没有独立的会话层与表示层）。D 错：TCP/IP 共四层。记忆："接口压两层、应用压三层、中间一一对"。</div>
+      <div class="exp"><b>📖 解析：</b>资源共享最本质。</div>
     </div>
   </div>
 </div>
-
-<!-- 📐 数学 -->
-<div class="group">
-  <div class="group-title">📐 数学知识点 <span class="badge">1 项</span></div>
-  <div class="card open">
-    <div class="card-head"><span class="arrow">▶</span><span class="card-title">极限定义（ε-δ 语言）</span><span class="tag book">高数</span><span class="tag mid">中等</span></div>
-    <div class="card-body">
-      <div class="q">lim(x→x₀) f(x) = A ⟺ ∀ε&gt;0，∃δ&gt;0，当 0&lt;|x−x₀|&lt;δ 时，|f(x)−A|&lt;ε<br>lim(n→∞) xₙ = A ⟺ ∀ε&gt;0，∃N∈N⁺，当 n&gt;N 时，|xₙ−A|&lt;ε</div>
-      <div class="exp"><b>理解要点：</b>① ε 是"误差标准"，要任意小都能满足；δ 随 ε 变化，只要求存在不要求具体值 ② 极限刻画的是 x 趋近 x₀ 时的趋势，与 f(x₀) 是否有定义、等于多少<b>无关</b> ③ 极限性质：唯一性、局部有界性、保号性。</div>
-      <div class="exp"><b>证明套路：</b>从 |f(x)−A| 出发放大，反解出 |x−x₀| 的约束，令 δ 等于该表达式即可。典型：|(2x+1)−3| = 2|x−1|，取 δ = ε/2。</div>
-      <div class="exp"><b>小题：</b>用 ε-δ 语言证明 lim(x→1)(2x+1) = 3。<b>答案：</b>对 ∀ε&gt;0，取 δ=ε/2，当 0&lt;|x−1|&lt;δ 时，|(2x+1)−3|=2|x−1|&lt;2·(ε/2)=ε，得证。</div>
+<div class="card open">
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">分时系统主要特征？</span><span class="tag book">OS</span><span class="tag hard">困难</span></div>
+  <div class="card-body">
+    <div class="q"><div class="opt">A. 多路/独立/及时/交互</div><div class="opt">B. 实时/可靠/安全</div><div class="opt">C. 批量/自动/高效</div><div class="opt">D. 单用户单任务</div></div>
+    <button class="ans-btn">✅ 查看答案与解析</button>
+    <div class="ans-box">
+      <div class="ans">答案：A</div>
+      <div class="exp"><b>📖 解析：</b>分时四特征。</div>
     </div>
   </div>
 </div>
-
-<!-- 🇬🇧 单词 -->
-<div class="group">
-  <div class="group-title">🇬🇧 考研单词 <span class="badge">5 词</span></div>
-
-  <div class="card">
-    <div class="card-head"><span class="arrow">▶</span><span class="card-title">much / life / long / study / need</span><span class="tag book">高频词</span></div>
-    <div class="card-body">
-      <div class="word-row"><span class="word">much</span><span class="phon">/mʌtʃ/</span></div>
-      <div class="def">adj. 许多的；大量的　adv. 非常；…得多（修饰比较级）</div>
-      <div class="example">Much of the research on artificial intelligence has focused on how machines learn from data. 关于人工智能的大量研究都聚焦于机器如何从数据中学习。</div>
-      <hr style="border:none;border-top:1px solid #eee;margin:8px 0">
-      <div class="word-row"><span class="word">life</span><span class="phon">/laɪf/</span></div>
-      <div class="def">n. 生命；生活；人生（复数 lives）</div>
-      <div class="example">The Internet has dramatically changed the way we live our daily life. 互联网极大地改变了我们的日常生活方式。</div>
-      <hr style="border:none;border-top:1px solid #eee;margin:8px 0">
-      <div class="word-row"><span class="word">long</span><span class="phon">/lɔːŋ/</span></div>
-      <div class="def">adj. 长的；长期的　adv. 长久地　v. 渴望（long for）</div>
-      <div class="example">Scientists have long debated whether technology improves or harms our quality of life. 长期以来科学家们一直在争论技术是改善了还是损害了我们的生活质量。</div>
-      <hr style="border:none;border-top:1px solid #eee;margin:8px 0">
-      <div class="word-row"><span class="word">study</span><span class="phon">/ˈstʌdi/</span></div>
-      <div class="def">n. 学习；研究（论文/报告）　v. 学习；研究；仔细察看</div>
-      <div class="example">A recent study suggests that regular exercise can significantly improve memory. 最近的一项研究表明，经常锻炼能显著改善记忆力。</div>
-      <hr style="border:none;border-top:1px solid #eee;margin:8px 0">
-      <div class="word-row"><span class="word">need</span><span class="phon">/niːd/</span></div>
-      <div class="def">v. 需要　n. 需要；需求（in need of 需要…）</div>
-      <div class="example">Students in need of financial support can apply for the scholarship. 需要经济支持的学生可以申请奖学金。</div>
-    </div>
-  </div>
 </div>
-
-<div class="footer">由 Hermes 生成 · 每天 08:00 更新 · 加油 💪</div>
-
+<div class="group"><div class="group-title">🇬🇧 考研单词 <span class="badge">5 词</span></div>
+<div class="card open">
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">🇬🇧 考研单词 ×5</span><span class="tag book">高频词</span></div>
+  <div class="card-body"><div class="word-row"><span class="word">think</span><span class="phon">/θɪŋk/</span></div>
+      <div class="def">v. 认为；思考</div>
+      <div class="example">✏️ I think it is time to act.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">choice</span><span class="phon">/tʃɔɪs/</span></div>
+      <div class="def">n. 选择；选择权</div>
+      <div class="example">✏️ We have no choice but to wait.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">change</span><span class="phon">/tʃeɪndʒ/</span></div>
+      <div class="def">v. 改变；n. 变化</div>
+      <div class="example">✏️ The weather changes quickly.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">world</span><span class="phon">/wɜːrld/</span></div>
+      <div class="def">n. 世界；领域</div>
+      <div class="example">✏️ She wants to travel around the world.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">direction</span><span class="phon">/dəˈrekʃn/</span></div>
+      <div class="def">n. 方向；指导</div>
+      <div class="example">✏️ He walked in the opposite direction.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"></div>
+</div>
+</div>
+<div class="footer">由 Hermes AI 生成 · 每天 08:00 更新 · 加油 💪</div>
 <script>
-  document.querySelectorAll('.card-head').forEach(head => {
-    head.addEventListener('click', () => {
-      head.parentElement.classList.toggle('open');
-    });
-  });
+document.querySelectorAll('.card-head').forEach(h => h.addEventListener('click', () => h.parentElement.classList.toggle('open')));
+document.querySelectorAll('.ans-btn').forEach(b => b.addEventListener('click', () => { b.style.display = 'none'; b.nextElementSibling.style.display = 'block'; }));
 </script>
-</body>
-</html>
+</body></html>
