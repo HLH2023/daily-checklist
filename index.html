@@ -57,9 +57,9 @@
 <div class="card open">
   <div class="card-head"><span class="arrow">▶</span><span class="card-title">🧩 LeetCode 每日一题：Maximum Length Substring With Two Occurrences</span><span class="tag easy">Easy</span></div>
   <div class="card-body">
-    <div class="q">给你一个字符串 s，请你找出满足「每个字符至多出现两次」的最长子串的长度。示例 1：s = "bcbbbcba"，输出 4，最长满足条件的子串为 "bcba"（b 出现 2 次、c 出现 1 次、a 出现 1 次）。示例 2：s = "aaaa"，输出 2。</div>
-    <div class="exp"><b>💡 解题思路：</b>滑动窗口：用右指针扩展窗口并把新字符计数加 1，一旦某字符出现次数超过 2，就用左指针收缩窗口直到重新满足条件；每次用当前窗口长度更新答案。窗口内始终保持所有字符频次 ≤ 2。</div>
-    <div class="exp"><b>🔧 题解：</b>双指针滑动窗口，一次遍历即可求出全局最长合法子串：窗口合法 ⇔ 每个字符频次 ≤ 2。时间复杂度 O(n)（每个字符至多进出窗口一次），空间复杂度 O(1)（仅需统计 26 个小写字母）。题目规模 n ≤ 50，暴力枚举所有子串 O(n²) 也可行，但滑动窗口是最优写法。</div>
+    <div class="q">给你一个字符串 s，请找出满足「每个字符至多出现两次」的最长子串的长度。示例 1：s = "bcbbbcba"，最长合法子串为 "bcba"（b 出现 2 次、c 出现 1 次、a 出现 1 次），答案为 4。示例 2：s = "aaaa"，每个字符至多出现 2 次，答案为 2。</div>
+    <div class="exp"><b>💡 解题思路：</b>滑动窗口（双指针）：右指针逐个加入字符并计数，一旦某字符频次超过 2，就左移左指针并减少对应计数，直到窗口重新合法；每次用 right − left + 1 更新答案。窗口内任意时刻所有字符频次 ≤ 2。</div>
+    <div class="exp"><b>🔧 题解：</b>一次遍历 O(n)：每个字符最多进、出窗口各一次；只需统计 26 个小写字母，计数数组/字典空间 O(1)。本题 n ≤ 50，暴力枚举所有子串 O(n²) 也可行，但滑动窗口是经典双指针模板写法，务必掌握。</div>
     <pre class="code">class Solution:
     def maximumLengthSubstring(self, s: str) -&gt; int:
         cnt = {}
@@ -77,108 +77,108 @@
 </div>
 <div class="group"><div class="group-title">📐 数学知识点 <span class="badge">4 项</span></div>
 <div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">📐 高数·第1天·极限：数列极限ε-N定义</span><span class="tag book">D1</span></div>
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">📐 高数·第1天·极限：数列极限 ε-N 定义</span><span class="tag book">D1</span></div>
   <div class="card-body">
-    <div class="q">lim x_n=a ⟺ ∀ε&gt;0,∃N, n&gt;N⟹|x_n-a|&lt;ε</div>
-    <div class="exp"><b>📌 要点：</b>量词顺序：先ε后N</div>
-    
-    <div class="exp" style="margin-top:6px">对任意<b style="color:#d48806">＿＿＿</b>，存在<b style="color:#d48806">＿＿＿</b>，当n&gt;N时恒有<b style="color:#d48806">＿＿＿</b></div><button class="ans-btn" style="font-size:12px;padding:4px 12px">✅ 答案</button><div class="ans-box"><div class="ans">ε&gt;0；正整数N；|x_n-a|&lt;ε</div></div>
-    
+    <div class="q">lim(n→∞) x_n = a ⟺ ∀ε&gt;0，∃N∈N*，当 n&gt;N 时恒有 |x_n − a| &lt; ε</div>
+    <div class="exp"><b>📌 要点：</b>核心是量词顺序「先 ε 后 N」：ε 任意小刻画逼近程度，N = N(ε) 刻画『足够远』，ε 越小 N 通常越大。数列极限只与后面无穷多项有关，改变或删去前有限项不影响极限。</div>
+    <div class="exp">• ε 的任意性：必须对任意 ε&gt;0 都成立，ε 越小要求越高</div><div class="exp">• N 的存在性：N 一般依赖 ε，记作 N(ε)，只要求存在、不要求最小</div><div class="exp">• 收敛数列必有界，且极限唯一（有界是收敛的必要条件，非充分）</div>
+    <div class="exp" style="margin-top:6px">对任意<b style="color:#d48806">＿＿＿</b>，存在<b style="color:#d48806">＿＿＿</b>，当 n&gt;N 时恒有<b style="color:#d48806">＿＿＿</b></div><button class="ans-btn" style="font-size:12px;padding:4px 12px">✅ 答案</button><div class="ans-box"><div class="ans">ε&gt;0；正整数 N；|x_n − a| &lt; ε</div></div>
+    <div class="exp"><b>🧭 套路：</b>证明套路：由 |x_n − a| 放大估计出 n 的下界，令 N 取该下界的取整加 1，再按定义格式书写。</div>
     
   </div>
  </div>
 <div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">📐 高数·第1天·极限：函数极限ε-δ定义</span><span class="tag book">D1</span></div>
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">📐 高数·第1天·极限：函数极限 ε-δ 定义</span><span class="tag book">D1</span></div>
   <div class="card-body">
-    <div class="q">lim f(x)=A ⟺ ∀ε&gt;0,∃δ&gt;0, 0&lt;|x-x0|&lt;δ⟹|f(x)-A|&lt;ε</div>
-    <div class="exp"><b>📌 要点：</b>δ是去心邻域半径，x≠x0</div>
-    
-    <div class="exp" style="margin-top:6px">对任意<b style="color:#d48806">＿＿＿</b>，存在<b style="color:#d48806">＿＿＿</b>，当0&lt;|x-x0|&lt;δ时恒有<b style="color:#d48806">＿＿＿</b></div><button class="ans-btn" style="font-size:12px;padding:4px 12px">✅ 答案</button><div class="ans-box"><div class="ans">ε&gt;0；δ&gt;0；|f(x)-A|&lt;ε</div></div>
-    
-    
+    <div class="q">lim(x→x₀) f(x) = A ⟺ ∀ε&gt;0，∃δ&gt;0，当 0&lt;|x − x₀|&lt;δ 时恒有 |f(x) − A| &lt; ε</div>
+    <div class="exp"><b>📌 要点：</b>δ 是 x₀ 的去心邻域半径，条件 0&lt;|x−x₀| 强调 x≠x₀：极限与 f(x₀) 是否有定义、取何值无关（如 (x²−1)/(x−1) 在 x=1 处无定义，但极限为 2）。δ 一般依赖 ε，也随 x₀ 变化。</div>
+    <div class="exp">• 去心邻域：0&lt;|x−x₀|&lt;δ，极限与 f(x₀) 无关</div><div class="exp">• δ=δ(ε)：δ 随 ε 变小而变小，证明时先放缩再取 δ</div><div class="exp">• 单侧极限：左、右极限存在且相等 ⟺ 极限存在</div>
+    <div class="exp" style="margin-top:6px">对任意<b style="color:#d48806">＿＿＿</b>，存在<b style="color:#d48806">＿＿＿</b>，当 0&lt;|x−x₀|&lt;δ 时恒有<b style="color:#d48806">＿＿＿</b></div><button class="ans-btn" style="font-size:12px;padding:4px 12px">✅ 答案</button><div class="ans-box"><div class="ans">ε&gt;0；δ&gt;0；|f(x) − A| &lt; ε</div></div>
+    <div class="exp"><b>🧭 套路：</b>证明套路：先把 |f(x)−A| 放缩成 k·|x−x₀| 的形式，再取 δ = ε/k（必要时加限制 δ≤1 处理分母）。</div>
+    <img src="images/2026-08-15_1.png" style="width:100%;border-radius:10px;margin-top:10px;border:1px solid #e5e7eb">
   </div>
  </div>
 <div class="card open">
   <div class="card-head"><span class="arrow">▶</span><span class="card-title">📐 线代·行列式与矩阵：余子式与代数余子式</span><span class="tag book">行列式与矩阵</span></div>
   <div class="card-body">
-    <div class="q">A_ij=(-1)^(i+j)M_ij；|A|=Σa_ijA_ij</div>
-    <div class="exp"><b>📌 要点：</b>余子式：删去i行j列的n-1阶行列式；代数余子式带符号；按行(列)展开定理；异行元素×另一行代数余子式之和=0</div>
-    
-    <div class="exp" style="margin-top:6px">默写核心结论：<b style="color:#d48806">＿＿＿</b></div><button class="ans-btn" style="font-size:12px;padding:4px 12px">✅ 答案</button><div class="ans-box"><div class="ans">A_ij=(-1)^(i+j)M_ij；|A|=Σa_ijA_ij</div></div>
-    
+    <div class="q">M_ij 为余子式；A_ij = (−1)^(i+j)·M_ij；|A| = Σ a_ij·A_ij（按第 i 行展开）</div>
+    <div class="exp"><b>📌 要点：</b>余子式 M_ij：划去第 i 行、第 j 列后剩下的 n−1 阶行列式；代数余子式 A_ij = (−1)^(i+j)·M_ij。按行（列）展开定理：|A| 等于任一行（列）的元素与其对应代数余子式乘积之和，这是高阶行列式降阶计算的核心工具。</div>
+    <div class="exp">• 符号规律：符号 (−1)^(i+j) 呈棋盘状交替，主对角线方向为 + − +</div><div class="exp">• 展开定理：任选一行（列）展开均相等，选 0 最多的行（列）计算量最小</div><div class="exp">• 异乘变零：第 i 行元素与第 j 行（i≠j）对应代数余子式乘积之和 = 0</div>
+    <div class="exp" style="margin-top:6px">默写核心结论：<b style="color:#d48806">＿＿＿</b></div><button class="ans-btn" style="font-size:12px;padding:4px 12px">✅ 答案</button><div class="ans-box"><div class="ans">A_ij = (−1)^(i+j)·M_ij；|A| = Σ a_ij·A_ij</div></div>
+    <div class="exp"><b>🧭 套路：</b>高阶行列式先做行（列）变换化出 0，再按 0 最多的行（列）展开降阶，直到化成三角行列式或二阶。</div>
     
   </div>
  </div>
 <div class="card open">
   <div class="card-head"><span class="arrow">▶</span><span class="card-title">📐 线代·行列式与矩阵：初等矩阵</span><span class="tag book">行列式与矩阵</span></div>
   <div class="card-body">
-    <div class="q">E(i,j)、E(i(k))、E(ij(k))；|E(i,j)|=-1,|E(i(k))|=k,|E(ij(k))|=1</div>
-    <div class="exp"><b>📌 要点：</b>单位阵经一次初等变换；三种类型；逆为同类型初等矩阵；行变换左乘、列变换右乘</div>
-    
-    <div class="exp" style="margin-top:6px">默写核心结论：<b style="color:#d48806">＿＿＿</b></div><button class="ans-btn" style="font-size:12px;padding:4px 12px">✅ 答案</button><div class="ans-box"><div class="ans">E(i,j)、E(i(k))、E(ij(k))；|E(i,j)|=-1,|E(i(k))|=k,|E(ij(k))|=1</div></div>
-    
-    
+    <div class="q">E(i,j)、E(i(k))、E(ij(k))；|E(i,j)| = −1，|E(i(k))| = k，|E(ij(k))| = 1</div>
+    <div class="exp"><b>📌 要点：</b>初等矩阵 = 单位阵 E 经一次初等变换所得：E(i,j) 交换 i、j 两行（列）；E(i(k)) 第 i 行乘非零常数 k；E(ij(k)) 把第 j 行（列）的 k 倍加到第 i 行（列）。左乘作行变换、右乘作列变换；初等矩阵均可逆，逆仍为同类型初等矩阵。</div>
+    <div class="exp">• 左乘行变、右乘列变：E·A 相当于对 A 做相应行变换，A·E 做列变换</div><div class="exp">• 行列式：|E(i,j)| = −1、|E(i(k))| = k、|E(ij(k))| = 1（初等矩阵均可逆 ⟹ 行列式 ≠ 0）</div><div class="exp">• 逆矩阵：E(i,j)⁻¹ = E(i,j)，E(i(k))⁻¹ = E(i(1/k))，E(ij(k))⁻¹ = E(ij(−k))</div>
+    <div class="exp" style="margin-top:6px">默写核心结论：<b style="color:#d48806">＿＿＿</b></div><button class="ans-btn" style="font-size:12px;padding:4px 12px">✅ 答案</button><div class="ans-box"><div class="ans">E(i,j)、E(i(k))、E(ij(k))；|E(i,j)| = −1，|E(i(k))| = k，|E(ij(k))| = 1</div></div>
+    <div class="exp"><b>🧭 套路：</b>快速判断：先看是否由单位阵一次初等变换得到；做题时先确定是行变换还是列变换（左乘/右乘），再套行列式结论。</div>
+    <img src="images/2026-08-15_3.png" style="width:100%;border-radius:10px;margin-top:10px;border:1px solid #e5e7eb">
   </div>
  </div>
 </div>
 <div class="group"><div class="group-title">💻 408 选择题 <span class="badge">5 题</span></div>
 <div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">设 F(1)=F(2)=1，当 n≥3 时 F(n)=F(n-1)+F(n-2)。若用直接递归算法计算 F(n)，且每次递归调用仅需常数级辅助空间，则该算法的时间复杂度和空间复杂度分别是（　）？</span><span class="tag book">数据结构</span><span class="tag easy">简单</span></div>
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">在一个长度为 100 的顺序表中插入一个新元素，若插入位置（含表尾共 101 个位置）等概率，则平均需要移动的元素个数是（　）。</span><span class="tag book">数据结构</span><span class="tag easy">简单</span></div>
   <div class="card-body">
-    <div class="q"><div class="opt">A. O(2ⁿ)、O(n)</div><div class="opt">B. O(2ⁿ)、O(2ⁿ)</div><div class="opt">C. O(n²)、O(n)</div><div class="opt">D. O(n)、O(n)</div></div>
-    
-    <button class="ans-btn">✅ 查看答案与解析</button>
-    <div class="ans-box">
-      <div class="ans">答案：A</div>
-      <div class="exp"><b>📖 解析：</b>直接递归计算斐波那契会展开成一棵递归二叉树，结点总数约为 2ⁿ 量级，因此时间 O(2ⁿ)。而空间复杂度看的是递归工作栈的最大深度：从 F(n) 一路递归到 F(1)，调用栈最深为 n 层，每层仅常数空间，故空间 O(n)。考点回顾：算法的时间复杂度取决于基本操作执行次数（递归树结点数），空间复杂度取决于递归栈的最大深度，二者不要混淆。</div>
-    </div>
-  </div>
- </div>
-<div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">某 CPU 主频为 2 GHz，运行某程序时平均 CPI 为 4，则该程序在该 CPU 上的运行速度约为（　）MIPS？</span><span class="tag book">计组</span><span class="tag easy">简单</span></div>
-  <div class="card-body">
-    <div class="q"><div class="opt">A. 250</div><div class="opt">B. 500</div><div class="opt">C. 1000</div><div class="opt">D. 2000</div></div>
+    <div class="q"><div class="opt">A. 49</div><div class="opt">B. 50</div><div class="opt">C. 51</div><div class="opt">D. 99</div></div>
     
     <button class="ans-btn">✅ 查看答案与解析</button>
     <div class="ans-box">
       <div class="ans">答案：B</div>
-      <div class="exp"><b>📖 解析：</b>每秒执行的指令条数 = 主频 / CPI = 2×10⁹ / 4 = 5×10⁸ 条，即 500 MIPS。也可直接套公式 MIPS = f / (CPI×10⁶) = 2000 / 4 = 500。注意 CPI 越大说明每条指令平均耗时越长，速度越慢；且 MIPS 只在同指令集体系下可比，跨体系比较可能失真（可用 MFLOPS 或运行时间补充衡量）。考点回顾：主频、CPI、指令条数与执行时间的关系为 T = 指令数 × CPI / 主频。</div>
+      <div class="exp"><b>📖 解析：</b>在第 i 个位置（1≤i≤n+1）插入需移动 n−i+1 个元素，等概率时平均移动次数 = (n + (n−1) + … + 0) / (n+1) = n/2 = 50。注意插入有 n+1 个可能位置，所以平均是 n/2 而不是 (n+1)/2；对比删除操作：删除有 n 个可能位置，平均移动 (n−1)/2 个。两者时间复杂度都是 O(n)，这正是顺序表插入删除低效的根源（随机存取、物理连续）。</div>
     </div>
   </div>
  </div>
 <div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">下列关于系统调用的叙述中，正确的是（　）？</span><span class="tag book">OS</span><span class="tag mid">中等</span></div>
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">某程序的串行部分占 40%，其余 60% 可并行执行。若将并行部分加速到原来的 4 倍，则整个程序的加速比约为（　）。</span><span class="tag book">计算机组成原理</span><span class="tag easy">简单</span></div>
   <div class="card-body">
-    <div class="q"><div class="opt">A. 陷入指令（访管指令）由内核态执行，用于完成系统调用服务</div><div class="opt">B. 系统调用与库函数完全等价，所有库函数都是系统调用的封装</div><div class="opt">C. 用户程序通过陷入指令请求操作系统内核服务，执行时 CPU 由用户态切换到内核态</div><div class="opt">D. 系统调用的参数只能通过寄存器传递，不能存放在内存中</div></div>
+    <div class="q"><div class="opt">A. 1.56</div><div class="opt">B. 1.82</div><div class="opt">C. 2.17</div><div class="opt">D. 2.50</div></div>
+    
+    <button class="ans-btn">✅ 查看答案与解析</button>
+    <div class="ans-box">
+      <div class="ans">答案：B</div>
+      <div class="exp"><b>📖 解析：</b>Amdahl 定律：S = 1 / ((1−f) + f/k)，其中 f = 0.6 为可加速部分占比，k = 4 为该部分加速倍数，1−f = 0.4 为不可加速部分。代入得 S = 1 / (0.4 + 0.6/4) = 1 / 0.55 ≈ 1.82。关键结论：即使并行部分无限加速（k→∞），加速比也至多趋近 1/(1−f) = 2.5——串行部分占比是性能瓶颈，这就是 Amdahl 定律的核心思想。</div>
+    </div>
+  </div>
+ </div>
+<div class="card open">
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">下列关于进程的叙述中，正确的是（　）。</span><span class="tag book">操作系统</span><span class="tag mid">中等</span></div>
+  <div class="card-body">
+    <div class="q"><div class="opt">A. 进程是程序的一次执行过程，一个程序只能对应一个进程</div><div class="opt">B. 进程具有动态性、并发性、独立性、异步性，其中并发性指进程按各自独立的、不可预知的速度向前推进</div><div class="opt">C. 进程是资源分配的基本单位，线程是 CPU 调度的基本单位，同一进程内的线程共享该进程的资源</div><div class="opt">D. 进程与程序都是动态的概念，二者的区别仅在于进程分配了内存而程序没有</div></div>
     
     <button class="ans-btn">✅ 查看答案与解析</button>
     <div class="ans-box">
       <div class="ans">答案：C</div>
-      <div class="exp"><b>📖 解析：</b>A 错：陷入指令本身在用户态执行，它的作用是引起中断、把 CPU 从用户态切换到内核态，真正执行系统调用服务程序的是内核。B 错：部分库函数（如 printf 内部调用 write）确实封装了系统调用，但大量纯计算类库函数（如 strlen、sqrt）不涉及系统调用。C 对：陷入指令是用户程序请求内核服务的唯一途径，执行后特权级由用户态切换为内核态。D 错：系统调用参数可通过寄存器、堆栈或内存块等传递。考点回顾：系统调用 = 陷入指令（用户态执行）+ 内核态服务程序，参数传递方式多样。</div>
+      <div class="exp"><b>📖 解析：</b>A 错：一个程序可对应多个进程（如多用户同时运行同一程序，各有一个进程）。B 错：把两个特征的定义说反了——并发性指多个进程同存于内存中、在一段时间内交替运行；异步性才指进程按各自独立的、不可预知的速度向前推进。C 对：引入线程后，进程是资源分配的基本单位，线程是调度的基本单位，同一进程的线程共享地址空间与资源。D 错：程序是静态的（指令序列），进程是动态的（程序的一次执行），且进程拥有 PCB 等结构，区别远不止内存分配。</div>
     </div>
   </div>
  </div>
 <div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">在 TCP/IP 五层参考模型中，数据链路层的协议数据单元（PDU）是（　）？</span><span class="tag book">网络</span><span class="tag easy">简单</span></div>
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">下列关于编码与调制的叙述中，正确的是（　）。</span><span class="tag book">计算机网络</span><span class="tag easy">简单</span></div>
   <div class="card-body">
-    <div class="q"><div class="opt">A. 报文（message）</div><div class="opt">B. 报文段（segment）</div><div class="opt">C. 数据报（packet）</div><div class="opt">D. 帧（frame）</div></div>
-    <img src="images/2026-08-15_p3.png" style="width:100%;border-radius:10px;margin-top:10px;border:1px solid #e5e7eb">
-    <button class="ans-btn">✅ 查看答案与解析</button>
-    <div class="ans-box">
-      <div class="ans">答案：D</div>
-      <div class="exp"><b>📖 解析：</b>各层 PDU 名称：应用层为报文（message），传输层为报文段（segment），网络层为数据报/分组（packet），数据链路层为帧（frame），物理层为比特流。发送端自上而下逐层封装（每层加首部），接收端自下而上逐层解封装，这正是数据封装与解封装的过程。注意传输层的 PDU 在 TCP 中叫报文段、在 UDP 中叫用户数据报，不要与网络层的 IP 数据报混淆。</div>
-    </div>
-  </div>
- </div>
-<div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">下列关于网络协议三要素的叙述中，正确的是（　）？</span><span class="tag book">网络</span><span class="tag hard">困难</span></div>
-  <div class="card-body">
-    <div class="q"><div class="opt">A. 语法规定通信双方应完成的操作与应作出的响应</div><div class="opt">B. 语义规定数据与控制信息的结构或格式</div><div class="opt">C. 同步（时序）详细说明事件实现顺序的规则</div><div class="opt">D. 三要素中语义最为核心，其余要素可以省略</div></div>
+    <div class="q"><div class="opt">A. 曼彻斯特编码在每个码元中间发生电平跳变，该跳变兼作时钟与数据信号，因此还需要额外的同步时钟线</div><div class="opt">B. 差分曼彻斯特编码在每个码元开始处有跳变表示 0、无跳变表示 1，中间跳变仅作时钟，抗干扰能力较强</div><div class="opt">C. 调制是把数字信号转换成数字信号的过程，编码是把模拟信号转换成数字信号的过程</div><div class="opt">D. 4B/5B 编码是曼彻斯特编码的改进，编码效率为 50%</div></div>
     
     <button class="ans-btn">✅ 查看答案与解析</button>
     <div class="ans-box">
-      <div class="ans">答案：C</div>
-      <div class="exp"><b>📖 解析：</b>协议三要素：语法——数据与控制信息的结构或格式；语义——发出何种控制信息、完成何种动作以及作出何种应答；同步（时序）——事件实现顺序的详细说明。A 错：把语法与语义说反了，规定「做什么」的是语义而非语法。B 错：把语义与语法说反了，规定「格式」的是语法而非语义。D 错：三要素缺一不可、没有主次之分，同步（时序）恰恰是协议区别于一般约定的关键所在。考点回顾：记忆口诀「语法看格式、语义看动作、同步看顺序」。</div>
+      <div class="ans">答案：B</div>
+      <div class="exp"><b>📖 解析：</b>A 错：曼彻斯特编码的中间跳变既作时钟又作数据，自含时钟，无需额外时钟线。B 对：差分曼彻斯特编码看码元开始处有无跳变来区分 0/1（有跳变表示 0、无跳变表示 1），中间跳变只作时钟，抗干扰能力强，常用于令牌环网。C 错：概念颠倒——编码是数字→数字（NRZ、曼彻斯特、4B/5B），调制是数字→模拟（ASK、FSK、PSK）。D 错：4B/5B 用 5 位码组表示 4 位数据，效率 80%，它改进的是曼彻斯特编码效率只有 50% 的缺点。</div>
+    </div>
+  </div>
+ </div>
+<div class="card open">
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">某信道带宽为 3000 Hz，信噪比为 30 dB。根据香农定理，该信道能达到的最大无差错数据传输率约为（　）。（log2 1001 ≈ 9.97）</span><span class="tag book">计算机网络</span><span class="tag hard">困难</span></div>
+  <div class="card-body">
+    <div class="q"><div class="opt">A. 9.97 kbps</div><div class="opt">B. 29.9 kbps</div><div class="opt">C. 30.9 kbps</div><div class="opt">D. 90 kbps</div></div>
+    
+    <button class="ans-btn">✅ 查看答案与解析</button>
+    <div class="ans-box">
+      <div class="ans">答案：B</div>
+      <div class="exp"><b>📖 解析：</b>先做 dB 换算：信噪比 30 dB ⟹ S/N = 10^(30/10) = 1000。香农公式 C = W·log2(1 + S/N) = 3000 × log2(1001) ≈ 3000 × 9.97 ≈ 29.9 kbps。两个易错点：① 题目给的是 dB 值必须换算成倍数，很多同学直接代入 30 或漏换算；② 香农公式给出的是有噪声信道无差错传输的极限速率（与奈奎斯特定理对比：奈奎斯特给的是无噪声下极限码元速率 2W，且与进制数 M 有关：2W·log2 M）。本题若直接用 10 代替 log2 1001 得 30 kbps 属近似，精确值约 29.9 kbps。</div>
     </div>
   </div>
  </div>
@@ -186,47 +186,47 @@
 <div class="group"><div class="group-title">🇬🇧 考研单词 <span class="badge">20 词</span></div>
 <div class="card open">
   <div class="card-head"><span class="arrow">▶</span><span class="card-title">🇬🇧 考研单词 ×20</span><span class="tag book">高频词</span></div>
-  <div class="card-body"><div class="word-row"><span class="word">see</span><span class="phon">/.../</span></div>
-      <div class="def">看</div>
-      <div class="example">✏️ 考研真题例句：看</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">three</span><span class="phon">/.../</span></div>
-      <div class="def">三</div>
-      <div class="example">✏️ 考研真题例句：三</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">those</span><span class="phon">/.../</span></div>
-      <div class="def">那些</div>
-      <div class="example">✏️ 考研真题例句：那些</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">end</span><span class="phon">/.../</span></div>
-      <div class="def">结束</div>
-      <div class="example">✏️ 考研真题例句：结束</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">once</span><span class="phon">/.../</span></div>
-      <div class="def">曾经、一次</div>
-      <div class="example">✏️ 考研真题例句：曾经、一次</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">company</span><span class="phon">/.../</span></div>
-      <div class="def">公司、陪伴</div>
-      <div class="example">✏️ 考研真题例句：公司、陪伴</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">conversation</span><span class="phon">/.../</span></div>
-      <div class="def">对话</div>
-      <div class="example">✏️ 考研真题例句：对话</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">problem</span><span class="phon">/.../</span></div>
-      <div class="def">问题</div>
-      <div class="example">✏️ 考研真题例句：问题</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">university</span><span class="phon">/.../</span></div>
-      <div class="def">大学</div>
-      <div class="example">✏️ 考研真题例句：大学</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">human</span><span class="phon">/.../</span></div>
-      <div class="def">人</div>
-      <div class="example">✏️ 考研真题例句：人</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">state</span><span class="phon">/.../</span></div>
-      <div class="def">陈述、状态</div>
-      <div class="example">✏️ 考研真题例句：陈述、状态</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">want</span><span class="phon">/.../</span></div>
-      <div class="def">想要</div>
-      <div class="example">✏️ 考研真题例句：想要</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">must</span><span class="phon">/.../</span></div>
-      <div class="def">必须</div>
-      <div class="example">✏️ 考研真题例句：必须</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">food</span><span class="phon">/.../</span></div>
-      <div class="def">食物</div>
-      <div class="example">✏️ 考研真题例句：食物</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">country</span><span class="phon">/.../</span></div>
-      <div class="def">国家</div>
-      <div class="example">✏️ 考研真题例句：国家</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">choose</span><span class="phon">/.../</span></div>
-      <div class="def">选择</div>
-      <div class="example">✏️ 考研真题例句：选择</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">any</span><span class="phon">/.../</span></div>
-      <div class="def">任何</div>
-      <div class="example">✏️ 考研真题例句：任何</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">my</span><span class="phon">/.../</span></div>
-      <div class="def">我的</div>
-      <div class="example">✏️ 考研真题例句：我的</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">day</span><span class="phon">/.../</span></div>
-      <div class="def">日子</div>
-      <div class="example">✏️ 考研真题例句：日子</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">less</span><span class="phon">/.../</span></div>
-      <div class="def">更少</div>
-      <div class="example">✏️ 考研真题例句：更少</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"></div>
+  <div class="card-body"><div class="word-row"><span class="word">see</span><span class="phon">/siː/</span></div>
+      <div class="def">v. 看见；理解；明白</div>
+      <div class="example">✏️ If you review every day, you will soon see great progress in your scores.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">three</span><span class="phon">/θriː/</span></div>
+      <div class="def">num. 三；三个</div>
+      <div class="example">✏️ The written exam consists of three parts: mathematics, English, and a professional course.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">those</span><span class="phon">/ðəʊz/</span></div>
+      <div class="def">pron./adj. 那些</div>
+      <div class="example">✏️ Those concepts in the textbook are the most frequently tested in the exam.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">end</span><span class="phon">/end/</span></div>
+      <div class="def">n. 结束；末端；目的 v. 结束</div>
+      <div class="example">✏️ By the end of this week, you should finish reviewing the data structure chapter.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">once</span><span class="phon">/wʌns/</span></div>
+      <div class="def">adv. 一次；曾经 conj. 一旦</div>
+      <div class="example">✏️ Once you master the basic algorithms, solving hard problems becomes much easier.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">company</span><span class="phon">/ˈkʌmpəni/</span></div>
+      <div class="def">n. 公司；陪伴</div>
+      <div class="example">✏️ Many graduates want to join a technology company after finishing their master's degree.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">conversation</span><span class="phon">/ˌkɒnvəˈseɪʃn/</span></div>
+      <div class="def">n. 交谈，对话</div>
+      <div class="example">✏️ The listening test usually includes a short conversation between two students.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">problem</span><span class="phon">/ˈprɒbləm/</span></div>
+      <div class="def">n. 问题，难题</div>
+      <div class="example">✏️ Solving a math problem step by step is better than memorizing the final answer.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">university</span><span class="phon">/ˌjuːnɪˈvɜːsəti/</span></div>
+      <div class="def">n. 大学</div>
+      <div class="example">✏️ She studies hard every day in order to be admitted to a top university.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">human</span><span class="phon">/ˈhjuːmən/</span></div>
+      <div class="def">n. 人 adj. 人类的</div>
+      <div class="example">✏️ Artificial intelligence is changing the way human beings work and live.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">state</span><span class="phon">/steɪt/</span></div>
+      <div class="def">n. 状态；国家 v. 陈述，说明</div>
+      <div class="example">✏️ A process has three basic states: ready, running, and blocked.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">want</span><span class="phon">/wɒnt/</span></div>
+      <div class="def">v. 想要；需要；缺乏</div>
+      <div class="example">✏️ You want to spend at least two hours a day on mathematics during the preparation period.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">must</span><span class="phon">/mʌst/</span></div>
+      <div class="def">aux. 必须，一定</div>
+      <div class="example">✏️ You must memorize the key formulas before doing the exercises.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">food</span><span class="phon">/fuːd/</span></div>
+      <div class="def">n. 食物，食品</div>
+      <div class="example">✏️ A balanced diet and enough sleep are as important as study during exam season.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">country</span><span class="phon">/ˈkʌntri/</span></div>
+      <div class="def">n. 国家；乡村</div>
+      <div class="example">✏️ Education in our country has developed rapidly over the past decades.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">choose</span><span class="phon">/tʃuːz/</span></div>
+      <div class="def">v. 选择，挑选</div>
+      <div class="example">✏️ You can choose the school that best fits your score and research interest.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">any</span><span class="phon">/ˈeni/</span></div>
+      <div class="def">pron./adj. 任何；一些</div>
+      <div class="example">✏️ If you have any questions about the syllabus, ask your teacher immediately.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">my</span><span class="phon">/maɪ/</span></div>
+      <div class="def">pron. 我的</div>
+      <div class="example">✏️ My study plan is strict, but it has brought steady improvement.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">day</span><span class="phon">/deɪ/</span></div>
+      <div class="def">n. 天，日子；白天</div>
+      <div class="example">✏️ Every day I review the knowledge points I learned the day before.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">less</span><span class="phon">/les/</span></div>
+      <div class="def">adj./adv. 更少的；较少地</div>
+      <div class="example">✏️ The more you practice, the less time you need to solve a single problem.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"></div>
 </div>
 </div>
 <div class="footer">由 Hermes AI 生成 · 每天 08:00 更新 · 加油 💪</div>
