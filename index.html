@@ -77,45 +77,49 @@
 </div>
 <div class="group"><div class="group-title">📐 数学知识点 <span class="badge">4 项</span></div>
 <div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">📐 高数：极限的性质（唯一性·局部有界性·保号性）</span><span class="tag book">高数</span></div>
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">📐 高数·第1天·极限：数列极限ε-N定义</span><span class="tag book">D1</span></div>
   <div class="card-body">
-    <div class="q">若 lim(x→x₀) f(x) = A 存在，则：① A 唯一；② f(x) 在 x₀ 的某去心邻域内有界；③ 若 A&gt;0（或 A&lt;0），则存在去心邻域使 f(x) 与 A 同号</div>
-    <div class="exp"><b>📌 要点：</b>极限刻画的是函数在 x→x₀ 过程中的变化趋势，与 f(x₀) 的值无关（x₀ 处甚至可以没有定义）。三条性质是后续求极限与证明题的基石：唯一性用于反证「极限不存在」；有界性是「有界 × 无穷小 = 无穷小」与夹逼定理的前提；保号性用于由极限符号推断函数局部符号。</div>
-    <div class="exp">• 极限存在必唯一：同一点不可能同时趋于两个不同的值</div><div class="exp">• 局部有界性：极限存在 ⇒ 在该点某去心邻域内有界（反之不成立）</div><div class="exp">• 保号性：极限为正 ⇒ 附近函数值也为正，「局部」「去心」不能丢</div>
-    <div class="exp"><b>🧭 套路：</b>看到「极限存在」先想有界，看到「极限为正/负」先想保号；性质只保证去心邻域内的结论。</div>
-    <img src="images/2026-08-15_0.png" style="width:100%;border-radius:10px;margin-top:10px;border:1px solid #e5e7eb">
+    <div class="q">lim x_n=a ⟺ ∀ε&gt;0,∃N, n&gt;N⟹|x_n-a|&lt;ε</div>
+    <div class="exp"><b>📌 要点：</b>量词顺序：先ε后N</div>
+    
+    <div class="exp" style="margin-top:6px">对任意<b style="color:#d48806">＿＿＿</b>，存在<b style="color:#d48806">＿＿＿</b>，当n&gt;N时恒有<b style="color:#d48806">＿＿＿</b></div><button class="ans-btn" style="font-size:12px;padding:4px 12px">✅ 答案</button><div class="ans-box"><div class="ans">ε&gt;0；正整数N；|x_n-a|&lt;ε</div></div>
+    
+    
   </div>
-</div>
+ </div>
 <div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">📐 高数：极限的四则运算法则与复合</span><span class="tag book">高数</span></div>
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">📐 高数·第1天·极限：函数极限ε-δ定义</span><span class="tag book">D1</span></div>
   <div class="card-body">
-    <div class="q">若 lim f(x)=A、lim g(x)=B 均存在，则 lim(f±g)=A±B，lim(f·g)=A·B，lim(f/g)=A/B（B≠0）</div>
-    <div class="exp"><b>📌 要点：</b>四则运算法则的前提是参与运算的各极限都存在（除法还要求分母极限非零），否则不能直接套用。遇到 0/0 型先消去零因子（约分、有理化）；遇到 ∞/∞ 型「抓大头」，分子分母同除最高次幂。复合函数求极限可令 u=g(x) 换元，前提是内外层极限均存在。</div>
-    <div class="exp">• 前提：各极限存在；除法要求分母极限 B≠0</div><div class="exp">• 0/0 型：约去公因子，如 (x²-1)/(x-1) 化简为 x+1 后再代</div><div class="exp">• ∞/∞ 型：分子分母同除 x 的最高次幂，抓大头</div>
-    <div class="exp"><b>🧭 套路：</b>能代就代，不能代先化简——0/0 约分或有理化，∞/∞ 抓大头，化简后仍可用四则法则拆开算。</div>
-    <img src="images/2026-08-15_1.png" style="width:100%;border-radius:10px;margin-top:10px;border:1px solid #e5e7eb">
+    <div class="q">lim f(x)=A ⟺ ∀ε&gt;0,∃δ&gt;0, 0&lt;|x-x0|&lt;δ⟹|f(x)-A|&lt;ε</div>
+    <div class="exp"><b>📌 要点：</b>δ是去心邻域半径，x≠x0</div>
+    
+    <div class="exp" style="margin-top:6px">对任意<b style="color:#d48806">＿＿＿</b>，存在<b style="color:#d48806">＿＿＿</b>，当0&lt;|x-x0|&lt;δ时恒有<b style="color:#d48806">＿＿＿</b></div><button class="ans-btn" style="font-size:12px;padding:4px 12px">✅ 答案</button><div class="ans-box"><div class="ans">ε&gt;0；δ&gt;0；|f(x)-A|&lt;ε</div></div>
+    
+    
   </div>
-</div>
+ </div>
 <div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">📐 线代：行列式的性质（倍加不变·体积解释）</span><span class="tag book">线代</span></div>
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">📐 线代·行列式与矩阵：余子式与代数余子式</span><span class="tag book">行列式与矩阵</span></div>
   <div class="card-body">
-    <div class="q">① det Aᵀ = det A；② 两行（列）互换，值变号；③ 某行乘 k，值乘 k；④ 两行成比例 ⇒ 值为 0；⑤ 某行加上另一行的 k 倍（倍加），值不变</div>
-    <div class="exp"><b>📌 要点：</b>按定义展开计算量大，利用性质先化简再计算是求行列式的标准套路。倍加变换（rᵢ + k·rⱼ）不改变行列式值，常用于把矩阵化为上三角（或阶梯形）后直接求值。几何上，二阶行列式是平行四边形面积、三阶行列式是平行六面体体积——倍加相当于「剪切」变换，面积与体积都不变。</div>
-    <div class="exp">• 转置值不变；互换两行变号；某行提公因子 k 值乘 k</div><div class="exp">• 两行相同或成比例 ⇒ det = 0（含某行全 0）</div><div class="exp">• 倍加 rᵢ + k·rⱼ 值不变——化上三角的利器</div>
-    <div class="exp"><b>🧭 套路：</b>化上三角全程只用倍加操作，值不变；若发现两行成比例或某行全 0，直接得 0，不用算。</div>
-    <img src="images/2026-08-15_2.png" style="width:100%;border-radius:10px;margin-top:10px;border:1px solid #e5e7eb">
+    <div class="q">A_ij=(-1)^(i+j)M_ij；|A|=Σa_ijA_ij</div>
+    <div class="exp"><b>📌 要点：</b>余子式：删去i行j列的n-1阶行列式；代数余子式带符号；按行(列)展开定理；异行元素×另一行代数余子式之和=0</div>
+    
+    
+    
+    
   </div>
-</div>
+ </div>
 <div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">📐 线代：行列式按行（列）展开定理</span><span class="tag book">线代</span></div>
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">📐 线代·行列式与矩阵：初等矩阵</span><span class="tag book">行列式与矩阵</span></div>
   <div class="card-body">
-    <div class="q">det A = Σⱼ aᵢⱼ·Aᵢⱼ，其中代数余子式 Aᵢⱼ = (-1)^(i+j)·Mᵢⱼ</div>
-    <div class="exp"><b>📌 要点：</b>余子式 Mᵢⱼ 是划去第 i 行第 j 列后剩下的 n-1 阶行列式，代数余子式 Aᵢⱼ 再乘符号 (-1)^(i+j)（符号按「+−+」棋盘格排列，即 (1,1) 位置为正）。展开定理把 n 阶行列式降为 n-1 阶，是计算与证明的核心工具：选含 0 最多的行（列）展开可大幅减少计算量。</div>
-    <div class="exp">• 代数余子式 Aᵢⱼ = (-1)^(i+j)·Mᵢⱼ，符号正负相间</div><div class="exp">• 按第 i 行展开：det = aᵢ₁Aᵢ₁ + aᵢ₂Aᵢ₂ + … + aᵢₙAᵢₙ</div><div class="exp">• 选 0 最多的行或列展开，计算量最小；如 |1 2 3; 0 4 5; 1 0 6| 按第一行展开 = 1×24 − 2×(−5) + 3×(−4) = 22</div>
-    <div class="exp"><b>🧭 套路：</b>先找 0：哪行（列）0 多就按哪行（列）展开；符号按 (1,1) 为 + 的棋盘格判断。</div>
-    <img src="images/2026-08-15_3.png" style="width:100%;border-radius:10px;margin-top:10px;border:1px solid #e5e7eb">
+    <div class="q">E(i,j)、E(i(k))、E(ij(k))；|E(i,j)|=-1,|E(i(k))|=k,|E(ij(k))|=1</div>
+    <div class="exp"><b>📌 要点：</b>单位阵经一次初等变换；三种类型；逆为同类型初等矩阵；行变换左乘、列变换右乘</div>
+    
+    
+    
+    
   </div>
-</div>
+ </div>
 </div>
 <div class="group"><div class="group-title">💻 408 选择题 <span class="badge">5 题</span></div>
 <div class="card open">
