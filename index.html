@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>每日学习清单 · 原型</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Microsoft YaHei", sans-serif;
+    background: linear-gradient(160deg, #f6f8fc 0%, #eef2f9 100%);
+    min-height: 100vh; color: #1f2937; padding: 24px 16px 60px;
+  }
+  .container { max-width: 520px; margin: 0 auto; }
+  .tabs { display: flex; gap: 8px; margin-bottom: 20px; justify-content: center; }
+  .tab {
+    padding: 10px 22px; border-radius: 999px; border: none; cursor: pointer;
+    font-size: 14px; font-weight: 600; background: #e5e9f2; color: #4b5563;
+    transition: all .2s;
+  }
+  .tab.active { background: #4f6ef7; color: #fff; box-shadow: 0 4px 12px rgba(79,110,247,.35); }
+  .page { display: none; animation: fadeIn .3s ease; }
+  .page.active { display: block; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+
+  /* 今日清单页 */
+  .hero {
+    background: linear-gradient(135deg, #4f6ef7 0%, #7c5cf0 100%);
+    border-radius: 20px; padding: 24px; color: #fff; margin-bottom: 20px;
+    box-shadow: 0 8px 24px rgba(79,110,247,.3);
+  }
+  .hero .date { font-size: 13px; opacity: .85; letter-spacing: .5px; }
+  .hero .title { font-size: 26px; font-weight: 800; margin: 6px 0 16px; }
+  .progress-ring-wrap { display: flex; align-items: center; gap: 16px; }
+  .ring { width: 64px; height: 64px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    background: conic-gradient(#fff 0% 27%, rgba(255,255,255,.25) 27% 100%); }
+  .ring-inner { width: 50px; height: 50px; border-radius: 50%; background: #5d6ef0; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; }
+  .ring-stats { font-size: 13px; opacity: .9; line-height: 1.7; }
+
+  .group { margin-bottom: 18px; }
+  .group-head { display: flex; align-items: center; gap: 8px; font-size: 15px; font-weight: 700; margin-bottom: 10px; }
+  .group-head .badge { font-size: 11px; background: #eef1ff; color: #4f6ef7; padding: 2px 10px; border-radius: 999px; font-weight: 600; }
+  .cards { display: grid; gap: 10px; }
+  .card {
+    background: #fff; border-radius: 14px; padding: 14px 16px; display: flex; gap: 12px; align-items: flex-start;
+    box-shadow: 0 2px 8px rgba(17,24,39,.05); border: 1px solid rgba(17,24,39,.04); cursor: pointer; transition: all .15s;
+  }
+  .card:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(17,24,39,.1); }
+  .card.done { opacity: .65; }
+  .card.done .task-title { text-decoration: line-through; }
+  .check {
+    width: 22px; height: 22px; border-radius: 50%; border: 2px solid #cbd5e1; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center; font-size: 12px; color: #fff; margin-top: 2px; transition: all .15s;
+  }
+  .card.done .check { background: #22c55e; border-color: #22c55e; }
+  .task-body { flex: 1; }
+  .task-title { font-size: 14px; font-weight: 600; }
+  .task-meta { font-size: 12px; color: #9ca3af; margin-top: 4px; display: flex; gap: 8px; flex-wrap: wrap; }
+  .tag { padding: 1px 8px; border-radius: 6px; font-size: 11px; font-weight: 600; }
+  .tag.easy { background: #dcfce7; color: #16a34a; }
+  .tag.mid { background: #fef9c3; color: #ca8a04; }
+  .tag.hard { background: #fee2e2; color: #dc2626; }
+  .tag.pt { background: #e0e7ff; color: #4f46e5; }
+
+  /* 数据流页 */
+  .flow-wrap { background: #fff; border-radius: 20px; padding: 28px 20px; box-shadow: 0 2px 12px rgba(17,24,39,.06); }
+  .flow-step { display: flex; gap: 16px; padding: 14px 0; position: relative; }
+  .flow-step:not(:last-child)::after {
+    content: ''; position: absolute; left: 19px; top: 48px; bottom: -2px; width: 2px; background: #e5e9f2;
+  }
+  .step-num {
+    width: 40px; height: 40px; border-radius: 12px; flex-shrink: 0; display: flex; align-items: center; justify-content: center;
+    font-size: 15px; font-weight: 800; color: #fff; background: linear-gradient(135deg, #4f6ef7, #7c5cf0);
+    box-shadow: 0 4px 10px rgba(79,110,247,.3); z-index: 1;
+  }
+  .step-body h3 { font-size: 15px; font-weight: 700; margin-bottom: 4px; }
+  .step-body p { font-size: 13px; color: #6b7280; line-height: 1.6; }
+  .step-body .code { font-family: ui-monospace, monospace; background: #f3f4f6; padding: 1px 6px; border-radius: 5px; font-size: 12px; }
+  .arrow-down { text-align: center; color: #9ca3af; font-size: 20px; margin: -4px 0; }
+
+  /* 仪表盘页 */
+  .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px; }
+  .stat {
+    background: #fff; border-radius: 16px; padding: 18px; box-shadow: 0 2px 8px rgba(17,24,39,.05);
+    border: 1px solid rgba(17,24,39,.04);
+  }
+  .stat .num { font-size: 26px; font-weight: 800; color: #4f6ef7; }
+  .stat .label { font-size: 12px; color: #9ca3af; margin-top: 2px; }
+  .bar-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+  .bar-row .name { width: 60px; font-size: 13px; font-weight: 600; }
+  .bar { flex: 1; height: 10px; background: #eef1f6; border-radius: 999px; overflow: hidden; }
+  .bar-fill { height: 100%; border-radius: 999px; transition: width .6s ease; }
+  .bar-row .pct { width: 40px; text-align: right; font-size: 12px; color: #6b7280; font-weight: 600; }
+  .week-chart { display: flex; gap: 8px; align-items: flex-end; height: 80px; margin-top: 12px; }
+  .day-bar { flex: 1; background: linear-gradient(180deg, #4f6ef7, #7c5cf0); border-radius: 6px 6px 0 0; opacity: .8; min-height: 4px; }
+  .day-label { font-size: 10px; color: #9ca3af; text-align: center; margin-top: 4px; }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="tabs">
+    <button class="tab active" onclick="show('today')">📋 今日清单</button>
+    <button class="tab" onclick="show('flow')">🔁 数据流程</button>
+    <button class="tab" onclick="show('dash')">📊 学习面板</button>
+  </div>
+
+  <!-- 今日清单 -->
+  <div id="today" class="page active">
+    <div class="hero">
+      <div class="date">2026-08-15 · 星期六</div>
+      <div class="title">今日学习清单</div>
+      <div class="progress-ring-wrap">
+        <div class="ring"><div class="ring-inner">27%</div></div>
+        <div class="ring-stats">已完成 3 / 11 项<br>⏱ 预计 25 分钟 · 🔥 连续打卡 3 天</div>
+      </div>
+    </div>
+
+    <div class="group">
+      <div class="group-head">🔥 今日重点 <span class="badge">2</span></div>
+      <div class="cards">
+        <div class="card done" onclick="this.classList.toggle('done')">
+          <div class="check">✓</div>
+          <div class="task-body">
+            <div class="task-title">数学：行列式定义</div>
+            <div class="task-meta"><span class="tag pt">线代</span><span class="tag easy">简单</span><span class="tag pt">排列/逆序数</span></div>
+          </div>
+        </div>
+        <div class="card" onclick="this.classList.toggle('done')">
+          <div class="check"></div>
+          <div class="task-body">
+            <div class="task-title">408 混合题 ×5（3简1中1难）</div>
+            <div class="task-meta"><span class="tag pt">数据结构</span><span class="tag pt">计组</span><span class="tag pt">操作系统</span><span class="tag pt">网络</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="group">
+      <div class="group-head">💻 408 · 今日考点</div>
+      <div class="cards">
+        <div class="card" onclick="this.classList.toggle('done')">
+          <div class="check"></div>
+          <div class="task-body">
+            <div class="task-title">数据结构：时间复杂度分析</div>
+            <div class="task-meta"><span class="tag easy">简单</span></div>
+          </div>
+        </div>
+        <div class="card" onclick="this.classList.toggle('done')">
+          <div class="check"></div>
+          <div class="task-body">
+            <div class="task-title">计组：计算机硬件组成</div>
+            <div class="task-meta"><span class="tag easy">简单</span></div>
+          </div>
+        </div>
+        <div class="card" onclick="this.classList.toggle('done')">
+          <div class="check"></div>
+          <div class="task-body">
+            <div class="task-title">操作系统：功能与目标</div>
+            <div class="task-meta"><span class="tag mid">中等</span></div>
+          </div>
+        </div>
+        <div class="card" onclick="this.classList.toggle('done')">
+          <div class="check"></div>
+          <div class="task-body">
+            <div class="task-title">网络：计算机网络定义</div>
+            <div class="task-meta"><span class="tag easy">简单</span></div>
+          </div>
+        </div>
+        <div class="card" onclick="this.classList.toggle('done')">
+          <div class="check"></div>
+          <div class="task-body">
+            <div class="task-title">操作系统：发展历程</div>
+            <div class="task-meta"><span class="tag hard">困难</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="group">
+      <div class="group-head">🧩 LeetCode</div>
+      <div class="cards">
+        <div class="card" onclick="this.classList.toggle('done')">
+          <div class="check"></div>
+          <div class="task-body">
+            <div class="task-title">Maximum Length Substring With Two Occurrences</div>
+            <div class="task-meta"><span class="tag easy">Easy</span><span class="tag pt">滑动窗口</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="group">
+      <div class="group-head">🇬🇧 单词 ×5</div>
+      <div class="cards">
+        <div class="card" onclick="this.classList.toggle('done')">
+          <div class="check"></div>
+          <div class="task-body">
+            <div class="task-title">think · 认为</div>
+            <div class="task-meta">I think the plan is feasible.</div>
+          </div>
+        </div>
+        <div class="card" onclick="this.classList.toggle('done')">
+          <div class="check"></div>
+          <div class="task-body">
+            <div class="task-title">world · 世界</div>
+            <div class="task-meta">The world is changing rapidly.</div>
+          </div>
+        </div>
+        <div class="card" onclick="this.classList.toggle('done')">
+          <div class="check"></div>
+          <div class="task-body">
+            <div class="task-title">choice · 选择</div>
+            <div class="task-meta">You have no other choice.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 数据流程 -->
+  <div id="flow" class="page">
+    <div class="flow-wrap">
+      <div class="flow-step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <h3>轮转选材（本地）</h3>
+          <p><span class="code">pick_daily_kp.py</span> 从 <b>607 个 408 考点</b> + <b>144 个数学考点</b>中按轮转算法选材，<b>保证每日考点不重复</b>；单词从 <b>5530 词</b>（词频排序）顺序取 5 个</p>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <h3>AI 出题</h3>
+          <p>Hermes 基于当日考点生成 <b>5 道 408 选择题</b>（3简1中1难，融合跨书考察）+ 数学公式要点 + 单词例句</p>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <h3>LeetCode 每日一题</h3>
+          <p>抓取 <span class="code">leetcode.com/graphql</span> 的今日题（API 已验证可用），附难度与链接</p>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="step-num">4</div>
+        <div class="step-body">
+          <h3>写入飞书多维表格</h3>
+          <p><span class="code">bitable_push.py</span> 通过 Bitable API 写入 <b>「每日任务」</b>表（约 11-12 条记录/天），含分组/难度/考点标签</p>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="step-num">5</div>
+        <div class="step-body">
+          <h3>应用模式 UI 呈现</h3>
+          <p>飞书「应用模式」页面实时渲染：分组卡片视图 + 进度环 + 勾选打卡，手机/PC 随时查看</p>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="step-num">6</div>
+        <div class="step-body">
+          <h3>打卡反馈循环</h3>
+          <p>勾选「已完成」→ 更新记录状态 → 进度环自动增长；每周自动统计各科完成率，AI 给出学习建议</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 仪表盘 -->
+  <div id="dash" class="page">
+    <div class="stat-grid">
+      <div class="stat"><div class="num">72%</div><div class="label">今日完成率</div></div>
+      <div class="stat"><div class="num">83%</div><div class="label">本周完成率</div></div>
+      <div class="stat"><div class="num">128</div><div class="label">累计 408 题</div></div>
+      <div class="stat"><div class="num">26</div><div class="label">连续打卡天数</div></div>
+    </div>
+    <div class="stat" style="padding:16px 18px;">
+      <div style="font-size:14px;font-weight:700;margin-bottom:12px;">📚 各科周进度</div>
+      <div class="bar-row"><span class="name">数学</span><div class="bar"><div class="bar-fill" style="width:85%;background:linear-gradient(90deg,#4f6ef7,#7c5cf0);"></div></div><span class="pct">85%</span></div>
+      <div class="bar-row"><span class="name">408</span><div class="bar"><div class="bar-fill" style="width:64%;background:linear-gradient(90deg,#f59e0b,#f97316);"></div></div><span class="pct">64%</span></div>
+      <div class="bar-row"><span class="name">英语</span><div class="bar"><div class="bar-fill" style="width:92%;background:linear-gradient(90deg,#22c55e,#84cc16);"></div></div><span class="pct">92%</span></div>
+      <div class="bar-row"><span class="name">LeetCode</span><div class="bar"><div class="bar-fill" style="width:41%;background:linear-gradient(90deg,#ec4899,#f43f5e);"></div></div><span class="pct">41%</span></div>
+    </div>
+    <div class="stat" style="padding:16px 18px;margin-top:12px;">
+      <div style="font-size:14px;font-weight:700;margin-bottom:8px;">📅 近 7 天打卡</div>
+      <div class="week-chart">
+        <div style="flex:1;"><div class="day-bar" style="height:45%"></div><div class="day-label">一</div></div>
+        <div style="flex:1;"><div class="day-bar" style="height:70%"></div><div class="day-label">二</div></div>
+        <div style="flex:1;"><div class="day-bar" style="height:55%"></div><div class="day-label">三</div></div>
+        <div style="flex:1;"><div class="day-bar" style="height:90%"></div><div class="day-label">四</div></div>
+        <div style="flex:1;"><div class="day-bar" style="height:75%"></div><div class="day-label">五</div></div>
+        <div style="flex:1;"><div class="day-bar" style="height:100%"></div><div class="day-label">六</div></div>
+        <div style="flex:1;"><div class="day-bar" style="height:30%;opacity:.4"></div><div class="day-label">日</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+function show(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  const idx = ['today','flow','dash'].indexOf(id);
+  document.querySelectorAll('.tab')[idx].classList.add('active');
+}
+</script>
+</body>
+</html>
