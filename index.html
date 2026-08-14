@@ -57,118 +57,119 @@
 <div class="card open">
   <div class="card-head"><span class="arrow">▶</span><span class="card-title">🧩 LeetCode 每日一题：Maximum Length Substring With Two Occurrences</span><span class="tag easy">Easy</span></div>
   <div class="card-body">
-    <div class="q">求最长子串长度，使其中每个字符出现次数不超过 2 次。</div>
-    <div class="exp"><b>💡 解题思路：</b>滑动窗口：右指针扩展，计数超过 2 时左指针收缩</div>
-    <div class="exp"><b>🔧 题解：</b>维护窗口内字符计数数组，O(n) 一次遍历。</div>
-    <pre class="code">def maxLength(s):
-    cnt = {}
-    l = ans = 0
-    for r, ch in enumerate(s):
-        cnt[ch] = cnt.get(ch, 0) + 1
-        while cnt[ch] &gt; 2:
-            cnt[s[l]] -= 1
-            l += 1
-        ans = max(ans, r - l + 1)
-    return ans</pre>
+    <div class="q">给你一个字符串 s，请你返回满足以下条件的最长子串的长度：该子串中任意一个字符出现的次数都不超过 2 次。例如 s = "bcbbbcba"，满足条件的最长子串为 "bcbbbcba" 中的 "bcbb" 或 "cbbc" 等，长度为 4。</div>
+    <div class="exp"><b>💡 解题思路：</b>用滑动窗口（双指针）维护一个满足「每个字符出现次数 ≤ 2」的窗口。右指针不断右移把新字符纳入窗口并更新计数；一旦某个字符计数超过 2，就右移左指针收缩窗口，直到该字符计数回到 2 以内。过程中记录窗口的最大长度。</div>
+    <div class="exp"><b>🔧 题解：</b>双指针滑动窗口：遍历一次字符串，用哈希表/数组统计窗口内字符频次。右指针每步扩展窗口，若新增字符频次 &gt; 2，则循环移动左指针并减少对应字符计数，直至满足条件，再更新答案。时间复杂度 O(n)，空间复杂度 O(1)（仅 26 个小写字母）。</div>
+    <pre class="code">class Solution:
+    def maximumLengthSubstring(self, s: str) -&gt; int:
+        cnt = {}
+        left = ans = 0
+        for right, ch in enumerate(s):
+            cnt[ch] = cnt.get(ch, 0) + 1
+            while cnt[ch] &gt; 2:
+                cnt[s[left]] -= 1
+                left += 1
+            ans = max(ans, right - left + 1)
+        return ans</pre>
     <a class="link" href="https://leetcode.com/problems/maximum-length-substring-with-two-occurrences/" target="_blank">🚀 去 LeetCode 做题 →</a>
   </div>
 </div>
 </div>
 <div class="group"><div class="group-title">📐 数学知识点 <span class="badge">4 项</span></div>
 <div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">📐 高数：极限的性质</span><span class="tag book">高数</span></div>
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">📐 高数：极限的性质：唯一性、有界性、保号性</span><span class="tag book">高数</span></div>
   <div class="card-body">
-    <div class="q">lim f(x) = A, lim g(x) = B</div>
-    <div class="exp"><b>📌 要点：</b>极限的唯一性、有界性、保号性</div>
-    <div class="exp">• 唯一性：极限若存在必唯一</div><div class="exp">• 有界性：收敛数列必有界</div><div class="exp">• 保号性：极限为正则附近函数为正</div>
-    <div class="exp"><b>🧭 套路：</b>证明极限不存在常用反证法+唯一性</div>
+    <div class="q">若 lim(x→x₀) f(x) = A，则：① 极限唯一；② 局部有界：∃δ&gt;0、M&gt;0，使 0&lt;|x−x₀|&lt;δ 时 |f(x)|≤M；③ 保号性：若 A&gt;0，则 ∃δ&gt;0，使 0&lt;|x−x₀|&lt;δ 时 f(x)&gt;0</div>
+    <div class="exp"><b>📌 要点：</b>极限存在的函数在极限点附近满足三大性质：极限值唯一（不可能同时趋近两个不同的数）；在去心邻域内有界（注意有界只是极限存在的必要条件，如 sin(1/x) 在 0 附近有界但极限不存在）；保号性保证极限为正（负）时函数在局部也为正（负），常用于比较两个函数的大小或判断函数符号。</div>
+    <div class="exp">• 极限唯一：若 lim f = A 且 lim f = B，则 A = B</div><div class="exp">• 局部有界：极限存在 ⇒ 在去心邻域内有界（反之不成立）</div><div class="exp">• 保号性：A&gt;0 ⇒ 局部 f(x)&gt;0；推论：若 lim f &gt; lim g，则局部 f(x) &gt; g(x)</div>
+    <div class="exp"><b>🧭 套路：</b>口诀：极限存在——唯一、有界、保号。保号性推论是证明 f(x)≥g(x) 类不等式的利器。</div>
     <img src="images/2026-08-15_0.png" style="width:100%;border-radius:10px;margin-top:10px;border:1px solid #e5e7eb">
   </div>
 </div>
 <div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">📐 高数：定积分的几何意义</span><span class="tag book">高数</span></div>
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">📐 高数：极限的运算法则：四则运算与复合</span><span class="tag book">高数</span></div>
   <div class="card-body">
-    <div class="q">S = ∫ₐᵇ f(x)dx</div>
-    <div class="exp"><b>📌 要点：</b>定积分表示曲边梯形的有向面积</div>
-    <div class="exp">• x 轴上方为正，下方为负</div><div class="exp">• 牛顿-莱布尼茨公式连接积分与导数</div>
-    <div class="exp"><b>🧭 套路：</b>对称区间偶函数积分翻倍</div>
+    <div class="q">若 lim f(x)=A、lim g(x)=B，则 lim(f±g)=A±B，lim(f·g)=A·B，lim(f/g)=A/B（B≠0）；外层连续时 lim f(g(x)) = f(lim g(x))</div>
+    <div class="exp"><b>📌 要点：</b>四则运算法则的前提是参与运算的极限都存在（除法还要求分母极限不为 0），使用时先判断能否直接代入。多项式函数的极限可直接代入自变量值计算；0/0 型未定式先约分或有理化消去零因子再求极限。复合函数求极限时，若外层函数连续，可把极限号移入函数内部。</div>
+    <div class="exp">• 加减乘除法则前提：lim f、lim g 均存在，且除法要求 lim g ≠ 0</div><div class="exp">• 多项式与分母不为 0 的有理函数：极限 = 直接代入求值</div><div class="exp">• 复合函数：外层连续时 lim f(g(x)) = f(lim g(x))</div>
+    <div class="exp"><b>🧭 套路：</b>套路：先试直接代入；分母为 0 时约分/有理化消零因子，再代值。</div>
     <img src="images/2026-08-15_1.png" style="width:100%;border-radius:10px;margin-top:10px;border:1px solid #e5e7eb">
   </div>
 </div>
 <div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">📐 线代：二阶行列式的几何意义</span><span class="tag book">线代</span></div>
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">📐 线代：行列式的性质：转置、换行变号、倍加不变</span><span class="tag book">线代</span></div>
   <div class="card-body">
-    <div class="q">det = a1b2 - a2b1</div>
-    <div class="exp"><b>📌 要点：</b>二阶行列式的绝对值等于以两向量为邻边的平行四边形面积</div>
-    <div class="exp">• 行列式为 0 ⇔ 两向量共线</div><div class="exp">• 交换两行变号=面积方向反转</div>
-    <div class="exp"><b>🧭 套路：</b>几何理解帮助记忆展开式</div>
+    <div class="q">|Aᵀ| = |A|；互换两行（列）变号；某行（列）乘 k，行列式乘 k；某行（列）的 k 倍加到另一行（列），行列式不变；|AB| = |A|·|B|</div>
+    <div class="exp"><b>📌 要点：</b>二阶行列式 |a b; c d| = ad − bc，几何上等于两行向量所张平行四边形的有向面积——「互换两行变号」正对应面积方向反转。倍加变换（把某行的 k 倍加到另一行）不改变行列式值，是化简计算最常用的工具；配合「两行相同则行列式为 0」与「某行全为 0 则行列式为 0」可快速判断。</div>
+    <div class="exp">• |Aᵀ| = |A|：行列式中行与列地位对等</div><div class="exp">• 互换两行（列）变号；两行（列）成比例 ⇒ 行列式为 0</div><div class="exp">• 倍加（k 倍加到另一行）值不变——化简成上三角的核心工具</div>
+    <div class="exp"><b>🧭 套路：</b>套路：计算行列式先用倍加化简成上三角，再对角线元素相乘；提取公因子注意逐行提取。</div>
     <img src="images/2026-08-15_2.png" style="width:100%;border-radius:10px;margin-top:10px;border:1px solid #e5e7eb">
   </div>
 </div>
 <div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">📐 线代：矩阵乘法示意</span><span class="tag book">线代</span></div>
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">📐 线代：行列式按行（列）展开定理</span><span class="tag book">线代</span></div>
   <div class="card-body">
-    <div class="q">C = A·B</div>
-    <div class="exp"><b>📌 要点：</b>矩阵乘法：C 的 (i,j) 元素 = A 第 i 行与 B 第 j 列的点积</div>
-    <div class="exp">• 左乘右乘不可交换</div><div class="exp">• A·B=0 不推 A=0 或 B=0</div>
-    <div class="exp"><b>🧭 套路：</b>行数=左矩阵行数，列数=右矩阵列数</div>
+    <div class="q">|A| = Σⱼ aᵢⱼ·Aᵢⱼ（按第 i 行展开）；代数余子式 Aᵢⱼ = (−1)^(i+j)·Mᵢⱼ，Mᵢⱼ 为划去第 i 行第 j 列后的余子式</div>
+    <div class="exp"><b>📌 要点：</b>行列式等于任一行（列）各元素与其对应代数余子式乘积之和。余子式 Mᵢⱼ 是划去第 i 行第 j 列后剩下的 n−1 阶行列式；代数余子式 Aᵢⱼ 还要乘上符号 (−1)^(i+j)（按棋盘格 +−+− 分布）。计算策略：先用倍加把某行（列）造出尽量多的 0，再按该行（列）展开，把高阶行列式降阶为低阶。</div>
+    <div class="exp">• Aᵢⱼ = (−1)^(i+j)·Mᵢⱼ，符号按 +−+− 棋盘格分布</div><div class="exp">• 按含 0 最多的行/列展开，计算量最小</div><div class="exp">• Σₖ aᵢₖ·Aⱼₖ = |A|（i=j）；= 0（i≠j，异行元素乘异行余子式）</div>
+    <div class="exp"><b>🧭 套路：</b>套路：先倍加造 0，再按 0 多的行/列展开，逐阶降维至 2 阶。</div>
     <img src="images/2026-08-15_3.png" style="width:100%;border-radius:10px;margin-top:10px;border:1px solid #e5e7eb">
   </div>
 </div>
 </div>
 <div class="group"><div class="group-title">💻 408 选择题 <span class="badge">5 题</span></div>
 <div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">下列哪项不属于数据结构三要素？</span><span class="tag book">数据结构</span><span class="tag easy">简单</span></div>
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">下列关于算法空间复杂度的说法中，正确的是（　）。</span><span class="tag book">数据结构</span><span class="tag easy">简单</span></div>
   <div class="card-body">
-    <div class="q"><div class="opt">A. 逻辑结构</div><div class="opt">B. 存储结构</div><div class="opt">C. 数据运算</div><div class="opt">D. 数据保密性</div></div>
-    <button class="ans-btn">✅ 查看答案与解析</button>
-    <div class="ans-box">
-      <div class="ans">答案：D</div>
-      <div class="exp"><b>📖 解析：</b>三要素=逻辑结构+存储结构+运算，保密性无关。</div>
-    </div>
-  </div>
-</div>
-<div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">冯诺依曼机基本工作方式？</span><span class="tag book">计组</span><span class="tag easy">简单</span></div>
-  <div class="card-body">
-    <div class="q"><div class="opt">A. 控制流驱动</div><div class="opt">B. 数据流驱动</div><div class="opt">C. 存储程序</div><div class="opt">D. 多指令多数据</div></div>
+    <div class="q"><div class="opt">A. 空间复杂度统计的是输入数据本身所占用的存储空间</div><div class="opt">B. 空间复杂度为 O(1) 的算法一定不需要任何辅助空间</div><div class="opt">C. 递归算法的空间复杂度通常需要考虑递归调用栈所占的空间</div><div class="opt">D. 原地（in-place）算法的空间复杂度一定为 O(0)</div></div>
     <button class="ans-btn">✅ 查看答案与解析</button>
     <div class="ans-box">
       <div class="ans">答案：C</div>
-      <div class="exp"><b>📖 解析：</b>存储程序思想。</div>
+      <div class="exp"><b>📖 解析：</b>空间复杂度衡量算法运行过程中所需的辅助存储空间（额外空间），不含输入数据本身占用的空间，故 A 错。O(1) 表示辅助空间为常数级，并非「不需要任何辅助空间」，B 错。递归算法每次调用都要在系统栈上分配一个栈帧，空间复杂度与递归深度成正比，故 C 正确。原地算法指辅助空间为 O(1)（常数级），不存在 O(0) 的写法，D 错。考点回顾：S(n)=O(f(n))，分析时重点关注临时变量的个数与递归调用的最大深度。</div>
     </div>
   </div>
 </div>
 <div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">OS 给应用程序的接口是？</span><span class="tag book">OS</span><span class="tag easy">简单</span></div>
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">某计算机主频为 2 GHz，某程序共执行 10⁹ 条指令，平均每条指令的 CPI 为 2，则该程序的 CPU 执行时间约为（　）。</span><span class="tag book">计组</span><span class="tag mid">中等</span></div>
   <div class="card-body">
-    <div class="q"><div class="opt">A. 系统调用</div><div class="opt">B. 库函数</div><div class="opt">C. 汇编指令</div><div class="opt">D. 中断向量</div></div>
-    <button class="ans-btn">✅ 查看答案与解析</button>
-    <div class="ans-box">
-      <div class="ans">答案：A</div>
-      <div class="exp"><b>📖 解析：</b>系统调用是程序接口。</div>
-    </div>
-  </div>
-</div>
-<div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">计算机网络最本质功能？</span><span class="tag book">网络</span><span class="tag mid">中等</span></div>
-  <div class="card-body">
-    <div class="q"><div class="opt">A. 数据通信</div><div class="opt">B. 资源共享</div><div class="opt">C. 分布式处理</div><div class="opt">D. 可靠性</div></div>
+    <div class="q"><div class="opt">A. 0.5 s</div><div class="opt">B. 1 s</div><div class="opt">C. 2 s</div><div class="opt">D. 4 s</div></div>
     <button class="ans-btn">✅ 查看答案与解析</button>
     <div class="ans-box">
       <div class="ans">答案：B</div>
-      <div class="exp"><b>📖 解析：</b>资源共享最本质。</div>
+      <div class="exp"><b>📖 解析：</b>CPU 执行时间 = 指令条数 × CPI × 时钟周期 = 指令条数 × CPI ÷ 主频 = 10⁹ × 2 ÷ (2×10⁹) = 1 s。主频 2 GHz 即每秒 2×10⁹ 个时钟周期，时钟周期 = 1/主频 = 0.5 ns。考点回顾：CPU 时间 = 指令数 × CPI / 主频；MIPS = 主频 / (CPI × 10⁶)（每秒百万条指令）；MFLOPS 用于衡量浮点运算性能。注意区分主频、CPI、MIPS、MFLOPS 四个性能指标的物理含义。</div>
     </div>
   </div>
 </div>
 <div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">分时系统主要特征？</span><span class="tag book">OS</span><span class="tag hard">困难</span></div>
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">下列关于系统调用的叙述中，错误的是（　）。</span><span class="tag book">OS</span><span class="tag hard">困难</span></div>
   <div class="card-body">
-    <div class="q"><div class="opt">A. 多路/独立/及时/交互</div><div class="opt">B. 实时/可靠/安全</div><div class="opt">C. 批量/自动/高效</div><div class="opt">D. 单用户单任务</div></div>
+    <div class="q"><div class="opt">A. 系统调用是操作系统提供给应用程序的编程接口，其执行位于内核态</div><div class="opt">B. 应用程序通过陷入指令（trap/访管指令）从用户态切换到内核态以执行系统调用</div><div class="opt">C. 库函数（如 printf）的调用一定会触发系统调用</div><div class="opt">D. 系统调用相当于内核与应用程序之间的服务契约，参数可通过寄存器或栈传递</div></div>
+    <button class="ans-btn">✅ 查看答案与解析</button>
+    <div class="ans-box">
+      <div class="ans">答案：C</div>
+      <div class="exp"><b>📖 解析：</b>库函数属于用户程序的一部分，运行在用户态；printf 等库函数内部通常封装了 write 等系统调用，但并非所有库函数都会触发系统调用——如 strlen、strcpy、sqrt 等纯计算型库函数完全在用户态完成，故 C 错误。A 正确：系统调用由内核实现，用户程序只能通过陷入指令进入内核态后执行。B 正确：陷入/访管指令是用户态进入内核态的唯一途径，执行后由硬件切换到内核态。D 正确：系统调用号与参数可通过寄存器、栈或内存块指针传递。考点回顾：系统调用与库函数的区别、陷入指令的作用、用户态/内核态的切换过程。</div>
+    </div>
+  </div>
+</div>
+<div class="card open">
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">在 TCP/IP 五层模型中，数据依次经过传输层、网络层、数据链路层封装后，各层 PDU 的名称依次是（　）。</span><span class="tag book">网络</span><span class="tag easy">简单</span></div>
+  <div class="card-body">
+    <div class="q"><div class="opt">A. 报文段、数据报、帧</div><div class="opt">B. 数据报、报文段、帧</div><div class="opt">C. 帧、数据报、报文段</div><div class="opt">D. 报文段、帧、数据报</div></div>
     <button class="ans-btn">✅ 查看答案与解析</button>
     <div class="ans-box">
       <div class="ans">答案：A</div>
-      <div class="exp"><b>📖 解析：</b>分时四特征。</div>
+      <div class="exp"><b>📖 解析：</b>应用层的 PDU 为报文；传输层封装为报文段（TCP 的 segment，UDP 则称为用户数据报）；网络层封装为 IP 数据报（或分组）；数据链路层封装为帧；物理层传输比特流。发送时自上而下逐层封装：每层把上层 PDU 作为数据部分，加上自己的首部（链路层还加尾部）构成新的 PDU；接收时自下而上逐层解封装。考点回顾：各层 PDU 名称（报文→报文段→数据报→帧→比特流）与封装/解封装过程。</div>
+    </div>
+  </div>
+</div>
+<div class="card open">
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">网络协议的三要素是（　）。</span><span class="tag book">网络</span><span class="tag easy">简单</span></div>
+  <div class="card-body">
+    <div class="q"><div class="opt">A. 语法、语义、时序（同步）</div><div class="opt">B. 语法、层次、接口</div><div class="opt">C. 语义、接口、服务</div><div class="opt">D. 时序、服务、层次</div></div>
+    <button class="ans-btn">✅ 查看答案与解析</button>
+    <div class="ans-box">
+      <div class="ans">答案：A</div>
+      <div class="exp"><b>📖 解析：</b>网络协议是为进行网络中的数据交换而建立的规则、标准或约定，其三要素为：语法——数据与控制信息的结构或格式（规定「怎么传」）；语义——发出何种控制信息、完成何种动作及作出何种应答（规定「传什么、怎么解释」）；时序——事件实现顺序的详细说明，即同步（规定「先后顺序」）。选项 B、C、D 中的「层次、接口、服务」是计算机网络体系结构的三个相关概念，不属于协议三要素。考点回顾：注意区分「协议三要素（语法/语义/时序）」与「体系结构三要素（层次/接口/服务）」。</div>
     </div>
   </div>
 </div>
@@ -176,17 +177,17 @@
 <div class="group"><div class="group-title">🇬🇧 考研单词 <span class="badge">5 词</span></div>
 <div class="card open">
   <div class="card-head"><span class="arrow">▶</span><span class="card-title">🇬🇧 考研单词 ×5</span><span class="tag book">高频词</span></div>
-  <div class="card-body"><div class="word-row"><span class="word">think</span><span class="phon">/θɪŋk/</span></div>
-      <div class="def">v. 认为；思考</div>
-      <div class="example">✏️ I think it is time to act.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">choice</span><span class="phon">/tʃɔɪs/</span></div>
-      <div class="def">n. 选择；选择权</div>
-      <div class="example">✏️ We have no choice but to wait.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">change</span><span class="phon">/tʃeɪndʒ/</span></div>
-      <div class="def">v. 改变；n. 变化</div>
-      <div class="example">✏️ The weather changes quickly.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">world</span><span class="phon">/wɜːrld/</span></div>
-      <div class="def">n. 世界；领域</div>
-      <div class="example">✏️ She wants to travel around the world.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">direction</span><span class="phon">/dəˈrekʃn/</span></div>
-      <div class="def">n. 方向；指导</div>
-      <div class="example">✏️ He walked in the opposite direction.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"></div>
+  <div class="card-body"><div class="word-row"><span class="word">first</span><span class="phon">/fɜːst/</span></div>
+      <div class="def">第一；首先的；最初的</div>
+      <div class="example">✏️ This is the first time I have taken the postgraduate entrance exam, so I feel a little nervous.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">help</span><span class="phon">/help/</span></div>
+      <div class="def">帮助；有助于；救命</div>
+      <div class="example">✏️ Reviewing one chapter every day will help you master the 408 knowledge points.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">four</span><span class="phon">/fɔː(r)/</span></div>
+      <div class="def">四</div>
+      <div class="example">✏️ The 408 exam covers four subjects: data structure, computer organization, operating system and computer network.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">job</span><span class="phon">/dʒɒb/</span></div>
+      <div class="def">工作；职责；职业</div>
+      <div class="example">✏️ It is my job to solve this problem, and I will keep trying until it works.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">learn</span><span class="phon">/lɜːn/</span></div>
+      <div class="def">学习；得知；学会</div>
+      <div class="example">✏️ We should learn from our mistakes and keep moving forward.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"></div>
 </div>
 </div>
 <div class="footer">由 Hermes AI 生成 · 每天 08:00 更新 · 加油 💪</div>
