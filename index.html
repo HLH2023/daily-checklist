@@ -50,11 +50,7 @@
 
 <div class="hero">
   <h1>📋 今日学习清单</h1>
-  <div class="date">2026 年 8 月 15 日 · 星期六 · 🔥 连续学习第 3 天</div>
-  <div class="progress-row">
-    <div class="progress-bar"><div class="fill" style="width:27%"></div></div>
-    <div class="progress-num">27%</div>
-  </div>
+  <div class="date">2026 年 8 月 15 日 · 星期六</div>
 </div>
 
 <div class="group"><div class="group-title">🔥 今日重点 <span class="badge">2 项</span></div>
@@ -77,13 +73,46 @@
     <a class="link" href="https://leetcode.com/problems/maximum-length-substring-with-two-occurrences/" target="_blank">🚀 去 LeetCode 做题 →</a>
   </div>
 </div>
+</div>
+<div class="group"><div class="group-title">📐 数学知识点 <span class="badge">4 项</span></div>
 <div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">📐 数学：行列式定义与性质</span><span class="tag mid">中等</span></div>
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">📐 高数：极限的性质</span><span class="tag book">高数</span></div>
   <div class="card-body">
-    <div class="q">D = Σ (-1)^t a1j1·a2j2·...·anjn</div>
-    <div class="exp"><b>📌 要点：</b>n 阶行列式是所有取自不同行不同列元素的带符号乘积之和</div>
-    <div class="exp">• 转置值不变</div><div class="exp">• 互换两行变号</div><div class="exp">• 两行相同为 0</div><div class="exp">• 某行公因子可提出</div><div class="exp">• 倍加不变值</div>
-    <div class="exp"><b>🧭 套路：</b>先用倍加化三角，再求主对角积</div>
+    <div class="q">lim f(x) = A, lim g(x) = B</div>
+    <div class="exp"><b>📌 要点：</b>极限的唯一性、有界性、保号性</div>
+    <div class="exp">• 唯一性：极限若存在必唯一</div><div class="exp">• 有界性：收敛数列必有界</div><div class="exp">• 保号性：极限为正则附近函数为正</div>
+    <div class="exp"><b>🧭 套路：</b>证明极限不存在常用反证法+唯一性</div>
+    <img src="images/2026-08-15_0.png" style="width:100%;border-radius:10px;margin-top:10px;border:1px solid #e5e7eb">
+  </div>
+</div>
+<div class="card open">
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">📐 高数：定积分的几何意义</span><span class="tag book">高数</span></div>
+  <div class="card-body">
+    <div class="q">S = ∫ₐᵇ f(x)dx</div>
+    <div class="exp"><b>📌 要点：</b>定积分表示曲边梯形的有向面积</div>
+    <div class="exp">• x 轴上方为正，下方为负</div><div class="exp">• 牛顿-莱布尼茨公式连接积分与导数</div>
+    <div class="exp"><b>🧭 套路：</b>对称区间偶函数积分翻倍</div>
+    <img src="images/2026-08-15_1.png" style="width:100%;border-radius:10px;margin-top:10px;border:1px solid #e5e7eb">
+  </div>
+</div>
+<div class="card open">
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">📐 线代：二阶行列式的几何意义</span><span class="tag book">线代</span></div>
+  <div class="card-body">
+    <div class="q">det = a1b2 - a2b1</div>
+    <div class="exp"><b>📌 要点：</b>二阶行列式的绝对值等于以两向量为邻边的平行四边形面积</div>
+    <div class="exp">• 行列式为 0 ⇔ 两向量共线</div><div class="exp">• 交换两行变号=面积方向反转</div>
+    <div class="exp"><b>🧭 套路：</b>几何理解帮助记忆展开式</div>
+    <img src="images/2026-08-15_2.png" style="width:100%;border-radius:10px;margin-top:10px;border:1px solid #e5e7eb">
+  </div>
+</div>
+<div class="card open">
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">📐 线代：矩阵乘法示意</span><span class="tag book">线代</span></div>
+  <div class="card-body">
+    <div class="q">C = A·B</div>
+    <div class="exp"><b>📌 要点：</b>矩阵乘法：C 的 (i,j) 元素 = A 第 i 行与 B 第 j 列的点积</div>
+    <div class="exp">• 左乘右乘不可交换</div><div class="exp">• A·B=0 不推 A=0 或 B=0</div>
+    <div class="exp"><b>🧭 套路：</b>行数=左矩阵行数，列数=右矩阵列数</div>
+    <img src="images/2026-08-15_3.png" style="width:100%;border-radius:10px;margin-top:10px;border:1px solid #e5e7eb">
   </div>
 </div>
 </div>
