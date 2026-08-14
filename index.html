@@ -3,305 +3,214 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>每日学习清单 · 原型</title>
+<title>每日学习清单 · 2026-08-15</title>
 <style>
-  * { box-sizing: border-box; margin: 0; padding: 0; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
   body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Microsoft YaHei", sans-serif;
-    background: linear-gradient(160deg, #f6f8fc 0%, #eef2f9 100%);
-    min-height: 100vh; color: #1f2937; padding: 24px 16px 60px;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Noto Sans SC", sans-serif;
+    background: #f5f6fa;
+    color: #1f2329;
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 16px 14px 40px;
   }
-  .container { max-width: 520px; margin: 0 auto; }
-  .tabs { display: flex; gap: 8px; margin-bottom: 20px; justify-content: center; }
-  .tab {
-    padding: 10px 22px; border-radius: 999px; border: none; cursor: pointer;
-    font-size: 14px; font-weight: 600; background: #e5e9f2; color: #4b5563;
-    transition: all .2s;
-  }
-  .tab.active { background: #4f6ef7; color: #fff; box-shadow: 0 4px 12px rgba(79,110,247,.35); }
-  .page { display: none; animation: fadeIn .3s ease; }
-  .page.active { display: block; }
-  @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
-
-  /* 今日清单页 */
   .hero {
-    background: linear-gradient(135deg, #4f6ef7 0%, #7c5cf0 100%);
-    border-radius: 20px; padding: 24px; color: #fff; margin-bottom: 20px;
-    box-shadow: 0 8px 24px rgba(79,110,247,.3);
+    background: linear-gradient(135deg, #4f6ef7 0%, #7c5cfc 100%);
+    border-radius: 16px;
+    padding: 20px 18px;
+    color: #fff;
+    margin-bottom: 14px;
   }
-  .hero .date { font-size: 13px; opacity: .85; letter-spacing: .5px; }
-  .hero .title { font-size: 26px; font-weight: 800; margin: 6px 0 16px; }
-  .progress-ring-wrap { display: flex; align-items: center; gap: 16px; }
-  .ring { width: 64px; height: 64px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
-    background: conic-gradient(#fff 0% 27%, rgba(255,255,255,.25) 27% 100%); }
-  .ring-inner { width: 50px; height: 50px; border-radius: 50%; background: #5d6ef0; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; }
-  .ring-stats { font-size: 13px; opacity: .9; line-height: 1.7; }
-
-  .group { margin-bottom: 18px; }
-  .group-head { display: flex; align-items: center; gap: 8px; font-size: 15px; font-weight: 700; margin-bottom: 10px; }
-  .group-head .badge { font-size: 11px; background: #eef1ff; color: #4f6ef7; padding: 2px 10px; border-radius: 999px; font-weight: 600; }
-  .cards { display: grid; gap: 10px; }
+  .hero h1 { font-size: 20px; font-weight: 700; margin-bottom: 6px; }
+  .hero .date { font-size: 13px; opacity: 0.85; margin-bottom: 12px; }
+  .progress-row { display: flex; align-items: center; gap: 10px; }
+  .progress-bar { flex: 1; height: 8px; background: rgba(255,255,255,0.25); border-radius: 4px; overflow: hidden; }
+  .progress-bar .fill { height: 100%; background: #fff; border-radius: 4px; width: 27%; }
+  .progress-num { font-size: 13px; font-weight: 600; }
+  .group { margin-bottom: 16px; }
+  .group-title {
+    display: flex; align-items: center; gap: 6px;
+    font-size: 15px; font-weight: 700;
+    margin: 14px 0 8px; padding-left: 2px;
+  }
+  .group-title .badge { font-size: 11px; background: #eef1ff; color: #4f6ef7; border-radius: 10px; padding: 2px 8px; font-weight: 600; }
   .card {
-    background: #fff; border-radius: 14px; padding: 14px 16px; display: flex; gap: 12px; align-items: flex-start;
-    box-shadow: 0 2px 8px rgba(17,24,39,.05); border: 1px solid rgba(17,24,39,.04); cursor: pointer; transition: all .15s;
+    background: #fff; border-radius: 12px;
+    box-shadow: 0 1px 3px rgba(31,35,41,0.08);
+    margin-bottom: 10px; overflow: hidden;
   }
-  .card:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(17,24,39,.1); }
-  .card.done { opacity: .65; }
-  .card.done .task-title { text-decoration: line-through; }
-  .check {
-    width: 22px; height: 22px; border-radius: 50%; border: 2px solid #cbd5e1; flex-shrink: 0;
-    display: flex; align-items: center; justify-content: center; font-size: 12px; color: #fff; margin-top: 2px; transition: all .15s;
+  .card-head {
+    display: flex; align-items: center; gap: 8px;
+    padding: 12px 14px; cursor: pointer;
+    user-select: none;
   }
-  .card.done .check { background: #22c55e; border-color: #22c55e; }
-  .task-body { flex: 1; }
-  .task-title { font-size: 14px; font-weight: 600; }
-  .task-meta { font-size: 12px; color: #9ca3af; margin-top: 4px; display: flex; gap: 8px; flex-wrap: wrap; }
-  .tag { padding: 1px 8px; border-radius: 6px; font-size: 11px; font-weight: 600; }
-  .tag.easy { background: #dcfce7; color: #16a34a; }
-  .tag.mid { background: #fef9c3; color: #ca8a04; }
-  .tag.hard { background: #fee2e2; color: #dc2626; }
-  .tag.pt { background: #e0e7ff; color: #4f46e5; }
-
-  /* 数据流页 */
-  .flow-wrap { background: #fff; border-radius: 20px; padding: 28px 20px; box-shadow: 0 2px 12px rgba(17,24,39,.06); }
-  .flow-step { display: flex; gap: 16px; padding: 14px 0; position: relative; }
-  .flow-step:not(:last-child)::after {
-    content: ''; position: absolute; left: 19px; top: 48px; bottom: -2px; width: 2px; background: #e5e9f2;
+  .card-head .arrow {
+    width: 18px; height: 18px; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    color: #8f959e; transition: transform 0.2s;
+    font-size: 12px;
   }
-  .step-num {
-    width: 40px; height: 40px; border-radius: 12px; flex-shrink: 0; display: flex; align-items: center; justify-content: center;
-    font-size: 15px; font-weight: 800; color: #fff; background: linear-gradient(135deg, #4f6ef7, #7c5cf0);
-    box-shadow: 0 4px 10px rgba(79,110,247,.3); z-index: 1;
-  }
-  .step-body h3 { font-size: 15px; font-weight: 700; margin-bottom: 4px; }
-  .step-body p { font-size: 13px; color: #6b7280; line-height: 1.6; }
-  .step-body .code { font-family: ui-monospace, monospace; background: #f3f4f6; padding: 1px 6px; border-radius: 5px; font-size: 12px; }
-  .arrow-down { text-align: center; color: #9ca3af; font-size: 20px; margin: -4px 0; }
-
-  /* 仪表盘页 */
-  .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px; }
-  .stat {
-    background: #fff; border-radius: 16px; padding: 18px; box-shadow: 0 2px 8px rgba(17,24,39,.05);
-    border: 1px solid rgba(17,24,39,.04);
-  }
-  .stat .num { font-size: 26px; font-weight: 800; color: #4f6ef7; }
-  .stat .label { font-size: 12px; color: #9ca3af; margin-top: 2px; }
-  .bar-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
-  .bar-row .name { width: 60px; font-size: 13px; font-weight: 600; }
-  .bar { flex: 1; height: 10px; background: #eef1f6; border-radius: 999px; overflow: hidden; }
-  .bar-fill { height: 100%; border-radius: 999px; transition: width .6s ease; }
-  .bar-row .pct { width: 40px; text-align: right; font-size: 12px; color: #6b7280; font-weight: 600; }
-  .week-chart { display: flex; gap: 8px; align-items: flex-end; height: 80px; margin-top: 12px; }
-  .day-bar { flex: 1; background: linear-gradient(180deg, #4f6ef7, #7c5cf0); border-radius: 6px 6px 0 0; opacity: .8; min-height: 4px; }
-  .day-label { font-size: 10px; color: #9ca3af; text-align: center; margin-top: 4px; }
+  .card.open .card-head .arrow { transform: rotate(90deg); }
+  .card-title { flex: 1; font-size: 14px; font-weight: 600; line-height: 1.4; }
+  .tag { font-size: 11px; padding: 2px 7px; border-radius: 8px; flex-shrink: 0; font-weight: 600; }
+  .tag.easy { background: #e8f8ee; color: #2ba471; }
+  .tag.mid  { background: #fff7e6; color: #d48806; }
+  .tag.hard { background: #fde8e8; color: #e54e4e; }
+  .tag.book { background: #eef1ff; color: #4f6ef7; }
+  .card-body { display: none; padding: 0 14px 14px; font-size: 13.5px; line-height: 1.7; color: #4b5563; }
+  .card.open .card-body { display: block; }
+  .card-body .q { color: #1f2329; font-weight: 500; margin-bottom: 8px; }
+  .card-body .opt { margin: 3px 0; padding: 6px 10px; background: #f7f8fa; border-radius: 8px; }
+  .card-body .ans { margin-top: 8px; padding: 8px 10px; background: #f0faf4; border-radius: 8px; color: #1f7a4d; font-weight: 600; }
+  .card-body .exp { margin-top: 6px; }
+  .card-body .exp b { color: #1f2329; }
+  .card-body .word-row { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
+  .card-body .word { font-size: 17px; font-weight: 700; color: #1f2329; }
+  .card-body .phon { color: #8f959e; font-size: 13px; }
+  .card-body .def { color: #4f6ef7; font-weight: 600; margin: 4px 0; }
+  .card-body .example { color: #6b7280; font-style: italic; margin-top: 4px; }
+  .card-body .link { display: inline-block; margin-top: 8px; color: #4f6ef7; text-decoration: none; font-weight: 600; }
+  .footer { text-align: center; color: #b0b6bf; font-size: 12px; margin-top: 20px; }
 </style>
 </head>
 <body>
-<div class="container">
-  <div class="tabs">
-    <button class="tab active" onclick="show('today')">📋 今日清单</button>
-    <button class="tab" onclick="show('flow')">🔁 数据流程</button>
-    <button class="tab" onclick="show('dash')">📊 学习面板</button>
+
+<div class="hero">
+  <h1>📋 今日学习清单</h1>
+  <div class="date">2026 年 8 月 15 日 · 星期六 · 🔥 连续学习第 3 天</div>
+  <div class="progress-row">
+    <div class="progress-bar"><div class="fill"></div></div>
+    <div class="progress-num">27%</div>
   </div>
+</div>
 
-  <!-- 今日清单 -->
-  <div id="today" class="page active">
-    <div class="hero">
-      <div class="date">2026-08-15 · 星期六</div>
-      <div class="title">今日学习清单</div>
-      <div class="progress-ring-wrap">
-        <div class="ring"><div class="ring-inner">27%</div></div>
-        <div class="ring-stats">已完成 3 / 11 项<br>⏱ 预计 25 分钟 · 🔥 连续打卡 3 天</div>
-      </div>
-    </div>
+<!-- 🔥 今日重点 -->
+<div class="group">
+  <div class="group-title">🔥 今日重点 <span class="badge">3 项</span></div>
 
-    <div class="group">
-      <div class="group-head">🔥 今日重点 <span class="badge">2</span></div>
-      <div class="cards">
-        <div class="card done" onclick="this.classList.toggle('done')">
-          <div class="check">✓</div>
-          <div class="task-body">
-            <div class="task-title">数学：行列式定义</div>
-            <div class="task-meta"><span class="tag pt">线代</span><span class="tag easy">简单</span><span class="tag pt">排列/逆序数</span></div>
-          </div>
-        </div>
-        <div class="card" onclick="this.classList.toggle('done')">
-          <div class="check"></div>
-          <div class="task-body">
-            <div class="task-title">408 混合题 ×5（3简1中1难）</div>
-            <div class="task-meta"><span class="tag pt">数据结构</span><span class="tag pt">计组</span><span class="tag pt">操作系统</span><span class="tag pt">网络</span></div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="group">
-      <div class="group-head">💻 408 · 今日考点</div>
-      <div class="cards">
-        <div class="card" onclick="this.classList.toggle('done')">
-          <div class="check"></div>
-          <div class="task-body">
-            <div class="task-title">数据结构：时间复杂度分析</div>
-            <div class="task-meta"><span class="tag easy">简单</span></div>
-          </div>
-        </div>
-        <div class="card" onclick="this.classList.toggle('done')">
-          <div class="check"></div>
-          <div class="task-body">
-            <div class="task-title">计组：计算机硬件组成</div>
-            <div class="task-meta"><span class="tag easy">简单</span></div>
-          </div>
-        </div>
-        <div class="card" onclick="this.classList.toggle('done')">
-          <div class="check"></div>
-          <div class="task-body">
-            <div class="task-title">操作系统：功能与目标</div>
-            <div class="task-meta"><span class="tag mid">中等</span></div>
-          </div>
-        </div>
-        <div class="card" onclick="this.classList.toggle('done')">
-          <div class="check"></div>
-          <div class="task-body">
-            <div class="task-title">网络：计算机网络定义</div>
-            <div class="task-meta"><span class="tag easy">简单</span></div>
-          </div>
-        </div>
-        <div class="card" onclick="this.classList.toggle('done')">
-          <div class="check"></div>
-          <div class="task-body">
-            <div class="task-title">操作系统：发展历程</div>
-            <div class="task-meta"><span class="tag hard">困难</span></div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="group">
-      <div class="group-head">🧩 LeetCode</div>
-      <div class="cards">
-        <div class="card" onclick="this.classList.toggle('done')">
-          <div class="check"></div>
-          <div class="task-body">
-            <div class="task-title">Maximum Length Substring With Two Occurrences</div>
-            <div class="task-meta"><span class="tag easy">Easy</span><span class="tag pt">滑动窗口</span></div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="group">
-      <div class="group-head">🇬🇧 单词 ×5</div>
-      <div class="cards">
-        <div class="card" onclick="this.classList.toggle('done')">
-          <div class="check"></div>
-          <div class="task-body">
-            <div class="task-title">think · 认为</div>
-            <div class="task-meta">I think the plan is feasible.</div>
-          </div>
-        </div>
-        <div class="card" onclick="this.classList.toggle('done')">
-          <div class="check"></div>
-          <div class="task-body">
-            <div class="task-title">world · 世界</div>
-            <div class="task-meta">The world is changing rapidly.</div>
-          </div>
-        </div>
-        <div class="card" onclick="this.classList.toggle('done')">
-          <div class="check"></div>
-          <div class="task-body">
-            <div class="task-title">choice · 选择</div>
-            <div class="task-meta">You have no other choice.</div>
-          </div>
-        </div>
-      </div>
+  <div class="card open">
+    <div class="card-head"><span class="arrow">▶</span><span class="card-title">数学：行列式定义（线代开篇）</span><span class="tag book">📐 线代</span><span class="tag mid">中等</span></div>
+    <div class="card-body">
+      <div class="q">今天开始线性代数第一站：行列式。它是后续矩阵、方程组、特征值的运算基石。</div>
+      <div class="exp"><b>核心定义：</b>n 阶行列式是所有取自不同行不同列的 n 个元素的乘积（带符号）的代数和，符号由列标排列的逆序数决定。</div>
+      <div class="exp"><b>关键性质：</b>① 转置值不变 ② 互换两行变号 ③ 某行乘 k 提公因子 ④ 某行加另一行倍数，值不变。</div>
+      <div class="exp"><b>记忆口诀：</b>"行变换看符号，倍加不变号"。</div>
     </div>
   </div>
 
-  <!-- 数据流程 -->
-  <div id="flow" class="page">
-    <div class="flow-wrap">
-      <div class="flow-step">
-        <div class="step-num">1</div>
-        <div class="step-body">
-          <h3>轮转选材（本地）</h3>
-          <p><span class="code">pick_daily_kp.py</span> 从 <b>607 个 408 考点</b> + <b>144 个数学考点</b>中按轮转算法选材，<b>保证每日考点不重复</b>；单词从 <b>5530 词</b>（词频排序）顺序取 5 个</p>
-        </div>
-      </div>
-      <div class="flow-step">
-        <div class="step-num">2</div>
-        <div class="step-body">
-          <h3>AI 出题</h3>
-          <p>Hermes 基于当日考点生成 <b>5 道 408 选择题</b>（3简1中1难，融合跨书考察）+ 数学公式要点 + 单词例句</p>
-        </div>
-      </div>
-      <div class="flow-step">
-        <div class="step-num">3</div>
-        <div class="step-body">
-          <h3>LeetCode 每日一题</h3>
-          <p>抓取 <span class="code">leetcode.com/graphql</span> 的今日题（API 已验证可用），附难度与链接</p>
-        </div>
-      </div>
-      <div class="flow-step">
-        <div class="step-num">4</div>
-        <div class="step-body">
-          <h3>写入飞书多维表格</h3>
-          <p><span class="code">bitable_push.py</span> 通过 Bitable API 写入 <b>「每日任务」</b>表（约 11-12 条记录/天），含分组/难度/考点标签</p>
-        </div>
-      </div>
-      <div class="flow-step">
-        <div class="step-num">5</div>
-        <div class="step-body">
-          <h3>应用模式 UI 呈现</h3>
-          <p>飞书「应用模式」页面实时渲染：分组卡片视图 + 进度环 + 勾选打卡，手机/PC 随时查看</p>
-        </div>
-      </div>
-      <div class="flow-step">
-        <div class="step-num">6</div>
-        <div class="step-body">
-          <h3>打卡反馈循环</h3>
-          <p>勾选「已完成」→ 更新记录状态 → 进度环自动增长；每周自动统计各科完成率，AI 给出学习建议</p>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- 仪表盘 -->
-  <div id="dash" class="page">
-    <div class="stat-grid">
-      <div class="stat"><div class="num">72%</div><div class="label">今日完成率</div></div>
-      <div class="stat"><div class="num">83%</div><div class="label">本周完成率</div></div>
-      <div class="stat"><div class="num">128</div><div class="label">累计 408 题</div></div>
-      <div class="stat"><div class="num">26</div><div class="label">连续打卡天数</div></div>
-    </div>
-    <div class="stat" style="padding:16px 18px;">
-      <div style="font-size:14px;font-weight:700;margin-bottom:12px;">📚 各科周进度</div>
-      <div class="bar-row"><span class="name">数学</span><div class="bar"><div class="bar-fill" style="width:85%;background:linear-gradient(90deg,#4f6ef7,#7c5cf0);"></div></div><span class="pct">85%</span></div>
-      <div class="bar-row"><span class="name">408</span><div class="bar"><div class="bar-fill" style="width:64%;background:linear-gradient(90deg,#f59e0b,#f97316);"></div></div><span class="pct">64%</span></div>
-      <div class="bar-row"><span class="name">英语</span><div class="bar"><div class="bar-fill" style="width:92%;background:linear-gradient(90deg,#22c55e,#84cc16);"></div></div><span class="pct">92%</span></div>
-      <div class="bar-row"><span class="name">LeetCode</span><div class="bar"><div class="bar-fill" style="width:41%;background:linear-gradient(90deg,#ec4899,#f43f5e);"></div></div><span class="pct">41%</span></div>
-    </div>
-    <div class="stat" style="padding:16px 18px;margin-top:12px;">
-      <div style="font-size:14px;font-weight:700;margin-bottom:8px;">📅 近 7 天打卡</div>
-      <div class="week-chart">
-        <div style="flex:1;"><div class="day-bar" style="height:45%"></div><div class="day-label">一</div></div>
-        <div style="flex:1;"><div class="day-bar" style="height:70%"></div><div class="day-label">二</div></div>
-        <div style="flex:1;"><div class="day-bar" style="height:55%"></div><div class="day-label">三</div></div>
-        <div style="flex:1;"><div class="day-bar" style="height:90%"></div><div class="day-label">四</div></div>
-        <div style="flex:1;"><div class="day-bar" style="height:75%"></div><div class="day-label">五</div></div>
-        <div style="flex:1;"><div class="day-bar" style="height:100%"></div><div class="day-label">六</div></div>
-        <div style="flex:1;"><div class="day-bar" style="height:30%;opacity:.4"></div><div class="day-label">日</div></div>
-      </div>
+  <div class="card">
+    <div class="card-head"><span class="arrow">▶</span><span class="card-title">LeetCode：Maximum Length Substring With Two Occurrences</span><span class="tag easy">简单</span></div>
+    <div class="card-body">
+      <div class="q">求最长子串长度，使其中每个字符出现的次数都不超过 2 次。</div>
+      <div class="exp"><b>思路：</b>滑动窗口。右指针扩展，当窗口内某字符计数 > 2 时左指针收缩，直到合法；每次更新最大长度。O(n) 时间。</div>
+      <div class="exp"><b>关键点：</b>字符计数用数组/哈希即可；注意"子串"连续，"子序列"不连续。</div>
+      <a class="link" href="https://leetcode.com/problems/maximum-length-substring-with-two-occurrences/" target="_blank">打开题目 →</a>
     </div>
   </div>
 </div>
+
+<!-- 💻 408 -->
+<div class="group">
+  <div class="group-title">💻 408 选择题 <span class="badge">5 题 · 3 简 1 中 1 难</span></div>
+
+  <div class="card">
+    <div class="card-head"><span class="arrow">▶</span><span class="card-title">① 数据结构三要素：下列哪项不属于数据结构的三要素？</span><span class="tag book">数据结构</span><span class="tag easy">简单</span></div>
+    <div class="card-body">
+      <div class="q">A. 数据的逻辑结构　B. 数据的存储结构　C. 数据的运算　D. 数据的保密性</div>
+      <div class="ans">答案：D</div>
+      <div class="exp"><b>解析：</b>数据结构三要素 = 逻辑结构（数据元素间的逻辑关系）、存储结构（逻辑结构在计算机中的表示）、数据运算（定义在逻辑结构上的操作）。保密性与数据结构无关。</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-head"><span class="arrow">▶</span><span class="card-title">② 计算机硬件组成：冯·诺依曼机的基本工作方式是？</span><span class="tag book">计组</span><span class="tag easy">简单</span></div>
+    <div class="card-body">
+      <div class="q">A. 控制流驱动方式　B. 数据流驱动方式　C. 存储程序方式　D. 多指令多数据方式</div>
+      <div class="ans">答案：C</div>
+      <div class="exp"><b>解析：</b>冯·诺依曼机核心思想是"存储程序"——指令和数据以同等地位存于存储器，按地址顺序取指执行。A 是传统控制流，B 是数据流机，D 是 SIMD/MIMD 并行分类。</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-head"><span class="arrow">▶</span><span class="card-title">③ 操作系统功能：操作系统提供给应用程序的接口是？</span><span class="tag book">OS</span><span class="tag easy">简单</span></div>
+    <div class="card-body">
+      <div class="q">A. 系统调用　B. 库函数　C. 汇编指令　D. 中断向量</div>
+      <div class="ans">答案：A</div>
+      <div class="exp"><b>解析：</b>操作系统对用户的接口：命令接口（联机/脱机）和程序接口（系统调用）。系统调用是应用程序与 OS 之间的唯一程序接口；库函数封装了系统调用，汇编指令/中断向量不是接口。</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-head"><span class="arrow">▶</span><span class="card-title">④ 网络定义：计算机网络最本质的功能是？</span><span class="tag book">网络</span><span class="tag mid">中等</span></div>
+    <div class="card-body">
+      <div class="q">A. 数据通信　B. 资源共享　C. 分布式处理　D. 提高可靠性</div>
+      <div class="ans">答案：B</div>
+      <div class="exp"><b>解析：</b>资源共享是计算机网络最本质的功能——让网络中各计算机的资源（硬件、软件、数据）可以互相共享，避免重复投资。数据通信（A）是基本功能之一但非本质，分布式处理（C）和可靠性（D）是资源共享带来的延伸能力。</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-head"><span class="arrow">▶</span><span class="card-title">⑤ 操作系统发展：分时系统的主要特征是？</span><span class="tag book">OS</span><span class="tag hard">困难</span></div>
+    <div class="card-body">
+      <div class="q">A. 多路性、独立性、及时性、交互性　B. 实时性、可靠性、安全性　C. 批量化、自动化、高效性　D. 单用户、单任务、封闭性</div>
+      <div class="ans">答案：A</div>
+      <div class="exp"><b>解析：</b>分时系统特征：多路性（多用户同时使用）、独立性（互不干扰）、及时性（响应快，时间片轮转）、交互性（人机对话）。B 是实时系统特征，C 是批处理系统特征，D 是单道批处理。记忆：分时=多路独立+及时交互。</div>
+    </div>
+  </div>
+</div>
+
+<!-- 📐 数学 -->
+<div class="group">
+  <div class="group-title">📐 数学知识点 <span class="badge">1 项</span></div>
+  <div class="card open">
+    <div class="card-head"><span class="arrow">▶</span><span class="card-title">行列式定义与性质（高数后线代起航）</span><span class="tag book">线代</span><span class="tag mid">中等</span></div>
+    <div class="card-body">
+      <div class="q">n 阶行列式 D = Σ (-1)^t a1j1·a2j2·...·anjn</div>
+      <div class="exp"><b>展开要点：</b>① 每项取自不同行不同列，共 n! 项 ② 符号由列标排列的逆序数 t 决定，奇排列为负 ③ 对角/三角行列式 = 主对角元素之积（计算核心技巧）。</div>
+      <div class="exp"><b>常用性质（务必熟记）：</b>性质 1 转置不变；性质 2 两行互换变号；性质 3 两行相同为 0；性质 4 某行有公因子可提出；性质 5 一行可拆两行相加；性质 6 某行倍加到另一行值不变。</div>
+      <div class="exp"><b>计算套路：</b>先用性质 6 化三角，再求主对角积——考研大题必用。</div>
+    </div>
+  </div>
+</div>
+
+<!-- 🇬🇧 单词 -->
+<div class="group">
+  <div class="group-title">🇬🇧 考研单词 <span class="badge">5 词</span></div>
+
+  <div class="card">
+    <div class="card-head"><span class="arrow">▶</span><span class="card-title">think / choice / change / world / direction</span><span class="tag book">高频词</span></div>
+    <div class="card-body">
+      <div class="word-row"><span class="word">think</span><span class="phon">/θɪŋk/</span></div>
+      <div class="def">v. 认为；思考；想起</div>
+      <div class="example">I think it is time to take action. 我认为是时候采取行动了。</div>
+      <hr style="border:none;border-top:1px solid #eee;margin:8px 0">
+      <div class="word-row"><span class="word">choice</span><span class="phon">/tʃɔɪs/</span></div>
+      <div class="def">n. 选择；选择权　adj. 精选的</div>
+      <div class="example">We have no choice but to wait. 我们别无选择，只能等待。</div>
+      <hr style="border:none;border-top:1px solid #eee;margin:8px 0">
+      <div class="word-row"><span class="word">change</span><span class="phon">/tʃeɪndʒ/</span></div>
+      <div class="def">v. 改变；更换　n. 变化；零钱</div>
+      <div class="example">The weather changes quickly in autumn. 秋天的天气变化很快。</div>
+      <hr style="border:none;border-top:1px solid #eee;margin:8px 0">
+      <div class="word-row"><span class="word">world</span><span class="phon">/wɜːrld/</span></div>
+      <div class="def">n. 世界；领域；世人</div>
+      <div class="example">She wants to travel around the world. 她想环游世界。</div>
+      <hr style="border:none;border-top:1px solid #eee;margin:8px 0">
+      <div class="word-row"><span class="word">direction</span><span class="phon">/dəˈrekʃn/</span></div>
+      <div class="def">n. 方向；指导；指令</div>
+      <div class="example">He walked in the opposite direction. 他朝相反的方向走去。</div>
+    </div>
+  </div>
+</div>
+
+<div class="footer">由 Hermes 生成 · 每天 08:00 更新 · 加油 💪</div>
+
 <script>
-function show(id) {
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-  const idx = ['today','flow','dash'].indexOf(id);
-  document.querySelectorAll('.tab')[idx].classList.add('active');
-}
+  document.querySelectorAll('.card-head').forEach(head => {
+    head.addEventListener('click', () => {
+      head.parentElement.classList.toggle('open');
+    });
+  });
 </script>
 </body>
 </html>
