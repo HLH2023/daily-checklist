@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>今日学习清单 · 2026-08-16</title>
+<title>今日学习清单 · 2026-08-17</title>
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Noto Sans SC", sans-serif; background: #f5f6fa; color: #1f2329; max-width: 640px; margin: 0 auto; padding: 16px 14px 40px; }
@@ -50,133 +50,150 @@
 
 <div class="hero">
   <h1>📋 今日学习清单</h1>
-  <div class="date">2026-08-16</div>
+  <div class="date">2026-08-17</div>
 </div>
 
 <div class="group"><div class="group-title">🔥 今日重点 <span class="badge">2 项</span></div>
 <div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">🧩 LeetCode 每日一题：Stone Game IX</span><span class="tag mid">Medium</span></div>
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">🧩 LeetCode 每日一题：Stone Game V</span><span class="tag hard">Hard</span></div>
   <div class="card-body">
-    <div class="q">Alice 和 Bob 继续玩石子游戏。有一行 n 个石子，每个石子有一个值 stones[i]。Alice 先手，两人轮流操作，每回合可移除任意一个石子。若某玩家移除石子后，所有已移除石子值之和能被 3 整除，则该玩家输。若石子全部取完（即使轮到 Alice 操作），Bob 自动获胜。双方均最优操作，返回 Alice 能否获胜。</div>
-    <div class="exp"><b>💡 解题思路：</b>游戏只与已取石子的和模 3 的余数有关，与具体数值无关。统计余数为 0、1、2 的石子个数 cnt0、cnt1、cnt2：取余数 0 的石子不改变当前和的余数，只是把回合权让给对方（奇数个 0 时先手可加以利用）；取余数 1 的石子后，对方若取余数 2 的石子会使和成为 3 的倍数而输，只能取余数 1（或 0），取余数 2 对称。据此分 cnt0 奇偶两类讨论：cnt0 为偶数时可忽略 0 石子（取 0 等于白送先手权）；cnt0 为奇数时先手可先取一个 0 石子，把麻烦局面抛给对方。</div>
-    <div class="exp"><b>🔧 题解：</b>结论：① cnt0 为偶数时，Alice 必胜 ⟺ cnt1≥1 且 cnt2≥1（Alice 先取 1，Bob 只能跟着取 1 或取 0，双方被迫沿 1↔2 交替消耗，先耗尽的一类恰好轮到 Bob 头上导致其输；若某类为 0，Alice 首步就把和固定住，最终被迫取异类石子而输）；② cnt0 为奇数时，Alice 先取一个 0 石子，等效于 Bob 面对偶数个 0 先手，此时 Alice 必胜 ⟺ |cnt1−cnt2|≥3。时间复杂度 O(n)，空间 O(1)。</div>
+    <div class="q">Alice 和 Bob 继续玩石子游戏。一排 n 堆石子，价值为 stones[i]。Alice 先手，两人轮流进行。每回合，当前玩家选择一个现存的分段（初始为整排石子）并把它拆成两段，使得两段价值之和相等，然后只保留其中价值较大的一段（若两段相等则任选一段，另一段被取走并计入该玩家的分数）；若不存在相等拆分，则该玩家不能行动（不产生分数），对手接着行动。游戏一直到只剩一段石子（不能再拆）为止，所有玩家得分的总和即为其总分。双方均最优操作，返回 Alice 能获得的最大分数。该题是区间 DP 的经典应用：定义 f[l][r] 为某一方在区间 [l, r] 上先手所能获得的最高分，通过枚举切分点并利用前缀和 O(1) 判断左、右半段价值是否相等（相等时才可操作，只能取较大那一半，另一半计入操作者分数）。</div>
+    <div class="exp"><b>💡 解题思路：</b>状态设计为区间 DP：f[l][r] = 在区间 [l, r] 上操作的玩家能获得的最大分数。枚举切分点 k（l ≤ k &lt; r），设左段和为 L = sum(l,k)、右段和为 R = sum(k+1,r)：① 若 L &lt; R，说明只有拆分出左段更小才能操作，操作者只能取右段（R 计入其分数），并轮到对手在右段 (k+1, r) 先手，故 f[l][r] = max(R + f[k+1][r])；② 若 L &gt; R，对称地 f[l][r] = max(L + f[l][k])；③ 若 L == R，操作者可任选一段保留，分数 = 段和 + 对方在保留段先手的结果，即 f[l][r] = max(L + f[l][k], R + f[k+1][r])；④ 若 L &lt; R 且进一步说明以当前 k 拆分时右段更大，则只取右段。最终答案 f[1][n]（对应整排）。</div>
+    <div class="exp"><b>🔧 题解：</b>① 用前缀和 pres 快速求任意区间和；② 区间长度从小到大递推（先算小区间），f[l][r] 的初始值可由「不可拆分」情形（用枚举所有 k 都无法满足 L == R 的关系）退化到只能选择允许的情形，因此要仔细处理：只有当 L == R 时操作者才真正获得那一半分数并转移；若对某 k 有 L != R，事实上该切分点根本不能作为合法的「相等拆分」，需忽略（Stone Game 规则要求拆出的两段价值相等）。对每个子区间枚举全部 k，按 L 与 R 的关系分三种情况取最大值即可。③ 答案即 f[1][n]，n 个石子，前缀和 + O(n^3) 枚举（可用记忆化搜索，等价于自顶向下的区间 DP）。注意：本规则下「必须相等才能拆」，与常见取较大半堆版本的转移略有差异，逐项核对 L==R 分支尤其关键。</div>
     <pre class="code">class Solution:
-    def stoneGameIX(self, stones: List[int]) -&gt; bool:
-        cnt = [0, 0, 0]
-        for s in stones:
-            cnt[s % 3] += 1
-        c0, c1, c2 = cnt
-        if c0 % 2 == 0:
-            return c1 &gt; 0 and c2 &gt; 0
-        return abs(c1 - c2) &gt;= 3</pre>
-    <a class="link" href="https://leetcode.com/problems/stone-game-ix/" target="_blank">🚀 去 LeetCode 做题 →</a>
+    def stoneGameV(self, stones):
+        n = len(stones)
+        pre = [0] * (n + 1)
+        for i, v in enumerate(stones):
+            pre[i + 1] = pre[i] + v
+        from functools import lru_cache
+        @lru_cache(None)
+        def f(l, r):
+            if l == r:
+                return 0
+            total = pre[r + 1] - pre[l]
+            best = 0
+            # 枚举切分点 k：左段 [l,k] 右段 [k+1,r]
+            left = 0
+            for k in range(l, r):
+                left += stones[k]
+                right = total - left
+                if left &lt; right:
+                    best = max(best, left + f(l, k))   # 左段较小→操作者取左段（左段价值计入其分，对手在左段先手）
+                elif left &gt; right:
+                    best = max(best, right + f(k + 1, r))
+                else:
+                    best = max(best, left + f(l, k), right + f(k + 1, r))
+            return best
+        return f(0, n - 1)</pre>
+    <a class="link" href="https://leetcode.com/problems/stone-game-v/" target="_blank">🚀 去 LeetCode 做题 →</a>
   </div>
 </div>
 </div>
 <div class="group"><div class="group-title">📐 数学知识点 <span class="badge">4 项</span></div>
 <div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">📐 高数·第1天·极限：取整函数 [x]</span><span class="tag book">第1天</span></div>
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">📐 高数·第1天·极限：复合极限逆向判断</span><span class="tag book">第1天</span></div>
   <div class="card-body">
-    <div class="q">[n,n+1) 上 y=n，左实右空；x−1&lt;[x]≤x</div>
-    <div class="exp"><b>📌 要点：</b>取整函数 [x] 表示不超过 x 的最大整数（向下取整），图像为阶梯形：在区间 [n,n+1) 上恒等于 n，左端点取到（实心）、右端点取不到（空心），x 为整数时左、右极限不相等，极限不存在。核心不等式 x−1&lt;[x]≤x 是求极限、夹逼放缩的常用工具。</div>
-    <div class="exp">• [x]≤x&lt;[x]+1，即 x−1&lt;[x]≤x</div><div class="exp">• lim(x→∞) [x]/x = 1（由不等式夹逼）</div><div class="exp">• {x}=x−[x] 为小数部分，以 1 为周期</div>
-    <div class="exp" style="margin-top:6px">[x]=不超过x的<b style="color:#d48806">＿＿＿</b>；不等式<b style="color:#d48806">＿＿＿</b>；y=x-[x]周期<b style="color:#d48806">＿＿＿</b></div><button class="ans-btn" style="font-size:12px;padding:4px 12px">✅ 答案</button><div class="ans-box"><div class="ans">最大整数；x-1&lt;[x]≤x；1</div></div>
-    <div class="exp"><b>🧭 套路：</b>遇到含 [x] 的极限：用 x−1&lt;[x]≤x 放缩后夹逼；讨论分段点（整数点）处需分别考察左右极限。</div>
+    <div class="q">f严格单调：lim f(g(x))存在⟹lim g(x)存在或g(x)趋于无穷</div>
+    <div class="exp"><b>📌 要点：</b>复合函数极限的反向判断：若外层函数 f 严格单调，且 lim f(g(x)) 存在，则可推出内层 lim g(x) 一定存在（或 g(x)→±∞）。逆否表述：若 lim g(x) 不存在且 g(x) 不趋于无穷，则 lim f(g(x)) 必不存在。这是解决「已知复合极限判断内层极限」一类逆向题的常用结论，前提是 f 严格单调（可逆），否则不能由 f(g(x)) 的极限反推 g(x) 的极限。</div>
+    <div class="exp">• f 严格单调 ⟹ 存在反函数 f⁻¹，可由外极限反推内极限</div><div class="exp">• lim f(g(x)) 存在 ⟹ lim g(x) 存在或 g(x)→±∞（否则复合极限不存在）</div><div class="exp">• 若 f 不单调（如 f(x)=x² 非单射），仅凭 f(g(x)) 极限无法唯一确定 g(x) 极限</div>
+    <div class="exp" style="margin-top:6px">f严格单调时，lim f(g(x))存在⟹<b style="color:#d48806">＿＿＿</b></div><button class="ans-btn" style="font-size:12px;padding:4px 12px">✅ 答案</button><div class="ans-box"><div class="ans">lim g(x)存在或g(x)→±∞</div></div>
+    <div class="exp"><b>🧭 套路：</b>判定时先检查外层是否严格单调；再考察内层极限是否存在或趋于无穷，两者都不满足则复合极限一定不存在。</div>
     
   </div>
  </div>
 <div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">📐 高数·第1天·极限：复合函数极限定理</span><span class="tag book">第1天</span></div>
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">📐 高数·第1天·极限：极限保号性</span><span class="tag book">第1天</span></div>
   <div class="card-body">
-    <div class="q">lim f(g(x))=lim f(u)=A；f 连续时 = f(lim g(x))</div>
-    <div class="exp"><b>📌 要点：</b>若 x→x0 时 g(x)→u0（g(x)≠u0 于 x0 的某去心邻域内），且 u→u0 时 f(u)→A，则 x→x0 时 f(g(x))→A。特别地，若 f 在 u0 处连续，则 lim f(g(x))=f(lim g(x))，即极限号可以穿过连续函数，先求内层极限再代值，这是变量替换法求极限的理论依据。</div>
-    <div class="exp">• 条件：x0 去心邻域内 g(x)≠u0（防止复合过程出现"空操作"）</div><div class="exp">• f 在 u0 连续时：lim f(g(x))=f(lim g(x))</div><div class="exp">• 用于换元 u=g(x)，把复杂极限化为已知极限</div>
-    <div class="exp" style="margin-top:6px">lim f(g(x))=<b style="color:#d48806">＿＿＿</b>（需g(x)≠u0）；若f在u0<b style="color:#d48806">＿＿＿</b>可去条件</div><button class="ans-btn" style="font-size:12px;padding:4px 12px">✅ 答案</button><div class="ans-box"><div class="ans">A；连续</div></div>
-    <div class="exp"><b>🧭 套路：</b>外层 f 连续是极限号穿过函数的充分条件；若 f 不连续，需单独验证内层 g(x) 是否恒等于 u0。</div>
+    <div class="q">lim f(x)&gt;0⟹局部 f(x)&gt;0；局部 f(x)&gt;0⟹lim≥0（可为0）</div>
+    <div class="exp"><b>📌 要点：</b>极限的保号性：若 lim(x→x0) f(x) = A &gt; 0，则存在 x0 的某个去心邻域，使该邻域内 f(x) &gt; 0；A &lt; 0 时对称地 f(x) &lt; 0。反过来，若在 x0 附近（去心邻域内）恒有 f(x) &gt; 0 且极限存在，则极限值 A ≥ 0（注意可以等于 0，不能推出 A &gt; 0）。核心思想：ε 取任意小的正数，由极限定义有 A−ε &lt; f(x) &lt; A+ε，取 ε &lt; A 即可保证 f(x) &gt; 0。</div>
+    <div class="exp">• A&gt;0（或 A&lt;0）⟹ 局部函数值与极限同号</div><div class="exp">• 局部恒&gt;0 且极限存在 ⟹ 极限≥0（可为0），这是一个「只能取弱不等式」的易错点</div><div class="exp">• 取 ε = |A|/2 即可由 |f(x)−A|&lt;ε 直接得到 f(x) 与 A 同号</div>
+    <div class="exp" style="margin-top:6px">lim f(x)&gt;0⟹x充分接近时<b style="color:#d48806">＿＿＿</b>；f(x)&gt;0且极限存在⟹极限<b style="color:#d48806">＿＿＿</b></div><button class="ans-btn" style="font-size:12px;padding:4px 12px">✅ 答案</button><div class="ans-box"><div class="ans">f(x)&gt;0；≥0</div></div>
+    <div class="exp"><b>🧭 套路：</b>求「局部 f(x)&gt;0 ⟹ lim ≥?」这类题目注意结论是 ≥0 而非 &gt;0；正方向（充分性）可用极限的 ε−δ 定义证明。</div>
     
   </div>
  </div>
 <div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">📐 线代·行列式与矩阵：伴随矩阵性质</span><span class="tag book">线代·行列式与矩阵</span></div>
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">📐 线代·行列式与矩阵：方阵行列式性质</span><span class="tag book">线代·行列式与矩阵</span></div>
   <div class="card-body">
-    <div class="q">AA*=A*A=|A|E；|A*|=|A|^(n-1)；(A^T)*=(A*)^T；(A*)^*=|A|^(n-2)A；(AB)*=B*A*</div>
-    <div class="exp"><b>📌 要点：</b>伴随矩阵 A* 由 A 的各元素代数余子式构成的矩阵转置得到。核心恒等式 AA*=A*A=|A|E 对任意 n 阶方阵成立；当 |A|≠0 时，A*=|A|A^{-1}，A^{-1}=A*/|A|。注意：(A+B)*≠A*+B*；A 不可逆时求逆公式不适用，但 AA*=|A|E 仍然成立。</div>
-    <div class="exp">• AA*=A*A=|A|E，对任意方阵恒成立</div><div class="exp">• |A*|=|A|^(n-1)；(A*)^*=|A|^(n-2)A（n≥2）</div><div class="exp">• (AB)*=B*A*；转置与伴随可交换：(A^T)*=(A*)^T</div>
-    <div class="exp" style="margin-top:6px">默写核心结论：<b style="color:#d48806">＿＿＿</b></div><button class="ans-btn" style="font-size:12px;padding:4px 12px">✅ 答案</button><div class="ans-box"><div class="ans">AA*=A*A=|A|E；|A*|=|A|^(n-1)；(A^T)*=(A*)^T；(A*)^*=|A|^(n-2)A；(AB)*=B*A*</div></div>
-    <div class="exp"><b>🧭 套路：</b>A 可逆时优先用 A*=|A|A^{-1} 求伴随，避免逐个算代数余子式；验证结论可令 AA*=|A|E 两端取行列式。</div>
-    <img src="images/2026-08-16_2.png" style="width:100%;border-radius:10px;margin-top:10px;border:1px solid #e5e7eb">
+    <div class="q">|Aᵀ|=|A|；|kA|=kⁿ|A|；|AB|=|A||B|；|Aᵐ|=|A|ᵐ</div>
+    <div class="exp"><b>📌 要点：</b>方阵行列式的运算性质：转置不改变行列式（|Aᵀ|=|A|）；数乘矩阵时行列式为 kⁿ|A|（n 为阶数，这是与「某一行提公因子」的区别，整体提因子每行都乘 k）；乘积的行列式等于行列式的乘积 |AB|=|A||B|（即使 AB≠BA，两边的行列式仍相等）；由此推出 |Aᵐ|=|A|ᵐ，以及 A 可逆时 |A⁻¹|=|A|⁻¹。</div>
+    <div class="exp">• |Aᵀ|=|A|，行列式按行展开与按列展开结果一致</div><div class="exp">• |kA|=kⁿ|A|（n 阶方阵），注意 n 次幂</div><div class="exp">• |AB|=|A||B| 对任意同阶方阵成立，与矩阵乘法顺序无关</div>
+    <div class="exp" style="margin-top:6px">默写核心结论：<b style="color:#d48806">＿＿＿</b></div><button class="ans-btn" style="font-size:12px;padding:4px 12px">✅ 答案</button><div class="ans-box"><div class="ans">|A^T|=|A|；|kA|=k^n|A|；|AB|=|A||B|；|A^m|=|A|^m</div></div>
+    <div class="exp"><b>🧭 套路：</b>区分「某一行乘 k」（行列式 ×k）与「整个矩阵乘 k」（行列式 ×kⁿ）；利用 |AB|=|A||B| 常可绕过复杂矩阵乘积直接算行列式。</div>
+    
   </div>
  </div>
 <div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">📐 线代·行列式与矩阵：逆矩阵运算规律</span><span class="tag book">线代·行列式与矩阵</span></div>
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">📐 线代·行列式与矩阵：分块矩阵运算</span><span class="tag book">线代·行列式与矩阵</span></div>
   <div class="card-body">
-    <div class="q">(A^{-1})^{-1}=A；(AB)^{-1}=B^{-1}A^{-1}；(kA)^{-1}=k^{-1}A^{-1}；|A^{-1}|=1/|A|</div>
-    <div class="exp"><b>📌 要点：</b>逆矩阵唯一；两个矩阵乘积的逆要反序：(AB)^{-1}=B^{-1}A^{-1}（A、B 同阶可逆）；数乘矩阵 kA（k≠0）的逆为 k^{-1}A^{-1}；行列式满足 |A^{-1}|=1/|A|。转置与求逆可交换：(A^T)^{-1}=(A^{-1})^T。分块对角矩阵的逆等于各对角块分别求逆；分块反对角矩阵的逆需换位后再分别求逆。</div>
-    <div class="exp">• (AB)^{-1}=B^{-1}A^{-1}，求逆次序要颠倒</div><div class="exp">• (kA)^{-1}=k^{-1}A^{-1}；|A^{-1}|=1/|A|</div><div class="exp">• 分块对角逆=对角块分别求逆；分块反对角先换位再分别求逆</div>
-    <div class="exp" style="margin-top:6px">默写核心结论：<b style="color:#d48806">＿＿＿</b></div><button class="ans-btn" style="font-size:12px;padding:4px 12px">✅ 答案</button><div class="ans-box"><div class="ans">(A^{-1})^{-1}=A；(AB)^{-1}=B^{-1}A^{-1}；(kA)^{-1}=k^{-1}A^{-1}；|A^{-1}|=1/|A|</div></div>
-    <div class="exp"><b>🧭 套路：</b>验证逆矩阵首选定义：AB=BA=E 即互为逆；含分块的矩阵求逆注意顺序与换位，防止丢失负号。</div>
+    <div class="q">|A C;O B|=|A||B|；换位块=(-1)^(mn)|A||B|；分块转置=Aᵀ Bᵀ;Cᵀ Dᵀ交换</div>
+    <div class="exp"><b>📌 要点：</b>分块矩阵的运算：分块加减、数乘按块进行；分块乘法与普通矩阵乘法规则一致（块乘法不可交换，注意乘法顺序）；分块对角矩阵的行列式 = 各对角块行列式之积（如 |A C;O B|=|A||B|，上三角分块同理），若对换两个对角块位置，行列式乘以 (-1)^(mn)；分块矩阵的转置需把子块自身转置并交换位置：[A B;C D]ᵀ = [Aᵀ Cᵀ;Bᵀ Dᵀ]；分块对角幂 = 各块取幂；可结合 Laplace 展开理解。</div>
+    <div class="exp">• 分块矩阵乘法按「块元」套用普通规则，块不可交换</div><div class="exp">• 分块三角矩阵 |A C;O B|=|A||B|；换位后再乘 (-1)^(mn)</div><div class="exp">• 分块转置：先整体转置（交换子块位置），再对每个子块取转置</div>
+    <div class="exp" style="margin-top:6px">默写核心结论：<b style="color:#d48806">＿＿＿</b></div><button class="ans-btn" style="font-size:12px;padding:4px 12px">✅ 答案</button><div class="ans-box"><div class="ans">|A C;O B|=|A||B|；换位块=(-1)^(mn)|A||B|；分块转置=A^T B^T;C^T D^T交换</div></div>
+    <div class="exp"><b>🧭 套路：</b>记忆技巧：分块转置 = 先将子块按矩阵转置的「对角线翻转」换位，再对每个子块单独转置。算大矩阵行列式时优先考虑分块三角化。</div>
     
   </div>
  </div>
 </div>
 <div class="group"><div class="group-title">💻 408 选择题 <span class="badge">5 题</span></div>
 <div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">在带头结点的双链表 L 中，已知指针 p 指向某个结点，现要在 p 之后插入新结点 s，下列操作顺序正确的是（ ）</span><span class="tag book">数据结构</span><span class="tag easy">简单</span></div>
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">下列关于顺序表和链表的比较，说法错误的是（ ）</span><span class="tag book">数据结构</span><span class="tag easy">简单</span></div>
   <div class="card-body">
-    <div class="q"><div class="opt">A. s-&gt;next=p-&gt;next; p-&gt;next-&gt;prior=s; s-&gt;prior=p; p-&gt;next=s</div><div class="opt">B. p-&gt;next=s; s-&gt;prior=p; s-&gt;next=p-&gt;next; p-&gt;next-&gt;prior=s</div><div class="opt">C. s-&gt;prior=p; p-&gt;next=s; s-&gt;next=p-&gt;next; p-&gt;next-&gt;prior=s</div><div class="opt">D. s-&gt;next=p-&gt;next; s-&gt;prior=p; p-&gt;next=s; p-&gt;next-&gt;prior=s</div></div>
-    <img src="images/2026-08-16_p0.png" style="width:100%;border-radius:10px;margin-top:10px;border:1px solid #e5e7eb">
-    <button class="ans-btn">✅ 查看答案与解析</button>
-    <div class="ans-box">
-      <div class="ans">答案：A</div>
-      <div class="exp"><b>📖 解析：</b>双链表插入的关键：先让新结点 s 与 p 的原后继建立双向链接，再修改 p 的指针，避免丢失 p-&gt;next。正确顺序为：① s-&gt;next=p-&gt;next（s 指向后继）；② p-&gt;next-&gt;prior=s（原后继的前驱改为 s）；③ s-&gt;prior=p（s 的前驱指向 p）；④ p-&gt;next=s（p 的后继改为 s）。若先执行 p-&gt;next=s（选项 B/C/D 的写法），p 的原后继将丢失，无法完成双向连接。</div>
-    </div>
-  </div>
- </div>
-<div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">设机器字长为 8 位（含 1 位符号位），采用原码表示，下列说法错误的是（ ）</span><span class="tag book">计算机组成原理</span><span class="tag easy">简单</span></div>
-  <div class="card-body">
-    <div class="q"><div class="opt">A. +0 的原码为 0000 0000，-0 的原码为 1000 0000</div><div class="opt">B. 原码中 0 有两种表示，故 8 位原码只能表示 255 个不同的数值</div><div class="opt">C. 原码可表示的真值范围为 -127 ~ +127</div><div class="opt">D. 原码表示中，符号位参与数值运算</div></div>
-    
+    <div class="q"><div class="opt">A. 顺序表支持随机存取，可在 O(1) 时间内按位置访问元素；链表只能顺序存取</div><div class="opt">B. 在表头插入/删除元素，顺序表需要移动大量元素，链表只需修改少量指针</div><div class="opt">C. 顺序表不需存储指针域，存储密度高；链表每个结点额外占用指针域，存储密度较低</div><div class="opt">D. 顺序表适合频繁插入删除的场景，链表适合频繁按位置随机访问的场景</div></div>
+    <img src="images/2026-08-17_p0.png" style="width:100%;border-radius:10px;margin-top:10px;border:1px solid #e5e7eb">
     <button class="ans-btn">✅ 查看答案与解析</button>
     <div class="ans-box">
       <div class="ans">答案：D</div>
-      <div class="exp"><b>📖 解析：</b>原码的符号位不参与数值运算，数值运算需转为补码进行（或单独处理符号位），故 D 错误。A 正确：0 的原码有两种（+0=0000 0000、-0=1000 0000）；B 正确：因 0 占两种编码，8 位原码实际表示 2^8−1=255 个不同数值；C 正确：8 位原码真值范围 −(2^7−1)~+(2^7−1) 即 −127~+127。</div>
+      <div class="exp"><b>📖 解析：</b>顺序表（数组实现）按位置访问是 O(1) 随机存取，但插入/删除平均需移动 n/2 个元素，代价大；链表插入/删除仅修改指针 O(1)（需先找到位置），但访问必须从头顺序遍历。因此「频繁插入删除」适合链表，「频繁按位置随机访问」适合顺序表，D 把两者说反了。C 正确：链表每个结点需额外的指针域，存储密度（数据占比）低于顺序表。</div>
     </div>
   </div>
  </div>
 <div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">关于进程状态转换，下列叙述中错误的是（ ）</span><span class="tag book">操作系统</span><span class="tag mid">中等</span></div>
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">设机器字长为 8 位，采用补码表示。已知 [x]补 = 1110 1100B，则 x 的十进制真值为（ ）</span><span class="tag book">计算机组成原理</span><span class="tag mid">中等</span></div>
   <div class="card-body">
-    <div class="q"><div class="opt">A. 就绪→运行：进程被调度程序选中，获得 CPU</div><div class="opt">B. 运行→阻塞：进程因等待某事件（如 I/O 完成）而主动让出 CPU</div><div class="opt">C. 阻塞→就绪：进程等待的事件发生，由系统将其唤醒</div><div class="opt">D. 就绪→阻塞：进程因时间片用完而进入阻塞状态</div></div>
-    
-    <button class="ans-btn">✅ 查看答案与解析</button>
-    <div class="ans-box">
-      <div class="ans">答案：D</div>
-      <div class="exp"><b>📖 解析：</b>就绪态进程只缺 CPU，不会进入阻塞态：时间片用完应发生运行→就绪（被剥夺 CPU），而非就绪→阻塞，故 D 错误。A 正确：就绪进程被调度即进入运行态；B 正确：运行进程申请资源/等待事件时主动进入阻塞态；C 正确：事件发生后阻塞进程被唤醒转为就绪态，等待重新调度。</div>
-    </div>
-  </div>
- </div>
-<div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">码分复用 CDMA 系统中，A、B、C、D 四个站使用相互正交的 4 位码片序列：A=(+1,+1,+1,+1)，B=(+1,−1,+1,−1)，C=(+1,+1,−1,−1)，D=(+1,−1,−1,+1)。某时刻基站收到的叠加信号为 S=(+1,+1,−1,+3)（发送比特 1 用 +1、比特 0 用 −1、未发送用 0 表示）。则各站的发送情况为（ ）</span><span class="tag book">计算机网络</span><span class="tag hard">困难</span></div>
-  <div class="card-body">
-    <div class="q"><div class="opt">A. A 发 1，B 发 0，C 未发送，D 发 1</div><div class="opt">B. A 发 1，B 发 1，C 发 0，D 未发送</div><div class="opt">C. A 发 0，B 发 1，C 未发送，D 发 1</div><div class="opt">D. A 发 1，B 发 0，C 发 1，D 发 1</div></div>
-    
-    <button class="ans-btn">✅ 查看答案与解析</button>
-    <div class="ans-box">
-      <div class="ans">答案：A</div>
-      <div class="exp"><b>📖 解析：</b>码分复用利用码片正交性分离信号：将接收信号 S 与某站码片做规格化内积，结果为 +1 表示该站发 1，−1 表示发 0，0 表示未发送。计算：S·A=(1+1−1+3)/4=1→A 发 1；S·B=(1−1−1−3)/4=−1→B 发 0；S·C=(1+1+1−3)/4=0→C 未发送；S·D=(1−1+1+3)/4=1→D 发 1。验证叠加：S=A−B+D=(1,1,1,1)+(−1,1,−1,1)+(1,−1,−1,1)=(1,1,−1,3)✓，故选 A。</div>
-    </div>
-  </div>
- </div>
-<div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">关于带头结点的循环单链表 L 和静态链表，下列说法正确的是（ ）</span><span class="tag book">数据结构</span><span class="tag easy">简单</span></div>
-  <div class="card-body">
-    <div class="q"><div class="opt">A. 循环单链表 L 的判空条件是 L-&gt;next == NULL</div><div class="opt">B. 循环单链表 L 的判空条件是 L-&gt;next == L，表尾结点的 next 指向头结点</div><div class="opt">C. 循环单链表中表尾结点的 next 指向 NULL，便于找到表尾</div><div class="opt">D. 静态链表通过指针连接各结点，插入删除操作比动态链表更灵活</div></div>
+    <div class="q"><div class="opt">A. +108</div><div class="opt">B. -20</div><div class="opt">C. -108</div><div class="opt">D. +20</div></div>
     
     <button class="ans-btn">✅ 查看答案与解析</button>
     <div class="ans-box">
       <div class="ans">答案：B</div>
-      <div class="exp"><b>📖 解析：</b>循环单链表表尾结点的 next 指向头结点，故判空条件为 L-&gt;next==L（空表时头结点自指），B 正确、A/C 错误（A 是普通单链表的判空条件，循环链表尾结点不指向 NULL）。D 错误：静态链表用数组下标（游标）代替指针模拟链表，插入删除不需移动元素但需管理空闲结点且表长固定，并非通过指针连接，灵活性与动态链表相比反而受限。</div>
+      <div class="exp"><b>📖 解析：</b>负数补码求真值：符号位为 1（负数），将数值位按位取反后加 1 得真值绝对值。1110 1100B → 数值位 110 1100B 取反得 001 0011B，再加 1 得 001 0100B = 20（十进制），符号为负，故 x = -20。也可用「补码整体按权展开再 -2^8」校验：1110 1100B = 2^7 - 20 - 2^8 思路下实质结果同为 -20。注意补码 8 位表示范围 -128 ~ +127，0 的表示唯一，均与此题契合。</div>
+    </div>
+  </div>
+ </div>
+<div class="card open">
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">关于进程的创建与终止，下列说法错误的是（ ）</span><span class="tag book">操作系统</span><span class="tag easy">简单</span></div>
+  <div class="card-body">
+    <div class="q"><div class="opt">A. 在 UNIX/Linux 中，fork 创建的子进程初始获得父进程地址空间的一份拷贝（利用写时复制技术）</div><div class="opt">B. 父进程先终止而其子进程仍在运行，这些子进程称为孤儿进程，通常被 init（1 号）进程收养</div><div class="opt">C. 子进程已终止但父进程尚未对其调用 wait/waitpid 回收其 PCB 等资源，此时子进程处于僵尸状态（Zombie）</div><div class="opt">D. 父进程可以通过调用 exit 系统调用直接终止它所创建的子进程</div></div>
+    
+    <button class="ans-btn">✅ 查看答案与解析</button>
+    <div class="ans-box">
+      <div class="ans">答案：D</div>
+      <div class="exp"><b>📖 解析：</b>exit 是进程终止自身执行的系统调用；父进程无法通过 exit 直接终止子进程，终止子进程通常借助信号（如 kill、SIGKILL）或由操作系统在子进程结束时回收。父进程的作用是对已终止的子进程调用 wait/waitpid 回收其资源。A 正确：fork 采用 copy-on-write（写时复制）优化。B 正确：孤儿进程由 init 收养。C 正确：子进程已终止但未被父进程回收时残留 PCB，进入僵尸状态。</div>
+    </div>
+  </div>
+ </div>
+<div class="card open">
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">下列关于宽带接入技术的说法，错误的是（ ）</span><span class="tag book">计算机网络</span><span class="tag easy">简单</span></div>
+  <div class="card-body">
+    <div class="q"><div class="opt">A. ADSL 采用频分复用技术，在同一对双绞线上同时传送电话语音信号与高速数据信号</div><div class="opt">B. FTTx 属于光纤接入，其中 FTTH 表示光纤到户，FTTB 表示光纤到楼</div><div class="opt">C. HFC 是混合光纤同轴电缆网，基于有线电视网的同轴电缆提供宽带上网，用户端需 Cable Modem</div><div class="opt">D. ADSL 是「非对称数字用户线」，其上行速率高于下行速率，适合下行为主的邮件上传等场景</div></div>
+    
+    <button class="ans-btn">✅ 查看答案与解析</button>
+    <div class="ans-box">
+      <div class="ans">答案：D</div>
+      <div class="exp"><b>📖 解析：</b>ADSL（Asymmetric Digital Subscriber Line）的「非对称」正是指下行速率高于上行速率（下行可达数 Mb/s，上行通常较小），它面向以下载为主的互联网应用设计，故「上行速率高于下行速率」错误。A 正确：ADSL 采用频分复用在同一双绞线上同时承载电话与数据。B 正确：FTTH=光纤到户（Fiber To The Home），FTTB=光纤到楼（Building）。C 正确：HFC 以有线电视网的同轴电缆加光纤混合组网，需 Cable Modem（线缆调制解调器）。</div>
+    </div>
+  </div>
+ </div>
+<div class="card open">
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">设机器字长为 8 位，采用反码进行加减运算（符号位有进位时执行循环进位，即 end-around carry）。计算 (-25) + (-18)，其十进制真值为（ ）</span><span class="tag book">计算机组成原理</span><span class="tag hard">困难</span></div>
+  <div class="card-body">
+    <div class="q"><div class="opt">A. -43</div><div class="opt">B. -44</div><div class="opt">C. -42</div><div class="opt">D. -41</div></div>
+    
+    <button class="ans-btn">✅ 查看答案与解析</button>
+    <div class="ans-box">
+      <div class="ans">答案：A</div>
+      <div class="exp"><b>📖 解析：</b>8 位反码：25=0001 1001B，-25 反码=1110 0110B（数值位按位取反）；18=0001 0010B，-18 反码=1110 1101B。两数反码相加：1110 0110 + 1110 1101 = 1 1101 0011（最高位产生进位），按反码运算规则将溢出的进位循环回加：1101 0011B + 1 = 1101 0100B。结果符号位为 1（负数），将其数值位 101 0100B 按位取反得 010 1011B = 43，故真值为 -43。校验：(-25)+(-18)=-43 正确。注意反码中 0 有 +0（0000 0000）与 -0（1111 1111）两种表示，且反码表示不了补码才有的 -128。</div>
     </div>
   </div>
  </div>
@@ -184,47 +201,47 @@
 <div class="group"><div class="group-title">🇬🇧 考研单词 <span class="badge">20 词</span></div>
 <div class="card open">
   <div class="card-head"><span class="arrow">▶</span><span class="card-title">🇬🇧 考研单词 ×20</span><span class="tag book">高频词</span></div>
-  <div class="card-body"><div class="word-row"><span class="word">old</span><span class="phon">/əʊld/</span></div>
-      <div class="def">老的</div>
-      <div class="example">✏️ The old theory was finally replaced by the new one. 旧理论最终被新理论所取代。</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">parent</span><span class="phon">/ˈpeərənt/</span></div>
-      <div class="def">父母</div>
-      <div class="example">✏️ Children's education begins with their parents' guidance. 孩子的教育始于父母的引导。</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">increase</span><span class="phon">/ɪnˈkriːs/</span></div>
-      <div class="def">增加</div>
-      <div class="example">✏️ The increase in enrollment has put pressure on universities. 入学人数的增加给高校带来了压力。</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">paragraph</span><span class="phon">/ˈpærəɡrɑːf/</span></div>
-      <div class="def">段落</div>
-      <div class="example">✏️ Each paragraph should express a single main idea. 每个段落应表达一个中心思想。</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">provide</span><span class="phon">/prəˈvaɪd/</span></div>
-      <div class="def">提供</div>
-      <div class="example">✏️ The report aims to provide evidence for the policy change. 该报告旨在为政策变更提供依据。</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">few</span><span class="phon">/fjuː/</span></div>
-      <div class="def">很少</div>
-      <div class="example">✏️ Only a few students could answer the question correctly. 只有少数学生能正确回答这个问题。</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">home</span><span class="phon">/həʊm/</span></div>
-      <div class="def">家</div>
-      <div class="example">✏️ He worked from home during the epidemic. 疫情期间他在家办公。</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">while</span><span class="phon">/waɪl/</span></div>
-      <div class="def">当…时、而、尽管</div>
-      <div class="example">✏️ While the theory is plausible, it lacks experimental support. 尽管该理论貌似合理，但缺乏实验支持。</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">different</span><span class="phon">/ˈdɪfrənt/</span></div>
-      <div class="def">不同的</div>
-      <div class="example">✏️ Different cultures may interpret the same gesture differently. 不同文化对同一手势可能有不同的理解。</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">point</span><span class="phon">/pɔɪnt/</span></div>
-      <div class="def">点、指</div>
-      <div class="example">✏️ The author's main point is that education should be reformed. 作者的主要观点是教育应当改革。</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">last</span><span class="phon">/lɑːst/</span></div>
-      <div class="def">最后的、持续</div>
-      <div class="example">✏️ The meeting lasted three hours. 会议持续了三个小时。</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">text</span><span class="phon">/tekst/</span></div>
-      <div class="def">文本</div>
-      <div class="example">✏️ The original text has been translated into several languages. 原文已被翻译成多种语言。</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">correspond</span><span class="phon">/ˌkɒrəˈspɒnd/</span></div>
-      <div class="def">相符合、相当</div>
-      <div class="example">✏️ His actions do not correspond with his words. 他的言行并不一致。</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">education</span><span class="phon">/ˌedʒuˈkeɪʃn/</span></div>
-      <div class="def">教育</div>
-      <div class="example">✏️ Higher education plays a vital role in economic development. 高等教育在经济发展中起着重要作用。</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">place</span><span class="phon">/pleɪs/</span></div>
-      <div class="def">放置、地点</div>
-      <div class="example">✏️ The conference will take place in Beijing next month. 会议将于下月在北京举行。</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">pay</span><span class="phon">/peɪ/</span></div>
-      <div class="def">支付</div>
-      <div class="example">✏️ Students should pay attention to the development of science. 学生应关注科学的发展。</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">language</span><span class="phon">/ˈlæŋɡwɪdʒ/</span></div>
-      <div class="def">语言、风格</div>
-      <div class="example">✏️ Language is a tool for communication and thought. 语言是交流与思维的工具。</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">still</span><span class="phon">/stɪl/</span></div>
-      <div class="def">仍然</div>
-      <div class="example">✏️ Despite the difficulties, he still insisted on his research. 尽管困难重重，他仍然坚持自己的研究。</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">keep</span><span class="phon">/kiːp/</span></div>
-      <div class="def">保持</div>
-      <div class="example">✏️ It is important to keep a balance between study and rest. 保持学习与休息的平衡很重要。</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">where</span><span class="phon">/weə(r)/</span></div>
-      <div class="def">哪里</div>
-      <div class="example">✏️ This is the laboratory where the experiment was conducted. 这就是进行实验的实验室。</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"></div>
+  <div class="card-body"><div class="word-row"><span class="word">book</span><span class="phon">/bʊk/</span></div>
+      <div class="def">预定、书籍</div>
+      <div class="example">✏️ Booking a hotel in advance is necessary during the holiday. 假期期间提前预订酒店很有必要。</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">government</span><span class="phon">/ˈɡʌvənmənt/</span></div>
+      <div class="def">政府</div>
+      <div class="example">✏️ The government has taken measures to improve the environment. 政府已采取措施改善环境。</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">college</span><span class="phon">/ˈkɒlɪdʒ/</span></div>
+      <div class="def">大学</div>
+      <div class="example">✏️ She plans to apply to a top college after graduation. 毕业后她打算申请一所顶尖大学。</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">second</span><span class="phon">/ˈsekənd/</span></div>
+      <div class="def">第二的、次等的</div>
+      <div class="example">✏️ He studies hard and always comes second in the exam, never giving up. 他学习刻苦，考试总是第二名，却从不放弃。</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">listen</span><span class="phon">/ˈlɪsn/</span></div>
+      <div class="def">听</div>
+      <div class="example">✏️ Listening to English broadcasts every day helps improve language skills. 每天听英语广播有助于提高语言能力。</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">why</span><span class="phon">/waɪ/</span></div>
+      <div class="def">为什么</div>
+      <div class="example">✏️ The report explains why the experiment failed to produce results. 报告解释了实验为何未能得出结果。</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">system</span><span class="phon">/ˈsɪstəm/</span></div>
+      <div class="def">系统</div>
+      <div class="example">✏️ The education system should be reformed to encourage innovation. 教育体系应进行改革以鼓励创新。</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">put</span><span class="phon">/pʊt/</span></div>
+      <div class="def">放</div>
+      <div class="example">✏️ You should put your ideas into practice rather than only discussing them. 你应该把想法付诸实践，而不只是空谈。</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">blank</span><span class="phon">/blæŋk/</span></div>
+      <div class="def">空白的、失色的</div>
+      <div class="example">✏️ Please fill in the blank with a proper word. 请用恰当的词填空。</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">might</span><span class="phon">/maɪt/</span></div>
+      <div class="def">可能</div>
+      <div class="example">✏️ The results might change if we adjust the experimental conditions. 如果调整实验条件，结果可能会改变。</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">result</span><span class="phon">/rɪˈzʌlt/</span></div>
+      <div class="def">结果</div>
+      <div class="example">✏️ The result of the survey reflects students' attitudes toward online learning. 调查结果反映了学生对在线学习的态度。</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">try</span><span class="phon">/traɪ/</span></div>
+      <div class="def">尝试</div>
+      <div class="example">✏️ You should try your best to finish the assignment on time. 你应该尽最大努力按时完成作业。</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">money</span><span class="phon">/ˈmʌni/</span></div>
+      <div class="def">钱</div>
+      <div class="example">✏️ He saved money to pay for his postgraduate tuition. 他攒钱支付读研的学费。</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">ask</span><span class="phon">/ɑːsk/</span></div>
+      <div class="def">问</div>
+      <div class="example">✏️ Feel free to ask questions about the reading material. 关于阅读材料，有问题尽管问。</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">seem</span><span class="phon">/siːm/</span></div>
+      <div class="def">似乎</div>
+      <div class="example">✏️ It seems that the new policy has little effect on the economy. 新政策似乎对经济影响甚微。</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">speak</span><span class="phon">/spiːk/</span></div>
+      <div class="def">说</div>
+      <div class="example">✏️ The professor will speak on the latest developments in AI research. 教授将就人工智能研究的最新进展发表演讲。</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">news</span><span class="phon">/njuːz/</span></div>
+      <div class="def">新闻</div>
+      <div class="example">✏️ Reading the news in English broadens our horizons. 阅读英文新闻能开阔我们的视野。</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">example</span><span class="phon">/ɪɡˈzɑːmpl/</span></div>
+      <div class="def">例子</div>
+      <div class="example">✏️ For example, renewable energy is playing an increasingly important role. 例如，可再生能源正发挥越来越重要的作用。</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">same</span><span class="phon">/seɪm/</span></div>
+      <div class="def">同样的</div>
+      <div class="example">✏️ Scientists repeated the experiment under the same conditions. 科学家在相同条件下重复了实验。</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">important</span><span class="phon">/ɪmˈpɔːtnt/</span></div>
+      <div class="def">重要的</div>
+      <div class="example">✏️ It is important to balance study and rest during exam preparation. 备考期间劳逸结合很重要。</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"></div>
 </div>
 </div>
 <div class="footer">由 Hermes AI 生成 · 每天 08:00 更新 · 加油 💪</div>
