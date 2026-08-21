@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>今日学习清单 · 2026-08-20</title>
+<title>今日学习清单 · 2026-08-21</title>
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Noto Sans SC", sans-serif; background: #f5f6fa; color: #1f2329; max-width: 640px; margin: 0 auto; padding: 16px 14px 40px; }
@@ -50,134 +50,159 @@
 
 <div class="hero">
   <h1>📋 今日学习清单</h1>
-  <div class="date">2026年8月20日</div>
+  <div class="date">2026年8月21日</div>
 </div>
 
 <div class="group"><div class="group-title">🔥 今日重点 <span class="badge">2 项</span></div>
 <div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">🧩 LeetCode 每日一题：Distribute Elements Into Two Arrays I</span><span class="tag easy">Easy</span></div>
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">🧩 LeetCode 每日一题：Kth Smallest Amount With Single Denomination Combination</span><span class="tag hard">Hard</span></div>
   <div class="card-body">
-    <div class="q">给定一个下标从 1 开始的整数数组 nums。将 nums 中的元素依次分配到两个数组 arr1 和 arr2：前两个元素分别放入 arr1 和 arr2；之后每个元素放入当前末尾元素更大的那个数组，若相等则放入 arr1。返回先放 arr1、再放 arr2 得到的数组。</div>
-    <div class="exp"><b>💡 解题思路：</b>先把 nums[0] 和 nums[1] 分别放入两个数组。遍历剩余元素，每次比较两个数组的最后一个元素：arr1 末尾更大或相等时放入 arr1，否则放入 arr2。最后拼接两个数组。</div>
-    <div class="exp"><b>🔧 题解：</b>直接模拟题意即可。两个数组始终只需访问末尾元素，因此每个元素处理一次，时间复杂度为 O(n)，额外空间复杂度为 O(n)（存储结果数组）。</div>
-    <pre class="code">class Solution:
-    def resultArray(self, nums):
-        arr1 = [nums[0]]
-        arr2 = [nums[1]]
-        for x in nums[2:]:
-            if arr1[-1] &gt; arr2[-1]:
-                arr1.append(x)
+    <div class="q">给定不同面额的硬币数组 coins 和整数 k。每种面额的硬币都有无限枚，但一次构成金额时不能混用不同面额。所有可构成的金额就是各面额的正整数倍的并集，返回其中第 k 小的不同金额。</div>
+    <div class="exp"><b>💡 解题思路：</b>对答案 x 二分查找，统计不超过 x 的可构成金额数量。面额 c 能产生 floor(x/c) 个倍数；不同面额的倍数集合可能重叠，因此用容斥原理枚举所有非空子集，子集交集的周期是这些面额的最小公倍数，奇数个集合加上，偶数个集合减去。计数不少于 k 时收缩右边界。</div>
+    <div class="exp"><b>🔧 题解：</b>先为每个面额子集预计算最小公倍数。count(x) 按子集大小奇偶对 x//lcm 求和，得到不超过 x 的不同可构成金额数。答案上界可取 min(coins)*k，因为最小面额的前 k 个倍数一定可构成；对 [1, min(coins)*k] 进行二分。预计算和每次计数均遍历 2^n 个子集，时间复杂度 O(2^n log(min(coins)·k))，空间复杂度 O(2^n)。</div>
+    <pre class="code">from math import gcd
+
+class Solution:
+    def findKthSmallest(self, coins, k):
+        n = len(coins)
+        size = 1 &lt;&lt; n
+        lcms = [1] * size
+
+        for mask in range(1, size):
+            bit = mask &amp; -mask
+            i = bit.bit_length() - 1
+            prev = mask ^ bit
+            g = gcd(lcms[prev], coins[i])
+            lcms[mask] = lcms[prev] // g * coins[i]
+
+        def count(x):
+            total = 0
+            for mask in range(1, size):
+                lcm_value = lcms[mask]
+                if lcm_value &lt;= x:
+                    contribution = x // lcm_value
+                    if mask.bit_count() &amp; 1:
+                        total += contribution
+                    else:
+                        total -= contribution
+            return total
+
+        left, right = 1, min(coins) * k
+        while left &lt; right:
+            mid = (left + right) // 2
+            if count(mid) &gt;= k:
+                right = mid
             else:
-                arr2.append(x)
-        return arr1 + arr2</pre>
-    <a class="link" href="https://leetcode.com/problems/distribute-elements-into-two-arrays-i/" target="_blank">🚀 去 LeetCode 做题 →</a>
+                left = mid + 1
+        return left</pre>
+    <a class="link" href="https://leetcode.com/problems/kth-smallest-amount-with-single-denomination-combination/" target="_blank">🚀 去 LeetCode 做题 →</a>
   </div>
 </div>
 </div>
 <div class="group"><div class="group-title">📐 数学知识点 <span class="badge">4 项</span></div>
 <div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">📐 高数·第1天·极限：增长阶比较</span><span class="tag book">第1天</span></div>
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">📐 高数·第2天·极限：(x+u)^m 展开取主导</span><span class="tag book">第2天</span></div>
   <div class="card-body">
-    <div class="q">lim x^n/e^x=0；lim ln x/x^n=0</div>
-    <div class="exp"><b>📌 要点：</b>当 x→+∞ 时，指数函数的增长速度高于任意幂函数，幂函数的增长速度高于对数函数。常用记忆顺序为 e^x≫x^n≫ln x。</div>
-    <div class="exp">• 指数函数 e^x 高于任意固定次数幂 x^n</div><div class="exp">• 幂函数 x^n 高于对数函数 ln x</div><div class="exp">• 比较增长阶时必须明确变量趋于何处</div>
-    <div class="exp" style="margin-top:6px">x→+∞时<b style="color:#d48806">＿＿＿</b>≫<b style="color:#d48806">＿＿＿</b>≫<b style="color:#d48806">＿＿＿</b></div><button class="ans-btn" style="font-size:12px;padding:4px 12px">✅ 答案</button><div class="ans-box"><div class="ans">e^x≫x^n≫ln x</div></div>
-    <div class="exp"><b>🧭 套路：</b>遇到 x→+∞ 的商式，先按 e^x、x^n、ln x 的增长阶判断极限，再结合等价变形或洛必达法则。</div>
+    <div class="q">(x+u)^m=x^m(1+u/x)^m=x^m+mx^(m-1)u+o(...)</div>
+    <div class="exp"><b>📌 要点：</b>当 u/x→0 时，先提取 x^m，再按二项式展开保留主导项；首个修正项的系数为 m，后续项相对于它属于更高阶小量。</div>
+    <div class="exp">• 先提取 x^m，把展开式写成 x^m(1+u/x)^m</div><div class="exp">• 一阶修正项为 mx^(m-1)u，系数不能漏掉 m</div><div class="exp">• 只需取题目要求的阶数时，余项可用 o(...) 表示</div>
+    <div class="exp" style="margin-top:6px">(x+u)^m≈<b style="color:#d48806">＿＿＿</b>（u/x→0时）</div><button class="ans-btn" style="font-size:12px;padding:4px 12px">✅ 答案</button><div class="ans-box"><div class="ans">x^m+mx^(m-1)u</div></div>
+    <div class="exp"><b>🧭 套路：</b>先判断 u 相对 x 的阶数，再决定保留到哪一项；不要把 (x+u)^m 直接误写成 x^m+u^m。</div>
     
   </div>
  </div>
 <div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">📐 高数·第2天·极限：积分中值定理与夹逼</span><span class="tag book">第2天</span></div>
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">📐 高数·第2天·极限：幂指函数极限</span><span class="tag book">第2天</span></div>
   <div class="card-body">
-    <div class="q">∫_a^b f(n,x)dx=f(n,ξ)(b-a)；夹逼准则</div>
-    <div class="exp"><b>📌 要点：</b>积分中值定理把连续函数在区间上的积分写成某个中间点函数值乘区间长度；若函数被上下界控制且上下界极限相同，可用夹逼准则处理积分型极限。</div>
-    <div class="exp">• 连续函数的积分可表示为某个中间点函数值乘区间长度</div><div class="exp">• 上下界函数极限相同即可夹逼出目标极限</div><div class="exp">• 使用定理时注意区间连续性与极限条件</div>
-    <div class="exp" style="margin-top:6px">∫f(n,x)dx=<b style="color:#d48806">＿＿＿</b>；(a,b)连续且g_n≤f≤h_n且lim g_n=lim h_n=A⟹<b style="color:#d48806">＿＿＿</b></div><button class="ans-btn" style="font-size:12px;padding:4px 12px">✅ 答案</button><div class="ans-box"><div class="ans">f(n,ξ_n)(b-a)；lim f(n,x)=A</div></div>
-    <div class="exp"><b>🧭 套路：</b>先把积分看作区间长度乘某个点值，再检查该点值是否可由夹逼或连续性确定。</div>
+    <div class="q">1^∞、0^0、∞^0 未定式：y=f^g→ln y=g ln f</div>
+    <div class="exp"><b>📌 要点：</b>对于 f(x)^{g(x)}，当底数为正且出现 1^∞、0^0 或 ∞^0 型未定式时，令 y=f(x)^{g(x)}，取对数把乘方转为 g(x)ln f(x)，再求其极限。</div>
+    <div class="exp">• 取对数前要确认底数 f(x)&gt;0</div><div class="exp">• 先求 g(x)ln f(x) 的极限，再用指数函数还原 y</div><div class="exp">• 1^∞、0^0、∞^0 都不能直接把底数和指数分别取极限后相乘</div>
+    <div class="exp" style="margin-top:6px">lim f(x)^g(x)=<b style="color:#d48806">＿＿＿</b>（f&gt;0）</div><button class="ans-btn" style="font-size:12px;padding:4px 12px">✅ 答案</button><div class="ans-box"><div class="ans">e^[lim g(x)ln f(x)]</div></div>
+    <div class="exp"><b>🧭 套路：</b>看到幂指型未定式，优先写 ln y=g ln f；若对数后的极限为 L，则原极限为 e^L。</div>
     
   </div>
  </div>
 <div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">📐 线代·行列式与矩阵：秩的拼接与伴随矩阵秩</span><span class="tag book">线代·行列式与矩阵</span></div>
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">📐 线代·向量：向量组等价</span><span class="tag book">线代·向量</span></div>
   <div class="card-body">
-    <div class="q">r(A,B)≤r(A)+r(B)；r(A*)={n,1,0}按r(A)={n,n-1,&lt;n-1}</div>
-    <div class="exp"><b>📌 要点：</b>横向或纵向拼接矩阵的秩不超过各部分秩之和；加一列后秩至多增加 1。n 阶矩阵伴随矩阵的秩按原矩阵秩分为三档：满秩时为 n，秩为 n-1 时为 1，更低时为 0。</div>
-    <div class="exp">• 拼接矩阵的秩介于相关最大秩与各部分秩之和之间</div><div class="exp">• 分块对角矩阵的秩等于各对角块秩之和</div><div class="exp">• 伴随矩阵秩由原矩阵秩是否为 n、n-1 或更低决定</div>
-    <div class="exp" style="margin-top:6px">默写核心结论：<b style="color:#d48806">＿＿＿</b></div><button class="ans-btn" style="font-size:12px;padding:4px 12px">✅ 答案</button><div class="ans-box"><div class="ans">r(A,B)≤r(A)+r(B)；r(A*)={n,1,0}按r(A)={n,n-1,&lt;n-1}</div></div>
-    <div class="exp"><b>🧭 套路：</b>遇到伴随矩阵先判断 r(A) 与 n 的关系；遇到拼接矩阵先使用秩的上下界，不要误认为拼接后秩必然相加。</div>
+    <div class="q">A~B⟺r(A)=r(B)=r(A,B)</div>
+    <div class="exp"><b>📌 要点：</b>两个向量组等价，表示它们可以互相线性表示；等价关系具有反身性、对称性和传递性。若向量组 B 能由 A 线性表示，则 r(B)≤r(A)。</div>
+    <div class="exp">• A~B 的秩判据为 r(A)=r(B)=r(A,B)</div><div class="exp">• 向量组等价意味着两个向量组可以互相线性表示</div><div class="exp">• 若 B 能由 A 线性表示，则 B 的秩不超过 A 的秩</div>
+    <div class="exp" style="margin-top:6px">默写核心结论：<b style="color:#d48806">＿＿＿</b></div><button class="ans-btn" style="font-size:12px;padding:4px 12px">✅ 答案</button><div class="ans-box"><div class="ans">A~B⟺r(A)=r(B)=r(A,B)</div></div>
+    <div class="exp"><b>🧭 套路：</b>判断等价时可先比较两个向量组的秩，再检查拼接矩阵的秩是否仍相同；只比较 r(A)=r(B) 不足以单独推出等价。</div>
     
   </div>
  </div>
 <div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">📐 线代·向量：线性组合与线性表示</span><span class="tag book">线代·向量</span></div>
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">📐 线代·向量：线性相关与线性无关</span><span class="tag book">线代·向量</span></div>
   <div class="card-body">
-    <div class="q">β=λ1α1+...+λsαs</div>
-    <div class="exp"><b>📌 要点：</b>向量 β 能由向量组 α1，…，αs 线性表示，当且仅当方程组 Ax=β 有解，也等价于增广矩阵与系数矩阵的秩相等。</div>
-    <div class="exp">• 线性组合是向量组按标量系数加权相加</div><div class="exp">• β 可由向量组线性表示等价于 Ax=β 有解</div><div class="exp">• 判定可用 r(A,β)=r(A)</div>
-    <div class="exp" style="margin-top:6px">默写核心结论：<b style="color:#d48806">＿＿＿</b></div><button class="ans-btn" style="font-size:12px;padding:4px 12px">✅ 答案</button><div class="ans-box"><div class="ans">β=λ1α1+...+λsαs</div></div>
-    <div class="exp"><b>🧭 套路：</b>把向量组作为矩阵 A 的列，目标向量作为 β；通过判断 Ax=β 是否有解或比较两个秩来判定线性表示。</div>
+    <div class="q">相关⟺∃不全为零k使Σkα=0⟺Ax=0有非零解⟺r(A)&lt;s</div>
+    <div class="exp"><b>📌 要点：</b>含 s 个向量的向量组线性相关，当且仅当存在不全为零的系数使线性组合为零，也等价于齐次方程 Ax=0 有非零解或 r(A)&lt;s；线性无关时 Ax=0 只有零解且 r(A)=s。</div>
+    <div class="exp">• 线性相关等价于齐次方程 Ax=0 存在非零解</div><div class="exp">• 相关时至少有一个向量可由其余向量线性表示</div><div class="exp">• 线性无关等价于 Ax=0 只有零解，并且 r(A)=s</div>
+    <div class="exp" style="margin-top:6px">默写核心结论：<b style="color:#d48806">＿＿＿</b></div><button class="ans-btn" style="font-size:12px;padding:4px 12px">✅ 答案</button><div class="ans-box"><div class="ans">相关⟺∃不全为零k使Σkα=0⟺Ax=0有非零解⟺r(A)&lt;s</div></div>
+    <div class="exp"><b>🧭 套路：</b>把向量组作为矩阵 A 的列，向量个数为 s；通过比较 r(A) 与 s，或判断齐次方程是否有非零解，快速判定相关性。</div>
     
   </div>
  </div>
 </div>
 <div class="group"><div class="group-title">💻 408 选择题 <span class="badge">5 题</span></div>
 <div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">采用顺序栈存储 n 个元素，栈底下标为 0，栈顶指针 top 指向当前栈顶元素。空栈时 top=-1，则栈满时 top 的值为（ ）</span><span class="tag book">数据结构</span><span class="tag easy">简单</span></div>
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">将中缀表达式 A+B*(C-D)-E/F 转换为等价的后缀表达式，正确的是（ ）</span><span class="tag book">数据结构</span><span class="tag easy">简单</span></div>
   <div class="card-body">
-    <div class="q"><div class="opt">A. n-1</div><div class="opt">B. n</div><div class="opt">C. 0</div><div class="opt">D. -1</div></div>
+    <div class="q"><div class="opt">A. ABCD-*+EF/-</div><div class="opt">B. ABCD-+*EF/-</div><div class="opt">C. AB+CD-*EF/-</div><div class="opt">D. ABCD-*E+F/-</div></div>
     
     <button class="ans-btn">✅ 查看答案与解析</button>
     <div class="ans-box">
       <div class="ans">答案：A</div>
-      <div class="exp"><b>📖 解析：</b>顺序栈可用下标 0 到 n-1 存放 n 个元素，栈满时最后一个元素位于下标 n-1，因此 top=n-1。若 top 指向下一个待插入位置，才会采用 top=n；本题已明确 top 指向当前栈顶元素。</div>
+      <div class="exp"><b>📖 解析：</b>先处理括号内的 C-D 得到 CD-，再与 B 做乘法得到 BCD-*；随后与 A 相加得到 ABCD-*+；E/F 得到 EF/，最后做减法，结果为 ABCD-*+EF/-。</div>
     </div>
   </div>
  </div>
 <div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">关于补码加法溢出判断，下列说法正确的是（ ）</span><span class="tag book">计算机组成原理</span><span class="tag easy">简单</span></div>
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">采用 8 位无符号纯小数定点表示，二进制位串 0.10110100 所表示的十进制数是（ ）</span><span class="tag book">计算机组成原理</span><span class="tag easy">简单</span></div>
   <div class="card-body">
-    <div class="q"><div class="opt">A. 两个正数相加结果为负数时发生溢出</div><div class="opt">B. 正数与负数相加一定发生溢出</div><div class="opt">C. 两个负数相加结果为正数时不发生溢出</div><div class="opt">D. 只要最高位产生进位就一定溢出</div></div>
+    <div class="q"><div class="opt">A. 0.703125</div><div class="opt">B. 0.6875</div><div class="opt">C. 180</div><div class="opt">D. 0.8125</div></div>
     
     <button class="ans-btn">✅ 查看答案与解析</button>
     <div class="ans-box">
       <div class="ans">答案：A</div>
-      <div class="exp"><b>📖 解析：</b>补码中同号数相加可能溢出，异号数相加不会溢出。两个正数相加得到负数，说明结果超出正数表示范围，发生正溢出。两个负数相加得到正数则发生负溢出，因此 C 错；最高位进位不等同于溢出，D 错。</div>
+      <div class="exp"><b>📖 解析：</b>无符号纯小数各位权值依次为 2^-1、2^-2、…、2^-8，因此 0.10110100=1/2+1/8+1/16+1/64=45/64=0.703125。C 是把位串 10110100 当作无符号整数得到的结果，不符合纯小数约定。</div>
     </div>
   </div>
  </div>
 <div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">关于 UNIX/Linux 中无名管道的说法，正确的是（ ）</span><span class="tag book">操作系统</span><span class="tag easy">简单</span></div>
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">关于同一进程内线程的说法，正确的是（ ）</span><span class="tag book">操作系统</span><span class="tag easy">简单</span></div>
   <div class="card-body">
-    <div class="q"><div class="opt">A. 无名管道通常只能实现半双工通信</div><div class="opt">B. 无名管道可以让任意两个无亲缘关系的进程通信</div><div class="opt">C. 管道写满后写进程一定立即退出</div><div class="opt">D. 管道读空时读进程一定获得文件结束标志</div></div>
+    <div class="q"><div class="opt">A. 同一进程的线程共享进程地址空间，但各自拥有程序计数器、寄存器集合和栈</div><div class="opt">B. 线程拥有独立于所属进程的地址空间，因此线程间必须通过管道通信</div><div class="opt">C. 任意线程切换都必然引起从用户态到内核态的切换</div><div class="opt">D. 一个线程结束后，所属进程中的其他线程一定全部结束</div></div>
     
     <button class="ans-btn">✅ 查看答案与解析</button>
     <div class="ans-box">
       <div class="ans">答案：A</div>
-      <div class="exp"><b>📖 解析：</b>无名管道通常在有亲缘关系的进程之间使用，并且一般是半双工的。管道写满时写进程可能阻塞，读空且写端仍存在时读进程通常阻塞；只有所有写端关闭后读空，读端才会读到文件结束。</div>
+      <div class="exp"><b>📖 解析：</b>线程是进程内的执行流。同一进程的线程共享代码段、数据段和打开的文件等资源，但为了保存各自的执行现场，每个线程有独立的程序计数器、寄存器集合和栈。线程间可直接通过共享内存交换数据；用户级线程切换不一定进入内核；单个线程结束也不意味着其他线程必然结束。</div>
     </div>
   </div>
  </div>
 <div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">采用 CRC 校验，数据位串为 1101，生成多项式对应的位串为 1011。发送端在数据后补 3 个 0 后进行模 2 除法，所得余数和发送位串分别为（ ）</span><span class="tag book">计算机网络</span><span class="tag mid">中等</span></div>
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">停止-等待协议中，数据帧长 1000 字节，链路速率为 1 Mbit/s，单程传播时延为 20 ms，确认帧的发送、处理和传播时间均忽略不计且无差错。发送方从发完一个数据帧到收到确认后才能发送下一个帧，则信道利用率约为（ ）</span><span class="tag book">计算机网络</span><span class="tag mid">中等</span></div>
   <div class="card-body">
-    <div class="q"><div class="opt">A. 余数 010，发送位串 1101010</div><div class="opt">B. 余数 001，发送位串 1101001</div><div class="opt">C. 余数 011，发送位串 1101011</div><div class="opt">D. 余数 100，发送位串 1101100</div></div>
+    <div class="q"><div class="opt">A. 8.0%</div><div class="opt">B. 16.7%</div><div class="opt">C. 40.0%</div><div class="opt">D. 83.3%</div></div>
     
     <button class="ans-btn">✅ 查看答案与解析</button>
     <div class="ans-box">
-      <div class="ans">答案：A</div>
-      <div class="exp"><b>📖 解析：</b>补零后的被除数为 1101000。用 1011 做模 2 除法：1101000⊕1011000=0110000，继续对齐后 0110000⊕0101100=0011100，再得 0011100⊕0010110=0001010，余数为低 3 位 010。因此发送位串为 1101 加余数 010，即 1101010。</div>
+      <div class="ans">答案：B</div>
+      <div class="exp"><b>📖 解析：</b>数据帧发送时间为 1000×8/(10^6)=8 ms；从开始发送到收到确认，等待周期为发送时间加往返传播时延，即 8+2×20=48 ms。停止-等待时一个周期内只有 8 ms 在发送数据，所以利用率为 8/48≈16.7%。</div>
     </div>
   </div>
  </div>
 <div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">利用一个栈检查括号序列 {[()]}([])。从左到右扫描时，遇到右括号就与栈顶左括号匹配并出栈。扫描完整个序列后，栈的状态和序列是否合法分别为（ ）</span><span class="tag book">数据结构</span><span class="tag hard">困难</span></div>
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">在 8 位机器字长下，位串 11101100 作为无符号数和补码有符号数分别表示多少？再将它与补码位串 00010101 相加，所得 8 位结果及有符号溢出情况是（ ）</span><span class="tag book">计算机组成原理</span><span class="tag hard">困难</span></div>
   <div class="card-body">
-    <div class="q"><div class="opt">A. 栈为空，合法</div><div class="opt">B. 栈中剩余 {，合法</div><div class="opt">C. 栈为空，不合法</div><div class="opt">D. 栈中剩余 [，不合法</div></div>
+    <div class="q"><div class="opt">A. 无符号数 236，有符号数 -20；结果为 00000001，补码有符号运算不溢出</div><div class="opt">B. 无符号数 236，有符号数 -20；结果为 00000001，补码有符号运算发生溢出</div><div class="opt">C. 无符号数 108，有符号数 -20；结果为 11111111，补码有符号运算不溢出</div><div class="opt">D. 无符号数 236，有符号数 20；结果为 00000001，补码有符号运算不溢出</div></div>
     
     <button class="ans-btn">✅ 查看答案与解析</button>
     <div class="ans-box">
       <div class="ans">答案：A</div>
-      <div class="exp"><b>📖 解析：</b>扫描 {、[、( 依次入栈；) 与 ( 匹配，] 与 [ 匹配，} 与 { 匹配，随后 (、[ 入栈，再由 ]、) 依次匹配出栈。所有括号均正确嵌套，且扫描结束栈为空，因此序列合法。</div>
+      <div class="exp"><b>📖 解析：</b>11101100 的无符号值为 128+64+32+8+4=236；最高位为 1，按 8 位补码解释时其值为 236-256=-20。与 00010101（十进制 21）相加得到 1 00000001，保留低 8 位为 00000001。-20+21=1 在补码表示范围内，没有有符号溢出；最高位产生进位本身也不能作为补码溢出的判据。</div>
     </div>
   </div>
  </div>
@@ -185,47 +210,47 @@
 <div class="group"><div class="group-title">🇬🇧 考研单词 <span class="badge">20 词</span></div>
 <div class="card open">
   <div class="card-head"><span class="arrow">▶</span><span class="card-title">🇬🇧 考研单词 ×20</span><span class="tag book">高频词</span></div>
-  <div class="card-body"><div class="word-row"><span class="word">build</span><span class="phon">/bɪld/</span></div>
-      <div class="def">建造</div>
-      <div class="example">✏️ Researchers hope to build a more efficient model for the experiment. 研究人员希望为实验建立一个更高效的模型。</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">early</span><span class="phon">/ˈɜːli/</span></div>
-      <div class="def">早期的；提早的</div>
-      <div class="example">✏️ Early education can have a lasting influence on children's development. 早期教育会对儿童发展产生持久影响。</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">off</span><span class="phon">/ɒf/</span></div>
-      <div class="def">关闭；不在原处</div>
-      <div class="example">✏️ The machine was switched off after the test was completed. 测试完成后机器被关闭了。</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">spend</span><span class="phon">/spend/</span></div>
-      <div class="def">花费；度过</div>
-      <div class="example">✏️ Students should spend more time reviewing the basic principles. 学生应花更多时间复习基本原理。</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">little</span><span class="phon">/ˈlɪtl/</span></div>
-      <div class="def">少；小</div>
-      <div class="example">✏️ There is little evidence to support this conclusion. 几乎没有证据支持这一结论。</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">bank</span><span class="phon">/bæŋk/</span></div>
-      <div class="def">银行；岸</div>
-      <div class="example">✏️ The bank introduced a new system to protect online payments. 这家银行推出了保护在线支付的新系统。</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">hard</span><span class="phon">/hɑːd/</span></div>
-      <div class="def">困难的；努力地</div>
-      <div class="example">✏️ It is hard to solve the problem without sufficient information. 没有充分信息很难解决这个问题。</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">cost</span><span class="phon">/kɒst/</span></div>
-      <div class="def">花费；成本</div>
-      <div class="example">✏️ The cost of public transportation affects people's choice of residence. 公共交通成本会影响人们对居住地的选择。</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">class</span><span class="phon">/klɑːs/</span></div>
-      <div class="def">班级；类别</div>
-      <div class="example">✏️ The study examines differences between social classes. 这项研究考察了社会阶层之间的差异。</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">group</span><span class="phon">/ɡruːp/</span></div>
-      <div class="def">小组；群体</div>
-      <div class="example">✏️ A control group is necessary for a reliable comparison. 进行可靠比较需要设置对照组。</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">price</span><span class="phon">/praɪs/</span></div>
-      <div class="def">价格</div>
-      <div class="example">✏️ The price of energy has a direct effect on industrial production. 能源价格会直接影响工业生产。</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">effect</span><span class="phon">/ɪˈfekt/</span></div>
-      <div class="def">效果；影响</div>
-      <div class="example">✏️ The policy had a significant effect on employment. 这项政策对就业产生了显著影响。</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">comprehension</span><span class="phon">/ˌkɒmprɪˈhenʃən/</span></div>
-      <div class="def">理解；理解力</div>
-      <div class="example">✏️ Reading widely improves comprehension of complex arguments. 广泛阅读能提高对复杂论证的理解。</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">today</span><span class="phon">/təˈdeɪ/</span></div>
-      <div class="def">在今天；现今</div>
-      <div class="example">✏️ Today, digital technology is used in almost every field. 如今，数字技术几乎应用于所有领域。</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">tell</span><span class="phon">/tel/</span></div>
-      <div class="def">告诉；辨别</div>
-      <div class="example">✏️ The results tell us little about the cause of the problem. 这些结果几乎无法告诉我们问题的原因。</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">set</span><span class="phon">/set/</span></div>
-      <div class="def">设定；一组</div>
-      <div class="example">✏️ The researchers set a clear target before collecting the data. 研究人员在收集数据前设定了明确目标。</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">something</span><span class="phon">/ˈsʌmθɪŋ/</span></div>
-      <div class="def">某事；某物</div>
-      <div class="example">✏️ Something must be done to reduce unnecessary waste. 必须采取措施减少不必要的浪费。</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">play</span><span class="phon">/pleɪ/</span></div>
-      <div class="def">玩；扮演；发挥作用</div>
-      <div class="example">✏️ Education plays an important role in economic development. 教育在经济发展中发挥重要作用。</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">likely</span><span class="phon">/ˈlaɪkli/</span></div>
-      <div class="def">很可能的；大概</div>
-      <div class="example">✏️ It is likely that the new method will improve accuracy. 新方法很可能提高准确性。</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">turn</span><span class="phon">/tɜːn/</span></div>
-      <div class="def">翻转；转变；轮流</div>
-      <div class="example">✏️ The discussion may turn to the long-term effects of the policy. 讨论可能转向该政策的长期影响。</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"></div>
+  <div class="card-body"><div class="word-row"><span class="word">course</span><span class="phon">/kɔːrs/</span></div>
+      <div class="def">课程</div>
+      <div class="example">✏️ The course introduces students to the basic principles of computer architecture. 这门课程向学生介绍计算机组成原理的基本原则。</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">buy</span><span class="phon">/baɪ/</span></div>
+      <div class="def">购买</div>
+      <div class="example">✏️ Many consumers buy products online after comparing their prices. 许多消费者比较价格后会在线购买产品。</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">understand</span><span class="phon">/ˌʌndərˈstænd/</span></div>
+      <div class="def">理解</div>
+      <div class="example">✏️ Students must understand the evidence before accepting the conclusion. 学生必须理解证据后才能接受这一结论。</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">offer</span><span class="phon">/ˈɔːfər/</span></div>
+      <div class="def">提供</div>
+      <div class="example">✏️ The new policy offers young researchers more opportunities for training. 新政策为年轻研究人员提供了更多培训机会。</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">service</span><span class="phon">/ˈsɜːrvɪs/</span></div>
+      <div class="def">服务、公共设施</div>
+      <div class="example">✏️ Public transport is an essential service in large cities. 公共交通是大城市的一项重要公共服务。</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">small</span><span class="phon">/smɔːl/</span></div>
+      <div class="def">小的</div>
+      <div class="example">✏️ Even a small error in the measurement may affect the final result. 测量中的一个小误差也可能影响最终结果。</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">product</span><span class="phon">/ˈprɑːdʌkt/</span></div>
+      <div class="def">产品</div>
+      <div class="example">✏️ The quality of a product depends on both its design and its materials. 产品质量取决于设计和材料。</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">experience</span><span class="phon">/ɪkˈspɪriəns/</span></div>
+      <div class="def">经历</div>
+      <div class="example">✏️ Practical experience helps students apply theoretical knowledge. 实践经历帮助学生运用理论知识。</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">suggest</span><span class="phon">/səˈdʒest/</span></div>
+      <div class="def">建议</div>
+      <div class="example">✏️ The results suggest that regular exercise improves memory. 结果表明规律运动能改善记忆力。</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">decide</span><span class="phon">/dɪˈsaɪd/</span></div>
+      <div class="def">决定</div>
+      <div class="example">✏️ The committee will decide whether to adopt the proposed method. 委员会将决定是否采用所提出的方法。</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">test</span><span class="phon">/test/</span></div>
+      <div class="def">测试</div>
+      <div class="example">✏️ The engineers tested the system under several extreme conditions. 工程师在几种极端条件下测试了该系统。</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">scientist</span><span class="phon">/ˈsaɪəntɪst/</span></div>
+      <div class="def">科学家</div>
+      <div class="example">✏️ The scientist proposed a new explanation for the observed phenomenon. 这位科学家为观察到的现象提出了新的解释。</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">bring</span><span class="phon">/brɪŋ/</span></div>
+      <div class="def">带来</div>
+      <div class="example">✏️ Technological progress can bring both benefits and new challenges. 技术进步既能带来好处，也会带来新的挑战。</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">since</span><span class="phon">/sɪns/</span></div>
+      <div class="def">自从、因为、既然</div>
+      <div class="example">✏️ Since the sample was too small, the conclusion should be treated with caution. 既然样本太小，这一结论就应谨慎对待。</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">however</span><span class="phon">/haʊˈevər/</span></div>
+      <div class="def">但是、然而</div>
+      <div class="example">✏️ The method is simple; however, it is not suitable for every situation. 这种方法很简单，然而并不适用于所有情况。</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">person</span><span class="phon">/ˈpɜːrsən/</span></div>
+      <div class="def">人</div>
+      <div class="example">✏️ A responsible person should consider the effects of a decision on others. 负责任的人应考虑决定对他人的影响。</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">teacher</span><span class="phon">/ˈtiːtʃər/</span></div>
+      <div class="def">教师</div>
+      <div class="example">✏️ A good teacher encourages students to ask questions and think independently. 好教师会鼓励学生提问并独立思考。</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">around</span><span class="phon">/əˈraʊnd/</span></div>
+      <div class="def">周围、环绕</div>
+      <div class="example">✏️ The survey collected opinions from people around the country. 这项调查收集了全国各地人们的意见。</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">whether</span><span class="phon">/ˈweðər/</span></div>
+      <div class="def">是否</div>
+      <div class="example">✏️ The experiment will determine whether the hypothesis is supported by the data. 实验将确定数据是否支持这一假设。</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">future</span><span class="phon">/ˈfjuːtʃər/</span></div>
+      <div class="def">未来</div>
+      <div class="example">✏️ Investment in education is important for the future of society. 对教育的投入对社会的未来很重要。</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"></div>
 </div>
 </div>
 <div class="footer">由 Hermes AI 生成 · 每天 08:00 更新 · 加油 💪</div>
