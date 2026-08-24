@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>今日学习清单 · 2026-08-23</title>
+<title>今日学习清单 · 2026-08-24</title>
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Noto Sans SC", sans-serif; background: #f5f6fa; color: #1f2329; max-width: 640px; margin: 0 auto; padding: 16px 14px 40px; }
@@ -50,147 +50,133 @@
 
 <div class="hero">
   <h1>📋 今日学习清单</h1>
-  <div class="date">2026年8月23日</div>
+  <div class="date">2026年8月24日</div>
 </div>
 
 <div class="group"><div class="group-title">🔥 今日重点 <span class="badge">2 项</span></div>
 <div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">🧩 LeetCode 每日一题：Sum Game</span><span class="tag mid">Medium</span></div>
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">🧩 LeetCode 每日一题：Stone Game VIII</span><span class="tag hard">Hard</span></div>
   <div class="card-body">
-    <div class="q">Alice 和 Bob 轮流把字符串 num 中的 ? 替换为 0 到 9 的任意数字，Alice 先手。字符串长度为偶数；游戏结束后，若前半段数字和等于后半段，Bob 获胜，否则 Alice 获胜。双方都采取最优策略，判断 Alice 是否获胜。</div>
-    <div class="exp"><b>💡 解题思路：</b>只需比较两半当前数字和的差值，以及两半问号数量的差值。设 diff=左半和−右半和，qdiff=左半问号数−右半问号数。若 qdiff=0，则没有可由某一方改变的净问号位置，Alice 只有在 diff 不为 0 时获胜；若 qdiff 不为 0，后手可以通过在问号较多的一侧进行补偿。每次一方填写一个数字，另一方可以在另一侧用 0 到 9 的范围抵消；当问号数量差为奇数时，先手能够制造无法相等的差距。等价判定为：当 qdiff==0 时答案是 diff!=0；否则答案取决于 diff 与 9*qdiff/2 的关系，使用整数形式比较 2*abs(diff) 与 9*abs(qdiff)。</div>
-    <div class="exp"><b>🔧 题解：</b>统计左右两半的数字和与问号数。若两侧问号数相同，直接判断两半数字和是否相等；否则令 diff 为数字和之差、qdiff 为问号数之差。交换左右两半可令 qdiff&gt;0。若 qdiff 为奇数，Alice 必胜；若 qdiff 为偶数，当 abs(diff) != 9*qdiff/2 时 Alice 必胜，否则 Bob 必胜。时间复杂度 O(n)，额外空间复杂度 O(1)。</div>
-    <pre class="code">class Solution:
-    def sumGame(self, num: str) -&gt; bool:
-        half = len(num) // 2
-        diff = 0
-        qdiff = 0
+    <div class="q">给定整数数组 stoneValue，Alice 和 Bob 轮流从数组左端拿走至少一个石子并获得所拿石子的总分；Alice 的第一次操作必须拿走至少两个石子。双方均采取最优策略，返回 Alice 最终得分与 Bob 最终得分之差的最大值。</div>
+    <div class="exp"><b>💡 解题思路：</b>用前缀和表示从开头拿走若干石子的得分。若当前已经考虑到前缀 i，选择把前 i+1 个石子作为一次操作后，当前得分差为 prefix[i] 减去对手在后续状态中的最优得分；也可以把选择继续延后，沿用后一个状态。因此状态转移为 dp[i]=max(dp[i+1], prefix[i]-dp[i+1])，只需从后向前滚动维护一个变量。由于 Alice 的第一次操作至少拿两个石子，最终答案从 prefix[1] 对应的状态开始。</div>
+    <div class="exp"><b>🔧 题解：</b>先计算前缀和 prefix。令 ans=prefix[n-1]，表示在最后一个可转移状态之后的基准值；然后令 i 从 n-2 递减到 1，执行 ans=max(ans, prefix[i]-ans)。循环结束时 ans 即 Alice 在允许首步至少拿两个石子的条件下的最大得分差。时间复杂度 O(n)，额外空间复杂度 O(n)（若保留前缀和）；也可以原地复用输入数组保存前缀和。</div>
+    <pre class="code">from itertools import accumulate
 
-        for i, ch in enumerate(num):
-            sign = 1 if i &lt; half else -1
-            if ch == '?':
-                qdiff += sign
-            else:
-                diff += sign * int(ch)
-
-        if qdiff == 0:
-            return diff != 0
-
-        if qdiff &lt; 0:
-            qdiff = -qdiff
-            diff = -diff
-
-        if qdiff % 2 == 1:
-            return True
-        return abs(diff) * 2 != 9 * qdiff</pre>
-    <a class="link" href="https://leetcode.com/problems/sum-game/" target="_blank">🚀 去 LeetCode 做题 →</a>
+class Solution:
+    def stoneGameVIII(self, stoneValue: list[int]) -&gt; int:
+        prefix = list(accumulate(stoneValue))
+        ans = prefix[-1]
+        for i in range(len(prefix) - 2, 0, -1):
+            ans = max(ans, prefix[i] - ans)
+        return ans</pre>
+    <a class="link" href="https://leetcode.com/problems/stone-game-viii/" target="_blank">🚀 去 LeetCode 做题 →</a>
   </div>
 </div>
 </div>
 <div class="group"><div class="group-title">📐 数学知识点 <span class="badge">4 项</span></div>
 <div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">📐 高数·第2天·导数：渐近线</span><span class="tag book">第2天</span></div>
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">📐 高数·第2天·导数：可导-连续-导函数连续链</span><span class="tag book">第2天</span></div>
   <div class="card-body">
-    <div class="q">水平：lim f(x)=k⟹y=k；斜：f(x)=kx+b+o(1)，k=lim f(x)/x，b=lim[f(x)-kx]</div>
-    <div class="exp"><b>📌 要点：</b>先求 k 再求 b；渐近线分为竖直、水平和斜渐近线。</div>
-    <div class="exp">• 竖直渐近线通常由函数在某点附近趋于无穷确定</div><div class="exp">• 水平渐近线由 x 趋于正无穷或负无穷时的函数极限确定</div><div class="exp">• 斜渐近线先求 k=lim f(x)/x，再求 b=lim[f(x)-kx]</div>
-    <div class="exp" style="margin-top:6px">三类：<b style="color:#d48806">＿＿＿</b>（无穷型）、<b style="color:#d48806">＿＿＿</b>（y=k）、<b style="color:#d48806">＿＿＿</b>（y=kx+b）</div><button class="ans-btn" style="font-size:12px;padding:4px 12px">✅ 答案</button><div class="ans-box"><div class="ans">竖直、水平、斜</div></div>
-    <div class="exp"><b>🧭 套路：</b>先分别考察定义域边界和 x→±∞ 的极限；斜渐近线必须先确认 k 为有限非零值。</div>
+    <div class="q">lim f(x)=f(x0)连续；lim f'(x)=f'(x0)导函数连续</div>
+    <div class="exp"><b>📌 要点：</b>lim f(x)=f(x0)连续；lim f'(x)=f'(x0)导函数连续</div>
+    <div class="exp">• 导函数连续可以推出导函数极限存在</div><div class="exp">• 导函数极限存在可推出左右导数相等，进而函数在该点可导</div><div class="exp">• 一元函数中可导必连续，但连续不一定可导</div>
+    <div class="exp" style="margin-top:6px">导函数连续⟹<b style="color:#d48806">＿＿＿</b>⟹左右导数相等⟹<b style="color:#d48806">＿＿＿</b></div><button class="ans-btn" style="font-size:12px;padding:4px 12px">✅ 答案</button><div class="ans-box"><div class="ans">导函数极限存在；可导</div></div>
+    <div class="exp"><b>🧭 套路：</b>区分函数连续、函数可导和导函数连续三个层次，逻辑链方向不能反推。</div>
     
   </div>
  </div>
 <div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">📐 高数·第2天·导数：导数定义</span><span class="tag book">第2天</span></div>
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">📐 高数·第2天·导数：可微定义</span><span class="tag book">第2天</span></div>
   <div class="card-body">
-    <div class="q">f'(x0)=lim[f(x0+Δx)-f(x0)]/Δx</div>
-    <div class="exp"><b>📌 要点：</b>导数三要素：动静结合、左右极限、极限存在；Δy 是函数改变量。</div>
-    <div class="exp">• 导数定义可用增量 Δx 表示，也可用 x→x0 的形式表示</div><div class="exp">• 一点处导数存在要求左右导数都存在且相等</div><div class="exp">• 可导必连续，但连续不一定可导</div>
-    <div class="exp" style="margin-top:6px">f'(x0)=lim Δx→0 <b style="color:#d48806">＿＿＿</b>=lim x→x0 <b style="color:#d48806">＿＿＿</b>；存在⟺<b style="color:#d48806">＿＿＿</b></div><button class="ans-btn" style="font-size:12px;padding:4px 12px">✅ 答案</button><div class="ans-box"><div class="ans">[f(x0+Δx)-f(x0)]/Δx；[f(x)-f(x0)]/(x-x0)；左右导数存在且相等</div></div>
-    <div class="exp"><b>🧭 套路：</b>遇到分段函数或绝对值函数，分别求左右导数并比较；不要把函数值 f(x0) 误写成增量。</div>
+    <div class="q">Δy=AΔx+o(Δx)⟺可微；dy=f'(x0)dx</div>
+    <div class="exp"><b>📌 要点：</b>可微⟺可导（一元）</div>
+    <div class="exp">• 可微的增量表达式为 Δy=AΔx+o(Δx)</div><div class="exp">• 一元函数在一点可微与可导等价</div><div class="exp">• 微分满足 dy=f'(x0)dx</div>
+    <div class="exp" style="margin-top:6px">Δy=<b style="color:#d48806">＿＿＿</b>+o(Δx)，则称可微，dy=<b style="color:#d48806">＿＿＿</b></div><button class="ans-btn" style="font-size:12px;padding:4px 12px">✅ 答案</button><div class="ans-box"><div class="ans">AΔx；f'(x0)dx</div></div>
+    <div class="exp"><b>🧭 套路：</b>识别可微定义时要保留 o(Δx) 高阶无穷小，并注意 A=f'(x0)。</div>
     
   </div>
  </div>
 <div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">📐 线代·向量：向量组秩与线性表示</span><span class="tag book">线代·向量</span></div>
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">📐 线代·向量：求极大无关组步骤</span><span class="tag book">线代·向量</span></div>
   <div class="card-body">
-    <div class="q">α可由β组表示⟹r(α组)≤r(β组)</div>
-    <div class="exp"><b>📌 要点：</b>等价向量组秩相等（反之不成立）；r(α1..αn)=r(α1..αn,β)⟺β可由表示；秩 r 的组中任 r 个无关向量即极大无关组。</div>
-    <div class="exp">• 一个向量组可由另一个向量组线性表示时，前者的秩不超过后者</div><div class="exp">• 向量加入后秩不变，当且仅当加入的向量可由原向量组表示</div><div class="exp">• 秩为 r 的向量组中，任取 r 个线性无关向量可组成极大无关组</div>
-    <div class="exp" style="margin-top:6px">默写核心结论：<b style="color:#d48806">＿＿＿</b></div><button class="ans-btn" style="font-size:12px;padding:4px 12px">✅ 答案</button><div class="ans-box"><div class="ans">α可由β组表示⟹r(α组)≤r(β组)</div></div>
-    <div class="exp"><b>🧭 套路：</b>先判断表示关系的方向，再比较秩；注意‘秩相等’不能单独推出两个向量组互相线性表示。</div>
+    <div class="q">A=(α1..αn)列排→初等行变换→阶梯形</div>
+    <div class="exp"><b>📌 要点：</b>向量作列组成矩阵；行变换化阶梯形；非零行数=秩；主元所在列对应原向量即极大无关组</div>
+    <div class="exp">• 将向量组按列排成矩阵</div><div class="exp">• 对矩阵作初等行变换化为阶梯形，非零行数就是向量组的秩</div><div class="exp">• 阶梯形主元所在列对应的原向量组成极大无关组</div>
+    <div class="exp" style="margin-top:6px">默写核心结论：<b style="color:#d48806">＿＿＿</b></div><button class="ans-btn" style="font-size:12px;padding:4px 12px">✅ 答案</button><div class="ans-box"><div class="ans">A=(α1..αn)列排→初等行变换→阶梯形</div></div>
+    <div class="exp"><b>🧭 套路：</b>行变换只用于定位主元，选取向量时要回到原矩阵的对应列。</div>
     
   </div>
  </div>
 <div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">📐 线代·向量：n个n维向量行列式判定</span><span class="tag book">线代·向量</span></div>
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">📐 线代·线性方程组：非齐次方程组解判别</span><span class="tag book">线代·线性方程组</span></div>
   <div class="card-body">
-    <div class="q">无关⟺|α1...αn|≠0；相关⟺行列式=0</div>
-    <div class="exp"><b>📌 要点：</b>n 个 n 维向量直接以行列式判定线性相关性：把向量作为列（或行）组成方阵，行列式非零等价于线性无关。</div>
-    <div class="exp">• n 个 n 维向量组成 n 阶方阵后才能直接使用行列式判定</div><div class="exp">• 行列式非零时矩阵可逆，向量组线性无关</div><div class="exp">• 行列式为零时矩阵不可逆，向量组线性相关</div>
-    <div class="exp" style="margin-top:6px">默写核心结论：<b style="color:#d48806">＿＿＿</b></div><button class="ans-btn" style="font-size:12px;padding:4px 12px">✅ 答案</button><div class="ans-box"><div class="ans">无关⟺|α1...αn|≠0；相关⟺行列式=0</div></div>
-    <div class="exp"><b>🧭 套路：</b>先确认向量个数和维数相同；若不是方阵，应改用秩或齐次方程组判定。</div>
+    <div class="q">r(A)≠r(Ā)无解；r(A)=r(Ā)=n唯一解；r(A)=r(Ā)&lt;n无穷多解</div>
+    <div class="exp"><b>📌 要点：</b>增广矩阵初等行变换→阶梯形；自由未知数个数=n-r(A)；通解=特解+齐次通解</div>
+    <div class="exp">• 比较系数矩阵 A 与增广矩阵 Ā 的秩</div><div class="exp">• r(A)≠r(Ā) 时方程组无解</div><div class="exp">• 秩相等且等于未知数个数时唯一解，秩相等但小于未知数个数时有无穷多解</div>
+    <div class="exp" style="margin-top:6px">默写核心结论：<b style="color:#d48806">＿＿＿</b></div><button class="ans-btn" style="font-size:12px;padding:4px 12px">✅ 答案</button><div class="ans-box"><div class="ans">r(A)≠r(Ā)无解；r(A)=r(Ā)=n唯一解；r(A)=r(Ā)&lt;n无穷多解</div></div>
+    <div class="exp"><b>🧭 套路：</b>先判定相容性 r(A)=r(Ā)，再与未知数个数 n 比较；自由未知数个数为 n-r(A)。</div>
     
   </div>
  </div>
 </div>
 <div class="group"><div class="group-title">💻 408 选择题 <span class="badge">5 题</span></div>
 <div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">循环队列采用数组 Q[0..MaxSize-1]，约定队头指针 front 指向队首元素、队尾指针 rear 指向下一个入队位置，并用牺牲一个存储单元区分队满和队空。下列判断正确的是（ ）</span><span class="tag book">数据结构</span><span class="tag easy">简单</span></div>
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">循环队列采用数组 Q[0..7]，约定 front 指向队首元素、rear 指向下一个入队位置，并牺牲一个存储单元区分队空和队满。若当前 front=5、rear=2，则队列中已有多少个元素？（ ）</span><span class="tag book">数据结构</span><span class="tag easy">简单</span></div>
   <div class="card-body">
-    <div class="q"><div class="opt">A. 队空条件为 front == rear，队满条件为 (rear + 1) % MaxSize == front</div><div class="opt">B. 队空条件为 (rear + 1) % MaxSize == front，队满条件为 front == rear</div><div class="opt">C. 入队时 front 加 1，出队时 rear 加 1</div><div class="opt">D. 该约定下循环队列最多可以存放 MaxSize 个元素</div></div>
+    <div class="q"><div class="opt">A. 3</div><div class="opt">B. 4</div><div class="opt">C. 5</div><div class="opt">D. 6</div></div>
+    
+    <button class="ans-btn">✅ 查看答案与解析</button>
+    <div class="ans-box">
+      <div class="ans">答案：C</div>
+      <div class="exp"><b>📖 解析：</b>元素个数为 (rear−front+MaxSize) mod MaxSize=(2−5+8) mod 8=5。队首到队尾依次经过下标 5、6、7、0、1，共 5 个元素；牺牲单元只影响最大容量，不改变该计数公式。</div>
+    </div>
+  </div>
+ </div>
+<div class="card open">
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">某 IEEE 754 双精度规格化浮点数的符号位为 0，11 位阶码为 10000000010，尾数字段最高两位为 01 且其余位全为 0。该数的十进制值为（ ）</span><span class="tag book">计算机组成原理</span><span class="tag easy">简单</span></div>
+  <div class="card-body">
+    <div class="q"><div class="opt">A. 2.5</div><div class="opt">B. 5</div><div class="opt">C. 10</div><div class="opt">D. 20</div></div>
+    
+    <button class="ans-btn">✅ 查看答案与解析</button>
+    <div class="ans-box">
+      <div class="ans">答案：C</div>
+      <div class="exp"><b>📖 解析：</b>双精度偏置值为 1023，阶码 10000000010₂=1026，所以实际阶码为 3。规格化数有隐藏的最高位 1，尾数为 1.01₂=1.25；符号位为 0 表示正数，数值为 1.25×2³=10。</div>
+    </div>
+  </div>
+ </div>
+<div class="card open">
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">某进程到达时刻为 2，完成时刻为 10，运行时间为 5。则该进程的周转时间、带权周转时间和等待时间分别为（ ）</span><span class="tag book">操作系统</span><span class="tag easy">简单</span></div>
+  <div class="card-body">
+    <div class="q"><div class="opt">A. 8，1.6，3</div><div class="opt">B. 8，1.6，5</div><div class="opt">C. 12，2.4，3</div><div class="opt">D. 12，1.6，5</div></div>
     
     <button class="ans-btn">✅ 查看答案与解析</button>
     <div class="ans-box">
       <div class="ans">答案：A</div>
-      <div class="exp"><b>📖 解析：</b>front 指向队首，rear 指向下一个可入队位置，因此 front==rear 表示队空；为了避免队满和队空指针状态相同，牺牲一个单元，队满条件为 (rear+1)%MaxSize==front。入队只移动 rear，出队只移动 front，最多存放 MaxSize−1 个元素。</div>
+      <div class="exp"><b>📖 解析：</b>周转时间=完成时刻−到达时刻=10−2=8；带权周转时间=周转时间/运行时间=8/5=1.6；等待时间=周转时间−运行时间=8−5=3。</div>
     </div>
   </div>
  </div>
 <div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">IEEE 754 单精度浮点数的符号位为 0，阶码域为 10000001，尾数域的最高 3 位为 100 且其余位均为 0。该数的十进制值是（ ）</span><span class="tag book">计算机组成原理</span><span class="tag easy">简单</span></div>
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">设发送一个数据帧所需时间为 T。在纯 ALOHA、时隙 ALOHA 和采用载波侦听的 CSMA 中，下列关于冲突特性的说法正确的是（ ）</span><span class="tag book">计算机网络</span><span class="tag mid">中等</span></div>
   <div class="card-body">
-    <div class="q"><div class="opt">A. 3</div><div class="opt">B. 6</div><div class="opt">C. 12</div><div class="opt">D. 24</div></div>
-    
-    <button class="ans-btn">✅ 查看答案与解析</button>
-    <div class="ans-box">
-      <div class="ans">答案：B</div>
-      <div class="exp"><b>📖 解析：</b>阶码 10000001₂=129，单精度偏置值为127，实际阶码为2。规格化尾数包含隐藏的最高位 1，因此尾数为 1.100…₂=1.5；符号位为0表示正数，数值为 1.5×2²=6。</div>
-    </div>
-  </div>
- </div>
-<div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">关于处理机调度层次，下列说法正确的是（ ）</span><span class="tag book">操作系统</span><span class="tag easy">简单</span></div>
-  <div class="card-body">
-    <div class="q"><div class="opt">A. 高级调度决定进程是否从外存进入内存，涉及作业的提交与完成</div><div class="opt">B. 中级调度只负责决定就绪进程获得处理机的先后次序</div><div class="opt">C. 低级调度负责把暂时不能运行的进程换出到外存</div><div class="opt">D. 高级调度发生最频繁，通常每个时间片都要执行一次</div></div>
+    <div class="q"><div class="opt">A. 纯 ALOHA 的易受冲突时间为 2T，时隙 ALOHA 的易受冲突时间为 T；CSMA 通过侦听可减少冲突但不能完全消除冲突</div><div class="opt">B. 纯 ALOHA 和时隙 ALOHA 的易受冲突时间都为 T，CSMA 能完全消除冲突</div><div class="opt">C. 纯 ALOHA 的易受冲突时间为 T，时隙 ALOHA 的易受冲突时间为 2T；CSMA 不需要退避</div><div class="opt">D. 时隙 ALOHA 只能在有线网络使用，CSMA 只能在无线网络使用</div></div>
     
     <button class="ans-btn">✅ 查看答案与解析</button>
     <div class="ans-box">
       <div class="ans">答案：A</div>
-      <div class="exp"><b>📖 解析：</b>高级调度又称作业调度，负责外存与内存之间的作业接纳；中级调度主要通过挂起与解除挂起实现内存与外存之间的进程调度；低级调度又称进程调度，负责从就绪队列选择进程占用处理机。低级调度最频繁，高级调度最不频繁。</div>
+      <div class="exp"><b>📖 解析：</b>纯 ALOHA 中帧在任意时刻发送，前后各一个帧时长内到达的帧都可能造成冲突，因此易受冲突时间为 2T；时隙 ALOHA 将发送起点限制在时隙边界，易受冲突时间降为 T。CSMA 先侦听信道，能够降低冲突概率，但传播时延等因素仍可能导致冲突，不能保证完全无冲突。</div>
     </div>
   </div>
  </div>
 <div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">采用 4 bit 序号字段的滑动窗口协议，在不考虑其他限制时，为避免新旧帧序号混淆，后退 N 帧（GBN）和选择重传（SR）的发送窗口最大值分别为（ ）</span><span class="tag book">计算机网络</span><span class="tag mid">中等</span></div>
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">带头结点的链队列初始为空，头结点记为 H，且 front=rear=H。依次执行入队 a、入队 b、出队、出队、入队 c。若出队操作返回被删除结点中的元素，则下列说法正确的是（ ）</span><span class="tag book">数据结构</span><span class="tag hard">困难</span></div>
   <div class="card-body">
-    <div class="q"><div class="opt">A. GBN 为 8，SR 为 8</div><div class="opt">B. GBN 为 15，SR 为 8</div><div class="opt">C. GBN 为 16，SR 为 8</div><div class="opt">D. GBN 为 15，SR 为 15</div></div>
+    <div class="q"><div class="opt">A. 两次出队分别返回 a、b；第二次出队后必须令 front=null，入队 c 后 rear=H</div><div class="opt">B. 两次出队分别返回 a、b；第二次出队后 front=rear=H，入队 c 后 H.next 指向 c 且 rear 指向 c</div><div class="opt">C. 两次出队分别返回 b、a；第二次出队后 front=rear=null，入队 c 时重新创建头结点</div><div class="opt">D. 两次出队分别返回 a、b；第二次出队后 front=H、rear=null，入队 c 后 front 指向 c 而 rear 仍为 H</div></div>
     
     <button class="ans-btn">✅ 查看答案与解析</button>
     <div class="ans-box">
       <div class="ans">答案：B</div>
-      <div class="exp"><b>📖 解析：</b>4 bit 序号的序号空间大小 N=2⁴=16。GBN 接收窗口为1，发送窗口最大为 N−1=15；SR 的发送窗口和接收窗口都不能超过序号空间的一半，最大为 N/2=8，否则无法区分迟到的旧帧和当前窗口内的新帧。</div>
-    </div>
-  </div>
- </div>
-<div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">关于介质访问控制方法，下列说法中正确的是（ ）</span><span class="tag book">计算机网络</span><span class="tag hard">困难</span></div>
-  <div class="card-body">
-    <div class="q"><div class="opt">A. 信道划分方法让所有站点共享同一时间、频率和码资源，因此不存在资源划分开销</div><div class="opt">B. 随机访问方法中站点可以自主决定发送，但发生冲突后通常需要重传或退避</div><div class="opt">C. 轮询方法由各站点竞争获得令牌，无法从根本上避免多个站点同时发送</div><div class="opt">D. CSMA/CD 适用于无线局域网，因为无线站点可以在发送时可靠检测碰撞</div></div>
-    
-    <button class="ans-btn">✅ 查看答案与解析</button>
-    <div class="ans-box">
-      <div class="ans">答案：B</div>
-      <div class="exp"><b>📖 解析：</b>随机访问允许站点自主竞争信道，可能发生冲突，通常通过重传和退避解决。信道划分把信道按时间、频率或码等维度分配给站点，存在划分和协调开销；轮询由主节点依次询问，或通过令牌传递获得发送权，并非竞争令牌；CSMA/CD 主要用于共享式有线以太网，无线环境难以边发送边检测碰撞，常用 CSMA/CA。</div>
+      <div class="exp"><b>📖 解析：</b>带头结点链队列中，入队总是在 rear 后插入并移动 rear；出队从 H.next 删除首元结点。依次出队得到 a、b。队列变空时不能丢失头结点，应恢复 front=rear=H；随后入队 c，使 H.next=c 且 rear 指向 c。</div>
     </div>
   </div>
  </div>
@@ -198,47 +184,47 @@
 <div class="group"><div class="group-title">🇬🇧 考研单词 <span class="badge">20 词</span></div>
 <div class="card open">
   <div class="card-head"><span class="arrow">▶</span><span class="card-title">🇬🇧 考研单词 ×20</span><span class="tag book">高频词</span></div>
-  <div class="card-body"><div class="word-row"><span class="word">rather</span><span class="phon">/ˈrɑːðər/</span></div>
-      <div class="def">相当的</div>
-      <div class="example">✏️ The evidence is rather important for understanding the limits of the experiment. 这些证据对于理解实验的局限性相当重要。</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">create</span><span class="phon">/kriˈeɪt/</span></div>
-      <div class="def">创造</div>
-      <div class="example">✏️ New technologies can create opportunities for people in remote areas. 新技术能够为偏远地区的人们创造机会。</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">never</span><span class="phon">/ˈnevər/</span></div>
-      <div class="def">从不</div>
-      <div class="example">✏️ A single study should never be treated as conclusive evidence. 一项研究绝不应被视为决定性证据。</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">century</span><span class="phon">/ˈsentʃəri/</span></div>
-      <div class="def">世纪</div>
-      <div class="example">✏️ The discovery changed scientific thinking at the beginning of the twentieth century. 这项发现改变了二十世纪初的科学思想。</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">bad</span><span class="phon">/bæd/</span></div>
-      <div class="def">坏的</div>
-      <div class="example">✏️ Bad data collection can lead to an unreliable conclusion. 糟糕的数据收集会导致不可靠的结论。</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">eat</span><span class="phon">/iːt/</span></div>
-      <div class="def">吃</div>
-      <div class="example">✏️ People who eat a balanced diet are more likely to remain healthy. 饮食均衡的人更有可能保持健康。</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">always</span><span class="phon">/ˈɔːlweɪz/</span></div>
-      <div class="def">总是</div>
-      <div class="example">✏️ Researchers should always distinguish facts from personal opinions. 研究人员总应把事实与个人观点区分开。</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">least</span><span class="phon">/liːst/</span></div>
-      <div class="def">最小的、最少的</div>
-      <div class="example">✏️ At least three independent sources are needed to verify the claim. 至少需要三个独立来源来核实这一说法。</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">face</span><span class="phon">/feɪs/</span></div>
-      <div class="def">面对</div>
-      <div class="example">✏️ Many communities face the challenge of adapting to climate change. 许多社区面临适应气候变化的挑战。</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">plan</span><span class="phon">/plæn/</span></div>
-      <div class="def">计划</div>
-      <div class="example">✏️ The university plans to expand its support for international students. 这所大学计划扩大对国际学生的支持。</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">consider</span><span class="phon">/kənˈsɪdər/</span></div>
-      <div class="def">考虑</div>
-      <div class="example">✏️ Policy makers must consider the long-term effects of their decisions. 政策制定者必须考虑其决定的长期影响。</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">industry</span><span class="phon">/ˈɪndəstri/</span></div>
-      <div class="def">工业、行业</div>
-      <div class="example">✏️ The software industry has changed the way many people work. 软件行业改变了许多人的工作方式。</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">themselves</span><span class="phon">/ðəmˈselvz/</span></div>
-      <div class="def">他们自己、他们亲自</div>
-      <div class="example">✏️ Students should learn to evaluate the sources themselves. 学生应学会亲自评估信息来源。</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">process</span><span class="phon">/ˈprɑːses/</span></div>
-      <div class="def">过程、进程</div>
-      <div class="example">✏️ Scientific progress is a gradual process rather than a sudden event. 科学进步是一个渐进过程，而不是突然发生的事件。</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">rate</span><span class="phon">/reɪt/</span></div>
-      <div class="def">比率</div>
-      <div class="example">✏️ The study measured the rate at which participants completed the task. 这项研究测量了参与者完成任务的比率。</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">fact</span><span class="phon">/fækt/</span></div>
-      <div class="def">事实</div>
-      <div class="example">✏️ The conclusion should be based on fact rather than assumption. 结论应建立在事实而非假设之上。</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">house</span><span class="phon">/haʊs/</span></div>
-      <div class="def">房子</div>
-      <div class="example">✏️ The report discusses how housing costs affect young families. 该报告讨论了住房成本如何影响年轻家庭。</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">culture</span><span class="phon">/ˈkʌltʃər/</span></div>
-      <div class="def">文化</div>
-      <div class="example">✏️ Language is closely connected with the history and culture of a society. 语言与一个社会的历史和文化密切相关。</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">power</span><span class="phon">/ˈpaʊər/</span></div>
-      <div class="def">力、功率</div>
-      <div class="example">✏️ Solar power is becoming an increasingly important source of clean energy. 太阳能正成为越来越重要的清洁能源来源。</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">share</span><span class="phon">/ʃer/</span></div>
-      <div class="def">分享</div>
-      <div class="example">✏️ Researchers are encouraged to share their data with the wider academic community. 鼓励研究人员与更广泛的学术界分享数据。</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"></div>
+  <div class="card-body"><div class="word-row"><span class="word">area</span><span class="phon">/ˈeriə/</span></div>
+      <div class="def">地区、范围</div>
+      <div class="example">✏️ The study examines how public transport affects employment opportunities in a rural area. 这项研究考察公共交通如何影响农村地区的就业机会。</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">million</span><span class="phon">/ˈmɪljən/</span></div>
+      <div class="def">百万</div>
+      <div class="example">✏️ More than a million people took part in the national survey. 超过一百万人参加了这项全国调查。</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">lot</span><span class="phon">/lɑːt/</span></div>
+      <div class="def">很、许多</div>
+      <div class="example">✏️ A lot of evidence suggests that early education has lasting effects. 大量证据表明早期教育具有持久影响。</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">sense</span><span class="phon">/sens/</span></div>
+      <div class="def">感觉</div>
+      <div class="example">✏️ The findings give us a better sense of how social networks influence behavior. 这些发现让我们更好地了解社交网络如何影响行为。</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">lose</span><span class="phon">/luːz/</span></div>
+      <div class="def">失去、失败</div>
+      <div class="example">✏️ A company may lose public trust if it refuses to explain the decision. 如果公司拒绝解释这一决定，可能会失去公众信任。</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">against</span><span class="phon">/əˈɡenst/</span></div>
+      <div class="def">相对、相反</div>
+      <div class="example">✏️ The results should be interpreted against the background of rapid technological change. 应结合技术快速变化的背景来解读这些结果。</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">rise</span><span class="phon">/raɪz/</span></div>
+      <div class="def">上升</div>
+      <div class="example">✏️ The report links the rise in housing costs to limited land supply. 报告将住房成本上升归因于土地供应有限。</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">energy</span><span class="phon">/ˈenərdʒi/</span></div>
+      <div class="def">精力</div>
+      <div class="example">✏️ Students need enough energy to maintain concentration during long examinations. 学生需要足够的精力在长时间考试中保持专注。</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">control</span><span class="phon">/kənˈtroʊl/</span></div>
+      <div class="def">控制</div>
+      <div class="example">✏️ The experiment used a control group to separate treatment effects from natural change. 实验使用对照组来区分处理效果与自然变化。</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">space</span><span class="phon">/speɪs/</span></div>
+      <div class="def">空间</div>
+      <div class="example">✏️ The design creates more space for discussion and collaborative learning. 这种设计为讨论和合作学习创造了更多空间。</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">case</span><span class="phon">/keɪs/</span></div>
+      <div class="def">情况</div>
+      <div class="example">✏️ In this case, the available data are insufficient to support a definite conclusion. 在这种情况下，现有数据不足以支持明确结论。</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">hold</span><span class="phon">/hoʊld/</span></div>
+      <div class="def">握着、坚持</div>
+      <div class="example">✏️ The researchers hold that careful measurement is essential for reliable results. 研究人员坚持认为谨慎测量对可靠结果至关重要。</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">possible</span><span class="phon">/ˈpɑːsəbəl/</span></div>
+      <div class="def">可能的</div>
+      <div class="example">✏️ The team considered every possible explanation before repeating the experiment. 团队在重复实验前考虑了所有可能的解释。</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">ability</span><span class="phon">/əˈbɪləti/</span></div>
+      <div class="def">能力</div>
+      <div class="example">✏️ Reading widely improves students' ability to evaluate complex arguments. 广泛阅读能提高学生评估复杂论点的能力。</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">animal</span><span class="phon">/ˈænɪməl/</span></div>
+      <div class="def">动物</div>
+      <div class="example">✏️ The experiment raised important questions about the treatment of laboratory animals. 这项实验引发了关于实验动物待遇的重要问题。</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">enough</span><span class="phon">/ɪˈnʌf/</span></div>
+      <div class="def">足够</div>
+      <div class="example">✏️ The sample is not large enough to represent the entire population. 该样本不够大，无法代表总体。</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">value</span><span class="phon">/ˈvæljuː/</span></div>
+      <div class="def">价值</div>
+      <div class="example">✏️ The value of the new method lies in its ability to reduce measurement error. 这种新方法的价值在于能够减少测量误差。</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">role</span><span class="phon">/roʊl/</span></div>
+      <div class="def">角色</div>
+      <div class="example">✏️ The article discusses the role of universities in promoting social mobility. 文章讨论了大学在促进社会流动中的作用。</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">week</span><span class="phon">/wiːk/</span></div>
+      <div class="def">周末</div>
+      <div class="example">✏️ The research team completed the first stage of the project in one week. 研究团队在一周内完成了项目的第一阶段。</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">individual</span><span class="phon">/ˌɪndɪˈvɪdʒuəl/</span></div>
+      <div class="def">个人的、独特的</div>
+      <div class="example">✏️ The program is designed to meet the individual needs of each learner. 该项目旨在满足每位学习者的个人需求。</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"></div>
 </div>
 </div>
 <div class="footer">由 Hermes AI 生成 · 每天 08:00 更新 · 加油 💪</div>
