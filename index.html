@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>今日学习清单 · 2026-08-28</title>
+<title>今日学习清单 · 2026-08-29</title>
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Noto Sans SC", sans-serif; background: #f5f6fa; color: #1f2329; max-width: 640px; margin: 0 auto; padding: 16px 14px 40px; }
@@ -50,187 +50,146 @@
 
 <div class="hero">
   <h1>📋 今日学习清单</h1>
-  <div class="date">2026年8月28日 星期五</div>
+  <div class="date">2026年8月29日 星期六</div>
 </div>
 
 <div class="group"><div class="group-title">🔥 今日重点 <span class="badge">2 项</span></div>
 <div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">🧩 LeetCode 每日一题：Lexicographically Smallest Palindromic Permutation Greater Than Target</span><span class="tag hard">困难</span></div>
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">🧩 LeetCode 每日一题：Make Lexicographically Smallest Array by Swapping Elements</span><span class="tag mid">中等</span></div>
   <div class="card-body">
-    <div class="q">给定两个长度均为 n 的小写字母串 s 和 target。请返回 s 的一个回文排列中严格大于 target 的字典序最小者；若不存在，返回空串。n≤300。例：s=baba、target=abba 时返回 baab；s=baba、target=bbaa 时返回空串。</div>
-    <div class="exp"><b>💡 解题思路：</b>回文排列存在的必要条件是最多只有一个字符出现奇数次；回文左半部分的字符多重集由每个字符频数除以 2 得到，奇数长度时中间字符固定为唯一的奇数频数字符。字典序比较时先比较左半部分：先构造不小于 target 左半部分的最小多重集排列；若它严格更大，直接镜像即可。若左半部分相同，再比较完整回文；若仍不大于 target，则寻找左半部分多重集排列的下一个严格更大排列。</div>
-    <div class="exp"><b>🔧 题解：</b>先统计 26 个字母频数并检查奇数频数个数。用回溯式的字典序后继构造：从右向左尝试保留 target 前缀，在某一位放置比 target 当前字符大的最小可用字符，剩余字符升序填充。这样得到的候选是多重集排列中大于给定下界的最小者，整体复杂度 O(n·26)，空间复杂度 O(n)。</div>
+    <div class="q">给定一个下标从 0 开始的正整数数组 nums 和正整数 limit。一次操作中，若 |nums[i]-nums[j]|≤limit，就可以交换任意两个下标 i、j 的元素。请返回经过任意次操作后能够得到的字典序最小数组。例：nums=[1,5,3,9,8]、limit=2 时返回 [1,3,5,8,9]。</div>
+    <div class="exp"><b>💡 解题思路：</b>把 nums 的数值排序。若排序后相邻两个数的差不超过 limit，则它们可以通过连续交换连成同一个连通分量；一个分量内的元素可以任意重排。对每个分量，取其中的数值升序排列，再把这些数依次放到该分量原下标的升序位置，就能使整个数组字典序最小。</div>
+    <div class="exp"><b>🔧 题解：</b>先按数值排序并按相邻差值≤limit 划分分组。每组内收集原下标并排序，同时把组内数值排序；将最小值分配给最小原下标，依次完成重排。排序主导时间复杂度为 O(n log n)，额外空间复杂度为 O(n)。</div>
     <pre class="code">from typing import List
 
 class Solution:
-    def _next_perm_at_least(self, cnt: List[int], bound: str, strict: bool) -&gt; str | None:
-        m = len(bound)
+    def lexicographicallySmallestArray(self, nums: List[int], limit: int) -&gt; List[int]:
+        n = len(nums)
+        pairs = sorted((value, index) for index, value in enumerate(nums))
+        ans = [0] * n
+        left = 0
 
-        # bound 本身可用时，非严格下界直接返回它。
-        left = cnt[:]
-        exact = True
-        for ch in bound:
-            k = ord(ch) - ord('a')
-            if left[k] == 0:
-                exact = False
-                break
-            left[k] -= 1
-        if exact and not strict:
-            return bound
+        while left &lt; n:
+            right = left
+            while (right + 1 &lt; n
+                   and pairs[right + 1][0] - pairs[right][0] &lt;= limit):
+                right += 1
 
-        # 从右向左寻找最靠后的“变大”位置，保留尽可能长的前缀。
-        for i in range(m - 1, -1, -1):
-            rest = cnt[:]
-            ok = True
-            for ch in bound[:i]:
-                k = ord(ch) - ord('a')
-                if rest[k] == 0:
-                    ok = False
-                    break
-                rest[k] -= 1
-            if not ok:
-                continue
-            start = ord(bound[i]) - ord('a') + 1
-            for k in range(start, 26):
-                if rest[k] == 0:
-                    continue
-                rest[k] -= 1
-                suffix = ''.join(chr(j + ord('a')) * rest[j] for j in range(26))
-                return bound[:i] + chr(k + ord('a')) + suffix
-        return None
+            values = sorted(value for value, _ in pairs[left:right + 1])
+            indices = sorted(index for _, index in pairs[left:right + 1])
+            for index, value in zip(indices, values):
+                ans[index] = value
+            left = right + 1
 
-    def _palindrome(self, left: str, center: str) -&gt; str:
-        return left + center + left[::-1]
-
-    def lexicographicallySmallestPalindromicPermutationGreaterThanTarget(self, s: str, target: str) -&gt; str:
-        freq = [0] * 26
-        for ch in s:
-            freq[ord(ch) - ord('a')] += 1
-        odd = [i for i, c in enumerate(freq) if c % 2]
-        if len(odd) &gt; 1:
-            return ''
-
-        center = chr(odd[0] + ord('a')) if odd else ''
-        half = [c // 2 for c in freq]
-        left_len = len(s) // 2
-        bound = target[:left_len]
-
-        left = self._next_perm_at_least(half, bound, strict=False)
-        if left is not None:
-            candidate = self._palindrome(left, center)
-            if candidate &gt; target:
-                return candidate
-
-        left = self._next_perm_at_least(half, bound, strict=True)
-        return '' if left is None else self._palindrome(left, center)</pre>
-    <a class="link" href="https://leetcode.com/problems/lexicographically-smallest-palindromic-permutation-greater-than-target/" target="_blank">🚀 去 LeetCode 做题 →</a>
+        return ans</pre>
+    <a class="link" href="https://leetcode.com/problems/make-lexicographically-smallest-array-by-swapping-elements/" target="_blank">🚀 去 LeetCode 做题 →</a>
   </div>
 </div>
 </div>
 <div class="group"><div class="group-title">📐 数学知识点 <span class="badge">4 项</span></div>
 <div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">📐 高数·第3天·导数应用：零点重数与图像</span><span class="tag book">高数·第3天·导数应用</span></div>
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">📐 高数·第1天·极限：单侧极限</span><span class="tag book">高数·第1天·极限</span></div>
   <div class="card-body">
-    <div class="q">若 f(x)=(x-a)^m g(x) 且 g(a)≠0，则 a 为 m 重零点；m 为奇数时穿过 x 轴，m 为偶数时相切但不穿过。</div>
-    <div class="exp"><b>📌 要点：</b>相邻零点间必有 f' 零点、f'' 零点（Rolle）；驻点不一定是极值点，要看 f' 是否变号。</div>
-    <div class="exp">• 因式分解确定零点的重数</div><div class="exp">• 奇重零点穿过 x 轴，偶重零点相切不穿过</div><div class="exp">• 驻点是否为极值点取决于 f' 在该点两侧是否变号</div>
-    <div class="exp" style="margin-top:6px">(x-1)(x-2)²(x-3)³(x-4)：奇重零点<b style="color:#d48806">＿＿＿</b>轴，偶重零点<b style="color:#d48806">＿＿＿</b>轴</div><button class="ans-btn" style="font-size:12px;padding:4px 12px">✅ 答案</button><div class="ans-box"><div class="ans">穿过；相切不穿过</div></div>
-    <div class="exp"><b>🧭 套路：</b>先看因式中 (x-a) 的幂次判断过轴或相切，再结合 f' 变号判断极值；不要把 f'(a)=0 直接等同于极值。</div>
+    <div class="q">双侧极限存在⟺左右极限存在且相等</div>
+    <div class="exp"><b>📌 要点：</b>双侧极限存在⟺左右极限存在且相等</div>
+    <div class="exp">• 单侧极限</div><div class="exp">• 第01章 函数与极限</div>
+    <div class="exp" style="margin-top:6px">左极限记号<b style="color:#d48806">＿＿＿</b>，右极限记号<b style="color:#d48806">＿＿＿</b></div><button class="ans-btn" style="font-size:12px;padding:4px 12px">✅ 答案</button><div class="ans-box"><div class="ans">x→x0-；x→x0+</div></div>
+    <div class="exp"><b>🧭 套路：</b>判断双侧极限时必须分别考察左、右极限；其中任一个不存在或二者不相等，双侧极限就不存在。</div>
     
   </div>
  </div>
 <div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">📐 高数·第3天·导数应用：曲率与曲率半径</span><span class="tag book">高数·第3天·导数应用</span></div>
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">📐 高数·第1天·极限：常见极限不存在例子</span><span class="tag book">高数·第1天·极限</span></div>
   <div class="card-body">
-    <div class="q">K=|dα/ds|=|y''|/[1+(y')²]^(3/2)；ρ=1/K；ds=√(1+y'²)dx；tanα=y'</div>
-    <div class="exp"><b>📌 要点：</b>曲率圆满足 |DM|=ρ，D 为圆心且位于曲线法线的凹侧。</div>
-    <div class="exp">• 曲率 K=|y''|/[1+(y')²]^(3/2)</div><div class="exp">• 曲率半径 ρ=1/K</div><div class="exp">• 曲率圆圆心在法线凹侧，半径为 ρ</div>
-    <div class="exp" style="margin-top:6px">K=<b style="color:#d48806">＿＿＿</b>；ρ=<b style="color:#d48806">＿＿＿</b>；圆心在<b style="color:#d48806">＿＿＿</b>侧法线上</div><button class="ans-btn" style="font-size:12px;padding:4px 12px">✅ 答案</button><div class="ans-box"><div class="ans">|y''|/[1+(y')²]^(3/2)；1/K；凹</div></div>
-    <div class="exp"><b>🧭 套路：</b>求曲率先算一阶、二阶导数并代入公式；判断圆心方向时看曲线凹向，曲率半径是曲率的倒数。</div>
+    <div class="q">lim(x→0)|x|/x不存在；lim(x→0)[x]不存在；lim(x→∞)sin x不存在</div>
+    <div class="exp"><b>📌 要点：</b>e^x: x→-∞为0，x→+∞为+∞；arctan x: ±π/2；arccot x: π/0</div>
+    <div class="exp">• 常见极限不存在例子</div><div class="exp">• 第01章 函数与极限</div>
+    <div class="exp" style="margin-top:6px">|x|/x在0处左右极限<b style="color:#d48806">＿＿＿</b>；[x]在0和1处<b style="color:#d48806">＿＿＿</b>；sin x在∞处<b style="color:#d48806">＿＿＿</b></div><button class="ans-btn" style="font-size:12px;padding:4px 12px">✅ 答案</button><div class="ans-box"><div class="ans">-1/+1不存在；-1/0与0/1不存在；不存在(振荡)</div></div>
+    <div class="exp"><b>🧭 套路：</b>优先检查左右极限是否相等；无穷远处遇到周期振荡函数时，注意其通常没有极限。</div>
     
   </div>
  </div>
 <div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">📐 线代·特征值与特征向量：内积与向量长度</span><span class="tag book">线代·特征值与特征向量</span></div>
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">📐 线代·行列式与矩阵：矩阵等价</span><span class="tag book">线代·行列式与矩阵</span></div>
   <div class="card-body">
-    <div class="q">(α,β)=Σa_i b_i；||α||=√(α,α)</div>
-    <div class="exp"><b>📌 要点：</b>内积性质：对称、齐次、可加、正定；长度具有非负性和齐次性 ||kα||=|k|||α||；单位化为 α/||α||；正交等价于 (α,β)=0；非零正交向量组必线性无关。</div>
-    <div class="exp">• 内积按对应分量乘积求和，满足对称、齐次、可加、正定</div><div class="exp">• 向量长度为 ||α||=√(α,α)，单位向量由 α/||α|| 得到</div><div class="exp">• 正交条件为内积等于 0，非零正交组必线性无关</div>
-    <div class="exp" style="margin-top:6px">默写核心结论：<b style="color:#d48806">＿＿＿</b></div><button class="ans-btn" style="font-size:12px;padding:4px 12px">✅ 答案</button><div class="ans-box"><div class="ans">(α,β)=Σa_ib_i；||α||=√(α,α)</div></div>
-    <div class="exp"><b>🧭 套路：</b>遇到长度先转为 (α,α) 再开平方；证明正交或线性无关时优先使用内积为零和正定性。</div>
+    <div class="q">A~B⟺∃可逆P,Q使PAQ=B</div>
+    <div class="exp"><b>📌 要点：</b>有限次初等变换互化；充要条件存在m阶可逆P、n阶可逆Q；等价具有反身/对称/传递性</div>
+    <div class="exp">• 矩阵等价</div><div class="exp">• 第03章 矩阵的初等变换与线性方程组</div>
+    <div class="exp" style="margin-top:6px">默写核心结论：<b style="color:#d48806">＿＿＿</b></div><button class="ans-btn" style="font-size:12px;padding:4px 12px">✅ 答案</button><div class="ans-box"><div class="ans">A~B⟺∃可逆P,Q使PAQ=B</div></div>
+    <div class="exp"><b>🧭 套路：</b>矩阵等价的判别核心是有限次初等变换可互化；注意它与相似、合同的定义和保持量不同。</div>
     
   </div>
  </div>
 <div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">📐 线代·特征值与特征向量：施密特正交化</span><span class="tag book">线代·特征值与特征向量</span></div>
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">📐 线代·行列式与矩阵：行列式常用计算结论</span><span class="tag book">线代·行列式与矩阵</span></div>
   <div class="card-body">
-    <div class="q">β1=α1；βn=αn-Σ[(αn,βi)/(βi,βi)]βi</div>
-    <div class="exp"><b>📌 要点：</b>线性无关组经过施密特正交化得到正交组，二者等价且张成同一空间；再将每个正交向量单位化即可得到标准正交组。</div>
-    <div class="exp">• 第一步取 β1=α1</div><div class="exp">• 后续向量减去在已得正交向量上的投影</div><div class="exp">• 正交组再分别除以自身长度即可单位化</div>
-    <div class="exp" style="margin-top:6px">默写核心结论：<b style="color:#d48806">＿＿＿</b></div><button class="ans-btn" style="font-size:12px;padding:4px 12px">✅ 答案</button><div class="ans-box"><div class="ans">β1=α1；βn=αn-Σ[(αn,βi)/(βi,βi)]βi</div></div>
-    <div class="exp"><b>🧭 套路：</b>按原向量顺序递推，每一步都减去对所有已得 β_i 的投影；分母必须是 (β_i,β_i)，不能误写成 1，最后再统一单位化。</div>
+    <div class="q">二阶=a11a22-a12a21；三阶对角线法则；三角=主对角积；副对角线型=(-1)^[n(n-1)/2]a1n...an1；零行=0</div>
+    <div class="exp"><b>📌 要点：</b>上下三角、对角行列式=主对角线元素之积；副对角线型带符号因子；含零行零列行列式为0</div>
+    <div class="exp">• 行列式常用计算结论</div><div class="exp">• 第01章 行列式</div>
+    <div class="exp" style="margin-top:6px">默写核心结论：<b style="color:#d48806">＿＿＿</b></div><button class="ans-btn" style="font-size:12px;padding:4px 12px">✅ 答案</button><div class="ans-box"><div class="ans">二阶=a11a22-a12a21；三阶对角线法则；三角=主对角积；副对角线型=(-1)^[n(n-1)/2]a1n...an1；零行=0</div></div>
+    <div class="exp"><b>🧭 套路：</b>先识别特殊结构再计算：三角或对角型直接乘主对角线；出现全零行或全零列时立即判断行列式为 0。</div>
     
   </div>
  </div>
 </div>
 <div class="group"><div class="group-title">💻 408 选择题 <span class="badge">5 题</span></div>
 <div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">设模式串 P="ababaca"，采用 0 下标且 next[0]=-1 的 KMP 定义。已匹配 P[0..4]="ababa" 后，在 P[5] 处失配时，应回退到哪个模式串下标继续比较？</span><span class="tag book">数据结构</span><span class="tag easy">简单</span></div>
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">一棵非空树共有 n 个结点。关于该树边数的说法正确的是？</span><span class="tag book">数据结构</span><span class="tag easy">简单</span></div>
   <div class="card-body">
-    <div class="q"><div class="opt">A. 0</div><div class="opt">B. 1</div><div class="opt">C. 2</div><div class="opt">D. 3</div></div>
-    
-    <button class="ans-btn">✅ 查看答案与解析</button>
-    <div class="ans-box">
-      <div class="ans">答案：D</div>
-      <div class="exp"><b>📖 解析：</b>已匹配前缀为 ababa，失配时考察它的最长相等真前缀和真后缀。最长的是 aba，长度为 3，因此 next[5]=3，应让 P[3] 与当前主串字符继续比较。</div>
-    </div>
-  </div>
- </div>
-<div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">采用偶校验传输 8 位数据 10110010。该数据中 1 的个数为 4，则应附加的偶校验位是多少？</span><span class="tag book">计算机组成原理</span><span class="tag easy">简单</span></div>
-  <div class="card-body">
-    <div class="q"><div class="opt">A. 0</div><div class="opt">B. 1</div><div class="opt">C. 由接收端随机决定</div><div class="opt">D. 无法确定，必须知道数据位宽之外的信息</div></div>
-    
-    <button class="ans-btn">✅ 查看答案与解析</button>
-    <div class="ans-box">
-      <div class="ans">答案：A</div>
-      <div class="exp"><b>📖 解析：</b>偶校验要求数据位和校验位中 1 的总数为偶数。10110010 中已有 4 个 1，是偶数，所以附加校验位为 0。奇偶校验可检测某些错误（尤其奇数位翻转），但不能定位错误位置，也不能可靠检测偶数位同时翻转。</div>
-    </div>
-  </div>
- </div>
-<div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">进程 A、B、C 同时到达，运行时间分别为 4、3、2，静态优先级分别为 2、1、3（数值越小优先级越高）。采用非抢占式优先级调度，平均等待时间是多少？</span><span class="tag book">操作系统</span><span class="tag mid">中等</span></div>
-  <div class="card-body">
-    <div class="q"><div class="opt">A. 10/3</div><div class="opt">B. 19/3</div><div class="opt">C. 3</div><div class="opt">D. 5</div></div>
-    
-    <button class="ans-btn">✅ 查看答案与解析</button>
-    <div class="ans-box">
-      <div class="ans">答案：A</div>
-      <div class="exp"><b>📖 解析：</b>调度顺序为 B、A、C。B 等待 0，A 等待 3，C 等待 3+4=7，总等待时间为 10，平均等待时间为 10/3。所有进程同时到达，所以等待时间不需要再扣除到达时刻。</div>
-    </div>
-  </div>
- </div>
-<div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">以太网交换机初始转发表为空。主机 AA 从端口 P1 发送帧给未知目的 MAC 为 BB，随后主机 BB 从端口 P2 回复帧给 AA。两帧处理后，转发表和第二帧的转发行为正确的是？</span><span class="tag book">计算机网络</span><span class="tag easy">简单</span></div>
-  <div class="card-body">
-    <div class="q"><div class="opt">A. 仅有 AA→P1；两帧都从所有端口广播</div><div class="opt">B. 有 AA→P1、BB→P2；第二帧仅转发到 P1</div><div class="opt">C. 有 BB→P1、AA→P2；第二帧仅转发到 P2</div><div class="opt">D. 交换机不会学习源 MAC，第二帧仍按广播处理</div></div>
+    <div class="q"><div class="opt">A. n 条</div><div class="opt">B. n-1 条</div><div class="opt">C. n+1 条</div><div class="opt">D. 取决于树的度，无法确定</div></div>
     
     <button class="ans-btn">✅ 查看答案与解析</button>
     <div class="ans-box">
       <div class="ans">答案：B</div>
-      <div class="exp"><b>📖 解析：</b>交换机收到帧时根据源 MAC 和入端口进行自学习。第一帧使 AA→P1 写入转发表，目的 BB 未知因此泛洪；第二帧使 BB→P2 写入表，并查到 AA 在 P1，所以只从 P1 转发，不向入端口 P2 回送。</div>
+      <div class="exp"><b>📖 解析：</b>树是连通且无环的图。每加入一个新结点，只需且必需通过一条边接入已有部分，因此 n 个结点恰有 n-1 条边。树的度分布、层次和高度会变化，但不影响这一结论。</div>
     </div>
   </div>
  </div>
 <div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">对模式串 P="ababaca"，采用 next[0]=-1、next[j] 为 P[0..j-1] 的最长相等真前后缀长度的定义，并按“若 P[j]=P[next[j]] 则 nextval[j]=nextval[next[j]]，否则 nextval[j]=next[j]”优化。nextval 数组（下标 0..6）是？</span><span class="tag book">数据结构</span><span class="tag hard">困难</span></div>
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">有 8 位数据位，采用能够纠正 1 位错误的海明码，校验位数 r 应满足 2^r≥8+r+1。r 的最小值是多少？</span><span class="tag book">计算机组成原理</span><span class="tag easy">简单</span></div>
   <div class="card-body">
-    <div class="q"><div class="opt">A. [-1, 0, -1, 0, -1, 3, -1]</div><div class="opt">B. [-1, 0, 0, 1, 2, 3, 0]</div><div class="opt">C. [0, 0, -1, 0, -1, 3, -1]</div><div class="opt">D. [-1, -1, 0, 0, 1, 2, 3]</div></div>
+    <div class="q"><div class="opt">A. 3</div><div class="opt">B. 4</div><div class="opt">C. 5</div><div class="opt">D. 8</div></div>
     
     <button class="ans-btn">✅ 查看答案与解析</button>
     <div class="ans-box">
-      <div class="ans">答案：A</div>
-      <div class="exp"><b>📖 解析：</b>先得 next=[-1,0,0,1,2,3,0]。逐位优化：j=1 保留 0；j=2 因 P[2]=P[0]=a，取 nextval[0]=-1；j=3 取 nextval[1]=0；j=4 取 nextval[2]=-1；j=5 因 c≠b 保留 3；j=6 因 a=P[0] 取 -1。因此 nextval=[-1,0,-1,0,-1,3,-1]。</div>
+      <div class="ans">答案：B</div>
+      <div class="exp"><b>📖 解析：</b>r=3 时，2^3=8&lt;8+3+1=12，不满足条件；r=4 时，2^4=16≥8+4+1=13，因此最少需要 4 位校验位。海明码总长度为 8+4=12 位，并可定位、纠正 1 位错误。</div>
+    </div>
+  </div>
+ </div>
+<div class="card open">
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">关于多级队列调度（MQ）和多级反馈队列调度（MLFQ），下列说法正确的是？</span><span class="tag book">操作系统</span><span class="tag mid">中等</span></div>
+  <div class="card-body">
+    <div class="q"><div class="opt">A. MQ 中进程可根据运行表现任意跨队列移动，MLFQ 中队列归属固定</div><div class="opt">B. MQ 通常将进程固定分配到某一队列，而 MLFQ 可根据运行表现调整进程所在队列</div><div class="opt">C. MQ 与 MLFQ 只是名称不同，队列迁移规则完全相同</div><div class="opt">D. MLFQ 只能采用非抢占式调度，不能设置时间片</div></div>
+    
+    <button class="ans-btn">✅ 查看答案与解析</button>
+    <div class="ans-box">
+      <div class="ans">答案：B</div>
+      <div class="exp"><b>📖 解析：</b>多级队列通常按进程类型或属性固定队列归属，各队列可采用不同调度算法；多级反馈队列则允许进程因 CPU 使用行为、等待时间或优先级规则在队列间迁移，常结合抢占和时间片，以兼顾响应时间与吞吐量。</div>
+    </div>
+  </div>
+ </div>
+<div class="card open">
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">一台二层交换机划分出 VLAN 10 和 VLAN 20，两个 VLAN 中各有主机。未配置三层网关时，关于广播和通信的说法正确的是？</span><span class="tag book">计算机网络</span><span class="tag easy">简单</span></div>
+  <div class="card-body">
+    <div class="q"><div class="opt">A. 两个 VLAN 属于同一个广播域，广播帧会互相转发</div><div class="opt">B. VLAN 10 与 VLAN 20 是不同广播域，同一 VLAN 内可二层通信，跨 VLAN 需三层设备转发</div><div class="opt">C. VLAN 只能划分冲突域，不能划分广播域</div><div class="opt">D. 只要使用同一台交换机，两个 VLAN 内主机就一定能直接通信</div></div>
+    
+    <button class="ans-btn">✅ 查看答案与解析</button>
+    <div class="ans-box">
+      <div class="ans">答案：B</div>
+      <div class="exp"><b>📖 解析：</b>VLAN 通过逻辑划分把一个物理交换网络分成多个广播域。交换机的广播帧只在所属 VLAN 内泛洪；不同 VLAN 之间不能直接进行二层通信，需要路由器或三层交换机等三层设备完成互通。IEEE 802.1Q 可在干道链路上携带 VLAN 标签。</div>
+    </div>
+  </div>
+ </div>
+<div class="card open">
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">采用 CRC，数据位串为 1101，生成多项式对应的二进制除数为 1011。发送端在数据后补 3 个 0 后进行模 2 除法，所得 CRC 余数是多少？</span><span class="tag book">计算机组成原理</span><span class="tag hard">困难</span></div>
+  <div class="card-body">
+    <div class="q"><div class="opt">A. 000</div><div class="opt">B. 001</div><div class="opt">C. 010</div><div class="opt">D. 111</div></div>
+    
+    <button class="ans-btn">✅ 查看答案与解析</button>
+    <div class="ans-box">
+      <div class="ans">答案：B</div>
+      <div class="exp"><b>📖 解析：</b>生成多项式 1011 的阶数为 3，所以先将 1101 扩展为 1101000。按模 2 除法逐位异或：1101000 除以 1011 的最后 3 位余数为 001，因此 CRC 校验码为 001，实际发送码字为 1101001。接收端将码字再除以 1011，余数应为 000。</div>
     </div>
   </div>
  </div>
@@ -238,47 +197,47 @@ class Solution:
 <div class="group"><div class="group-title">🇬🇧 考研单词 <span class="badge">20 词</span></div>
 <div class="card open">
   <div class="card-head"><span class="arrow">▶</span><span class="card-title">🇬🇧 考研单词 ×20</span><span class="tag book">高频词</span></div>
-  <div class="card-body"><div class="word-row"><span class="word">real</span><span class="phon">/riːl/</span></div>
-      <div class="def">真的；真实的</div>
-      <div class="example">✏️ The experiment provides real evidence for the proposed theory.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">almost</span><span class="phon">/ˈɔːlməʊst/</span></div>
-      <div class="def">几乎；差不多</div>
-      <div class="example">✏️ The project is almost complete, but the conclusion needs revision.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">customer</span><span class="phon">/ˈkʌstəmə(r)/</span></div>
-      <div class="def">顾客；客户</div>
-      <div class="example">✏️ The company improved its service after collecting customer feedback.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">subject</span><span class="phon">/ˈsʌbdʒɪkt/</span></div>
-      <div class="def">科目；主题；使服从</div>
-      <div class="example">✏️ The article discusses the subject from both historical and economic perspectives.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">ago</span><span class="phon">/əˈɡəʊ/</span></div>
-      <div class="def">以前；……前</div>
-      <div class="example">✏️ The research was published several years ago but remains influential.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">focus</span><span class="phon">/ˈfəʊkəs/</span></div>
-      <div class="def">聚焦；焦点</div>
-      <div class="example">✏️ The study focuses on the relationship between education and social mobility.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">local</span><span class="phon">/ˈləʊkl/</span></div>
-      <div class="def">当地的；局部的</div>
-      <div class="example">✏️ Local governments play an important role in protecting the environment.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">really</span><span class="phon">/ˈriːəli/</span></div>
-      <div class="def">确实；真正地</div>
-      <div class="example">✏️ The policy really affects the lives of low-income families.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">certain</span><span class="phon">/ˈsɜːtn/</span></div>
-      <div class="def">确定的；某些</div>
-      <div class="example">✏️ Under certain conditions, the two methods produce similar results.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">ever</span><span class="phon">/ˈevə(r)/</span></div>
-      <div class="def">曾经；从来</div>
-      <div class="example">✏️ Few inventions have ever changed human communication so deeply.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">success</span><span class="phon">/səkˈses/</span></div>
-      <div class="def">成功；成就</div>
-      <div class="example">✏️ The success of the program depends on long-term public support.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">late</span><span class="phon">/leɪt/</span></div>
-      <div class="def">晚的；迟的；已故的</div>
-      <div class="example">✏️ The late arrival of the data delayed the final analysis.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">true</span><span class="phon">/truː/</span></div>
-      <div class="def">真实的；正确的</div>
-      <div class="example">✏️ It is true that technology can improve efficiency, but it also creates risks.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">name</span><span class="phon">/neɪm/</span></div>
-      <div class="def">名称；命名；说出名称</div>
-      <div class="example">✏️ The researchers named the new model after its main application.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">knowledge</span><span class="phon">/ˈnɒlɪdʒ/</span></div>
-      <div class="def">知识；了解</div>
-      <div class="example">✏️ A broad knowledge of history helps students understand current events.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">stress</span><span class="phon">/stres/</span></div>
-      <div class="def">压力；强调</div>
-      <div class="example">✏️ The report stresses the importance of equal access to education.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">matter</span><span class="phon">/ˈmætə(r)/</span></div>
-      <div class="def">事情；问题；要紧</div>
-      <div class="example">✏️ What matters most is whether the evidence supports the conclusion.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">involve</span><span class="phon">/ɪnˈvɒlv/</span></div>
-      <div class="def">涉及；使参与</div>
-      <div class="example">✏️ The investigation involved researchers from several universities.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">raise</span><span class="phon">/reɪz/</span></div>
-      <div class="def">举起；提出；提高</div>
-      <div class="example">✏️ The findings raise important questions about the fairness of the system.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">identify</span><span class="phon">/aɪˈdentɪfaɪ/</span></div>
-      <div class="def">识别；鉴定；确定</div>
-      <div class="example">✏️ The survey helps identify the main factors behind students' choices.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"></div>
+  <div class="card-body"><div class="word-row"><span class="word">stay</span><span class="phon">/steɪ/</span></div>
+      <div class="def">保持、停留</div>
+      <div class="example">✏️ The evidence suggests that the unemployment rate may stay high for several months.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">population</span><span class="phon">/ˌpɒpjuˈleɪʃən/</span></div>
+      <div class="def">人口</div>
+      <div class="example">✏️ The population of the city has increased as new industries have developed.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">risk</span><span class="phon">/rɪsk/</span></div>
+      <div class="def">风险</div>
+      <div class="example">✏️ The report examines the risk of climate change to agricultural production.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">medium</span><span class="phon">/ˈmiːdiəm/</span></div>
+      <div class="def">中等的、媒介</div>
+      <div class="example">✏️ Television remains an important medium for communicating public information.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">lack</span><span class="phon">/læk/</span></div>
+      <div class="def">缺乏</div>
+      <div class="example">✏️ A lack of reliable data makes it difficult to evaluate the policy.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">strong</span><span class="phon">/strɒŋ/</span></div>
+      <div class="def">强壮的、强烈的</div>
+      <div class="example">✏️ There is strong evidence that education improves social mobility.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">fill</span><span class="phon">/fɪl/</span></div>
+      <div class="def">填</div>
+      <div class="example">✏️ Applicants must fill in the form before submitting their documents.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">patient</span><span class="phon">/ˈpeɪʃənt/</span></div>
+      <div class="def">有耐心的、病人</div>
+      <div class="example">✏️ The doctor explained the treatment patiently to every patient.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">rule</span><span class="phon">/ruːl/</span></div>
+      <div class="def">规则</div>
+      <div class="example">✏️ The first rule of academic writing is to distinguish evidence from opinion.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">until</span><span class="phon">/ənˈtɪl/</span></div>
+      <div class="def">直到</div>
+      <div class="example">✏️ The experiment cannot begin until all the equipment has been tested.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">continue</span><span class="phon">/kənˈtɪnjuː/</span></div>
+      <div class="def">继续</div>
+      <div class="example">✏️ If the current trend continues, demand for clean energy will rise.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">receive</span><span class="phon">/rɪˈsiːv/</span></div>
+      <div class="def">收到</div>
+      <div class="example">✏️ Participants will receive detailed instructions before the survey begins.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">already</span><span class="phon">/ɔːlˈredi/</span></div>
+      <div class="def">已经</div>
+      <div class="example">✏️ The researchers have already identified several factors affecting the result.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">record</span><span class="phon">/ˈrekɔːd/</span></div>
+      <div class="def">记录</div>
+      <div class="example">✏️ The experimenters kept a careful record of every observation.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">employee</span><span class="phon">/ɪmˈplɔɪiː/</span></div>
+      <div class="def">雇工</div>
+      <div class="example">✏️ Each employee is entitled to a safe and supportive working environment.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">sell</span><span class="phon">/sel/</span></div>
+      <div class="def">卖</div>
+      <div class="example">✏️ The company decided to sell the product at a lower price to reach more customers.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">note</span><span class="phon">/nəʊt/</span></div>
+      <div class="def">笔记</div>
+      <div class="example">✏️ Please note that the conclusions depend on the sample size.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">month</span><span class="phon">/mʌnθ/</span></div>
+      <div class="def">月</div>
+      <div class="example">✏️ The study followed the participants for more than one month.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">community</span><span class="phon">/kəˈmjuːnəti/</span></div>
+      <div class="def">社区、共同体</div>
+      <div class="example">✏️ The project was designed to improve health services in the local community.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">demand</span><span class="phon">/dɪˈmɑːnd/</span></div>
+      <div class="def">要求</div>
+      <div class="example">✏️ Growing demand for digital services has changed the way people work.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"></div>
 </div>
 </div>
 <div class="footer">由 Hermes AI 生成 · 每天 08:00 更新 · 加油 💪</div>
