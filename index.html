@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>今日学习清单 · 2026-08-30</title>
+<title>今日学习清单 · 2026-08-31</title>
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Noto Sans SC", sans-serif; background: #f5f6fa; color: #1f2329; max-width: 640px; margin: 0 auto; padding: 16px 14px 40px; }
@@ -50,138 +50,149 @@
 
 <div class="hero">
   <h1>📋 今日学习清单</h1>
-  <div class="date">2026年8月30日 星期日</div>
+  <div class="date">2026年8月31日（星期一）</div>
 </div>
 
 <div class="group"><div class="group-title">🔥 今日重点 <span class="badge">2 项</span></div>
 <div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">🧩 LeetCode 每日一题：Removing Minimum and Maximum From Array</span><span class="tag mid">中等</span></div>
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">🧩 LeetCode 每日一题：Find the Minimum and Maximum Number of Nodes Between Critical Points</span><span class="tag mid">中等</span></div>
   <div class="card-body">
-    <div class="q">给定一个下标从 0 开始、元素互不相同的整数数组 nums。数组中的最小值和最大值必须同时被删除；一次删除只能从数组首端或尾端移除一个元素。请返回删除这两个元素所需的最少操作次数。例如 nums=[2,10,7,5,4,1,8,6] 时，最少删除 5 个元素。</div>
-    <div class="exp"><b>💡 解题思路：</b>先线性扫描找到最小值和最大值的下标，并令 left=min(posMin,posMax)、right=max(posMin,posMax)。删除两者只有三类最优方案：从左端连续删除到 right、从右端连续删除到 left，或分别从两端删除（左端删到 left 且右端删到 right，亦可交换两者的角色）。计算这三类方案的代价并取最小值。</div>
-    <div class="exp"><b>🔧 题解：</b>设数组长度为 n。三种代价分别为 right+1、n-left、(left+1)+(n-right)。其中第三种表示从两端夹取区间 [left,right]，覆盖了两种分配方向中的较优者；也可以显式计算两种混合方案。扫描找极值后即可 O(n) 得到答案，额外空间 O(1)。</div>
-    <pre class="code">from typing import List
+    <div class="q">给定一个单链表，将同时大于前后节点的节点或同时小于前后节点的节点称为关键点。返回任意两个不同关键点之间的最小距离和最大距离；若关键点少于两个，返回 [-1, -1]。距离按节点在链表中的位置之差计算。</div>
+    <div class="exp"><b>💡 解题思路：</b>只需一次遍历并维护相邻三个节点。用 prev、cur、next 判断 cur 是否为局部极大或局部极小；记录第一个和最近一个关键点的位置。每发现一个新关键点，更新与上一个关键点的距离（得到最小值），最后用最后一个位置减第一个位置得到最大值。</div>
+    <div class="exp"><b>🔧 题解：</b>从位置 1 开始遍历中间节点，严格使用 &gt; 或 &lt;，相等时不能判为关键点。关键点不足两个时返回 [-1, -1]；否则返回 [min_gap, last_pos - first_pos]。时间复杂度 O(n)，额外空间复杂度 O(1)。</div>
+    <pre class="code">def nodesBetweenCriticalPoints(head):
+    prev = head
+    cur = head.next
+    pos = 1
+    first = -1
+    last = -1
+    min_gap = float('inf')
 
-class Solution:
-    def minimumDeletions(self, nums: List[int]) -&gt; int:
-        n = len(nums)
-        min_pos = nums.index(min(nums))
-        max_pos = nums.index(max(nums))
-        left, right = sorted((min_pos, max_pos))
+    while cur and cur.next:
+        nxt = cur.next
+        is_critical = (cur.val &gt; prev.val and cur.val &gt; nxt.val) or \
+                      (cur.val &lt; prev.val and cur.val &lt; nxt.val)
+        if is_critical:
+            if first == -1:
+                first = pos
+            else:
+                min_gap = min(min_gap, pos - last)
+            last = pos
+        prev = cur
+        cur = nxt
+        pos += 1
 
-        remove_left = right + 1
-        remove_right = n - left
-        remove_both = (left + 1) + (n - right)
-
-        return min(remove_left, remove_right, remove_both)</pre>
-    <a class="link" href="https://leetcode.com/problems/removing-minimum-and-maximum-from-array/" target="_blank">🚀 去 LeetCode 做题 →</a>
+    if first == -1 or first == last:
+        return [-1, -1]
+    return [min_gap, last - first]</pre>
+    <a class="link" href="https://leetcode.com/problems/find-the-minimum-and-maximum-number-of-nodes-between-critical-points/" target="_blank">🚀 去 LeetCode 做题 →</a>
   </div>
 </div>
 </div>
 <div class="group"><div class="group-title">📐 数学知识点 <span class="badge">4 项</span></div>
 <div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">📐 高数·第1天·极限：取整函数[x]</span><span class="tag book">高数·第1天·极限</span></div>
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">📐 高数·第1天·函数与极限：复合极限逆向判断</span><span class="tag book">高数·第1天·函数与极限</span></div>
   <div class="card-body">
-    <div class="q">[n,n+1)上 y=n，左实右空；x-1&lt;[x]≤x</div>
-    <div class="exp"><b>📌 要点：</b>[x] 表示不超过 x 的最大整数，图像是左闭右开的阶梯；函数 y=x-[x] 具有周期 1。</div>
-    <div class="exp">• 取整函数[x]</div><div class="exp">• 第01章 函数与极限</div><div class="exp">• 阶梯图像与周期性</div>
-    <div class="exp" style="margin-top:6px">[x]=不超过x的<b style="color:#d48806">＿＿＿</b>；不等式<b style="color:#d48806">＿＿＿</b>；y=x-[x]周期<b style="color:#d48806">＿＿＿</b></div><button class="ans-btn" style="font-size:12px;padding:4px 12px">✅ 答案</button><div class="ans-box"><div class="ans">最大整数；x-1&lt;[x]≤x；1</div></div>
-    <div class="exp"><b>🧭 套路：</b>遇到含 [x] 的极限，先按整数区间拆分，并特别检查整数点左右的取值；不要把 [x] 误当作四舍五入。</div>
+    <div class="q">f严格单调：lim f(g(x))存在⟹lim g(x)存在或趋于无穷</div>
+    <div class="exp"><b>📌 要点：</b>若 f 在相应定义域上严格单调，且复合极限 lim f(g(x)) 存在，则内层 g(x) 必须存在极限或趋于无穷。逆否形式常用于判断：若 g(x) 既无极限又不趋于无穷，则 f(g(x)) 的极限不存在。</div>
+    <div class="exp">• 先确认外函数 f 在所考区间上严格单调</div><div class="exp">• 复合函数极限存在时，内层变量不能在有限值与无穷之间无规则振荡</div><div class="exp">• 注意结论是充分条件下的逆向判断，不要把一般复合极限规则误写成等价命题</div>
+    <div class="exp" style="margin-top:6px">f严格单调时，lim f(g(x))存在⟹<b style="color:#d48806">＿＿＿</b></div><button class="ans-btn" style="font-size:12px;padding:4px 12px">✅ 答案</button><div class="ans-box"><div class="ans">lim g(x)存在或g(x)→±∞</div></div>
+    <div class="exp"><b>🧭 套路：</b>看到严格单调外函数，优先考虑用极限存在性反推内层 g(x) 的趋向。</div>
     
   </div>
  </div>
 <div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">📐 高数·第1天·极限：复合函数极限定理</span><span class="tag book">高数·第1天·极限</span></div>
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">📐 高数·第1天·函数与极限：极限保号性</span><span class="tag book">高数·第1天·函数与极限</span></div>
   <div class="card-body">
-    <div class="q">lim f(g(x))=lim f(u)=A；f连续时=f(lim g(x))</div>
-    <div class="exp"><b>📌 要点：</b>若 g(x)→u0，且 f 在 u0 的邻域内有定义并满足相应条件，则可先求内层极限，再使用外层函数的连续性或极限定理。</div>
-    <div class="exp">• 复合函数极限定理</div><div class="exp">• 第01章 函数与极限</div><div class="exp">• 内外层极限的先后关系</div>
-    <div class="exp" style="margin-top:6px">lim f(g(x))=<b style="color:#d48806">＿＿＿</b>（需g(x)≠u0）；若f在u0<b style="color:#d48806">＿＿＿</b>可去条件</div><button class="ans-btn" style="font-size:12px;padding:4px 12px">✅ 答案</button><div class="ans-box"><div class="ans">A；连续</div></div>
-    <div class="exp"><b>🧭 套路：</b>先确认 g(x) 的极限存在以及复合函数在邻域内有定义；只有当 f 在 u0 连续时，才能直接写成 f(lim g(x))。</div>
+    <div class="q">lim&gt;0⟹局部f(x)&gt;0；局部f(x)&gt;0⟹lim≥0(可为0!)</div>
+    <div class="exp"><b>📌 要点：</b>若 lim f(x)=A&gt;0，则存在某个充分小的邻域，使 x 足够接近极限点时 f(x)&gt;0。反过来，若邻域内 f(x)&gt;0 且极限存在，只能推出极限大于等于 0，不能推出极限严格大于 0。</div>
+    <div class="exp">• 正极限的保号性来自取 ε=A/2</div><div class="exp">• 函数局部为正时，极限可以等于 0，例如 f(x)=x²</div><div class="exp">• 题目若给出极限小于 0，可同理判断函数在邻域内为负</div>
+    <div class="exp" style="margin-top:6px">lim f(x)&gt;0⟹x充分接近时<b style="color:#d48806">＿＿＿</b>；f(x)&gt;0且极限存在⟹极限<b style="color:#d48806">＿＿＿</b></div><button class="ans-btn" style="font-size:12px;padding:4px 12px">✅ 答案</button><div class="ans-box"><div class="ans">f(x)&gt;0；≥0</div></div>
+    <div class="exp"><b>🧭 套路：</b>看到‘函数恒正’与‘极限为正’时区分局部结论和严格不等号，等于 0 是高频陷阱。</div>
     
   </div>
  </div>
 <div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">📐 线代·第2章·矩阵及其运算：伴随矩阵性质</span><span class="tag book">线代·第2章·矩阵及其运算</span></div>
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">📐 线代·第1章·行列式：方阵行列式性质</span><span class="tag book">线代·第1章·行列式</span></div>
   <div class="card-body">
-    <div class="q">AA*=A*A=|A|E；|A*|=|A|^(n-1)；(A^T)*=(A*)^T；(A*)^*=|A|^(n-2)A；(AB)*=B*A*</div>
-    <div class="exp"><b>📌 要点：</b>伴随矩阵由代数余子式矩阵转置得到；当 |A|≠0 时，A*=|A|A^{-1}，从而 A^{-1}=A*/|A|。注意伴随运算一般不满足 (A+B)*=A*+B*。</div>
-    <div class="exp">• 伴随矩阵性质</div><div class="exp">• 第02章 矩阵及其运算</div><div class="exp">• 伴随矩阵与逆矩阵</div>
-    <div class="exp" style="margin-top:6px">默写核心结论：<b style="color:#d48806">＿＿＿</b></div><button class="ans-btn" style="font-size:12px;padding:4px 12px">✅ 答案</button><div class="ans-box"><div class="ans">AA*=A*A=|A|E；|A*|=|A|^(n-1)；(A^T)*=(A*)^T；(A*)^*=|A|^(n-2)A；(AB)*=B*A*</div></div>
-    <div class="exp"><b>🧭 套路：</b>先判断 |A| 是否为 0；需要求逆时优先使用 A^{-1}=A*/|A|，涉及乘积时注意伴随矩阵的次序会反转。</div>
+    <div class="q">|A^T|=|A|；|kA|=k^n|A|；|AB|=|A||B|；|A^m|=|A|^m</div>
+    <div class="exp"><b>📌 要点：</b>n 阶方阵转置不改变行列式；矩阵整体数乘 k 时，行列式乘以 k^n；乘积的行列式等于行列式之积。注意矩阵乘法本身通常不交换，但 |AB| 与 |BA| 相等。</div>
+    <div class="exp">• |kA| 中 k 作用于 n 行（或 n 列），所以因子是 k^n 而不是 k</div><div class="exp">• |AB|=|A||B| 对同阶方阵成立，且不要求 AB=BA</div><div class="exp">• |A^m|=|A|^m 可直接用于幂的行列式计算</div>
+    <div class="exp" style="margin-top:6px">默写核心结论：<b style="color:#d48806">＿＿＿</b></div><button class="ans-btn" style="font-size:12px;padding:4px 12px">✅ 答案</button><div class="ans-box"><div class="ans">|A^T|=|A|；|kA|=k^n|A|；|AB|=|A||B|；|A^m|=|A|^m</div></div>
+    <div class="exp"><b>🧭 套路：</b>先辨认是整矩阵数乘还是某一行（列）数乘，再决定行列式因子的次数。</div>
     
   </div>
  </div>
 <div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">📐 线代·第2章·矩阵及其运算：逆矩阵运算规律</span><span class="tag book">线代·第2章·矩阵及其运算</span></div>
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">📐 线代·第2章·矩阵及其运算：分块矩阵运算</span><span class="tag book">线代·第2章·矩阵及其运算</span></div>
   <div class="card-body">
-    <div class="q">(A^{-1})^{-1}=A；(AB)^{-1}=B^{-1}A^{-1}；(kA)^{-1}=k^{-1}A^{-1}；|A^{-1}|=1/|A|</div>
-    <div class="exp"><b>📌 要点：</b>可逆矩阵的逆矩阵唯一；转置仍可逆且 (A^T)^{-1}=(A^{-1})^T。分块对角矩阵可对角块分别求逆，分块反对角矩阵求逆时要注意块的位置交换。</div>
-    <div class="exp">• 逆矩阵运算规律</div><div class="exp">• 第02章 矩阵及其运算</div><div class="exp">• 乘积逆矩阵的次序</div>
-    <div class="exp" style="margin-top:6px">默写核心结论：<b style="color:#d48806">＿＿＿</b></div><button class="ans-btn" style="font-size:12px;padding:4px 12px">✅ 答案</button><div class="ans-box"><div class="ans">(A^{-1})^{-1}=A；(AB)^{-1}=B^{-1}A^{-1}；(kA)^{-1}=k^{-1}A^{-1}；|A^{-1}|=1/|A|</div></div>
-    <div class="exp"><b>🧭 套路：</b>看到乘积求逆时必须倒序；先检查相关矩阵是否可逆，并注意标量 k 需要满足 k≠0。</div>
+    <div class="q">|A C;O B|=|A||B|；换位块=(-1)^(mn)|A||B|；分块转置=A^T B^T;C^T D^T交换</div>
+    <div class="exp"><b>📌 要点：</b>分块矩阵的加减和数乘按对应块进行，乘法遵守普通矩阵乘法规则但块之间一般不可交换。分块三角矩阵的行列式等于对角块行列式之积；分块对角矩阵的幂可分别对各对角块求幂。</div>
+    <div class="exp">• 分块必须保证维数匹配，块乘法不能把块当作普通标量随意交换</div><div class="exp">• 上（下）三角分块矩阵的行列式等于对角块行列式之积</div><div class="exp">• 分块转置不仅要对每块转置，还要交换非对角块的位置</div>
+    <div class="exp" style="margin-top:6px">默写核心结论：<b style="color:#d48806">＿＿＿</b></div><button class="ans-btn" style="font-size:12px;padding:4px 12px">✅ 答案</button><div class="ans-box"><div class="ans">|A C;O B|=|A||B|；换位块=(-1)^(mn)|A||B|；分块转置=A^T B^T;C^T D^T交换</div></div>
+    <div class="exp"><b>🧭 套路：</b>遇到分块行列式先观察是否为分块三角形；遇到分块转置牢记‘每块转置并转置块的位置’。</div>
     
   </div>
  </div>
 </div>
 <div class="group"><div class="group-title">💻 408 选择题 <span class="badge">5 题</span></div>
 <div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">一棵二叉树有 15 个结点，其中有 7 个结点的度为 0，则度为 2 的结点数为？</span><span class="tag book">数据结构</span><span class="tag easy">简单</span></div>
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">一棵完全二叉树共有 10 个结点，按从上到下、从左到右编号为 1～10。下列说法正确的是（ ）。</span><span class="tag book">数据结构</span><span class="tag easy">简单</span></div>
   <div class="card-body">
-    <div class="q"><div class="opt">A. 6</div><div class="opt">B. 7</div><div class="opt">C. 8</div><div class="opt">D. 15</div></div>
+    <div class="q"><div class="opt">A. 结点 5 一定是叶子结点</div><div class="opt">B. 结点 6 一定是叶子结点</div><div class="opt">C. 结点 4 一定没有左孩子</div><div class="opt">D. 结点 3 一定是叶子结点</div></div>
+    
+    <button class="ans-btn">✅ 查看答案与解析</button>
+    <div class="ans-box">
+      <div class="ans">答案：B</div>
+      <div class="exp"><b>📖 解析：</b>完全二叉树按层序编号时，编号大于 ⌊n/2⌋ 的结点是叶子。n=10，⌊10/2⌋=5，因此 6～10 都是叶子，只有 B 正确；5 号结点可能有孩子。</div>
+    </div>
+  </div>
+ </div>
+<div class="card open">
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">采用 8 位定点原码表示（最高位为符号位，其余 7 位为数值位），用原码乘法计算（+13）×（−5），所得结果的原码为（ ）。</span><span class="tag book">计算机组成原理</span><span class="tag easy">简单</span></div>
+  <div class="card-body">
+    <div class="q"><div class="opt">A. 1001000001000001</div><div class="opt">B. 1000000001000001</div><div class="opt">C. 0000000001000001</div><div class="opt">D. 1000000010000101</div></div>
     
     <button class="ans-btn">✅ 查看答案与解析</button>
     <div class="ans-box">
       <div class="ans">答案：A</div>
-      <div class="exp"><b>📖 解析：</b>二叉树中度为 0 的结点数 n0 与度为 2 的结点数 n2 始终满足 n0=n2+1。因此 n2=n0-1=7-1=6。其余 2 个结点为度为 1 的结点。</div>
+      <div class="exp"><b>📖 解析：</b>+13 的数值部分为 0001101，−5 的数值部分为 0000101；乘积数值为 65，即二进制 1000001。两数符号异或为 1，所以结果原码为符号位 1 加数值 1000001：10000001（若按两个 8 位操作数的原码乘法结果写成 16 位，则为 10000000 01000001，选项 A）。</div>
     </div>
   </div>
  </div>
 <div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">在 8 位补码机器中，x=11010110，若对 x 作算术右移 2 位，结果是？</span><span class="tag book">计算机组成原理</span><span class="tag easy">简单</span></div>
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">关于利用硬件方法实现进程互斥，下列说法正确的是（ ）。</span><span class="tag book">操作系统</span><span class="tag easy">简单</span></div>
   <div class="card-body">
-    <div class="q"><div class="opt">A. 00110101</div><div class="opt">B. 11101011</div><div class="opt">C. 11110101</div><div class="opt">D. 11010101</div></div>
-    
-    <button class="ans-btn">✅ 查看答案与解析</button>
-    <div class="ans-box">
-      <div class="ans">答案：C</div>
-      <div class="exp"><b>📖 解析：</b>算术右移时最高位补入原符号位。x 的符号位为 1，右移一次为 11101011，再右移一次为 11110101，因此结果为 C。逻辑右移才会在左侧补 0。</div>
-    </div>
-  </div>
- </div>
-<div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">多个进程竞争同一个临界资源时，关于临界区访问控制的说法正确的是？</span><span class="tag book">操作系统</span><span class="tag mid">中等</span></div>
-  <div class="card-body">
-    <div class="q"><div class="opt">A. 只要临界区较短，就允许多个进程同时进入</div><div class="opt">B. 一个进程进入临界区后，其他进程必须终止执行</div><div class="opt">C. 临界区空闲时申请者应能进入，临界区被占用时其他申请者不能同时进入，并且等待应有界</div><div class="opt">D. 进程只要在剩余区运行，就可以长期阻止其他进程进入临界区</div></div>
-    
-    <button class="ans-btn">✅ 查看答案与解析</button>
-    <div class="ans-box">
-      <div class="ans">答案：C</div>
-      <div class="exp"><b>📖 解析：</b>正确的临界区实现通常要求互斥、空闲让进和有限等待：临界资源空闲且有进程申请时应允许其进入；已有进程在临界区时，其他进程不得同时进入；等待进程不能无限期地得不到机会。其他选项分别违反互斥、正常并发或有限等待要求。</div>
-    </div>
-  </div>
- </div>
-<div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">在 PPP 协议中，负责建立、配置和测试数据链路，并协商最大接收单元等链路参数的是？</span><span class="tag book">计算机网络</span><span class="tag easy">简单</span></div>
-  <div class="card-body">
-    <div class="q"><div class="opt">A. NCP</div><div class="opt">B. LCP</div><div class="opt">C. ARP</div><div class="opt">D. HDLC</div></div>
+    <div class="q"><div class="opt">A. 关中断方法可以保证多处理机环境下所有处理器互斥</div><div class="opt">B. Test-and-Set 指令具有原子性，适合实现自旋锁</div><div class="opt">C. Swap 指令会使临界区一定不会发生忙等</div><div class="opt">D. 硬件指令实现的锁不需要遵守让权等待原则，因此不会导致饥饿</div></div>
     
     <button class="ans-btn">✅ 查看答案与解析</button>
     <div class="ans-box">
       <div class="ans">答案：B</div>
-      <div class="exp"><b>📖 解析：</b>LCP（链路控制协议）用于建立、配置、测试和维护 PPP 数据链路；NCP（网络控制协议）用于针对不同网络层协议进行配置。ARP 是地址解析协议，HDLC 是另一种数据链路层协议。</div>
+      <div class="exp"><b>📖 解析：</b>Test-and-Set（TS）等读改写指令由硬件保证原子性，常用于实现自旋锁。关中断主要适用于单处理机内核，不能直接保证多处理机互斥；自旋锁可能忙等，也可能造成饥饿，因此 C、D 错误。</div>
     </div>
   </div>
  </div>
 <div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">Peterson 算法中，P0 和 P1 均已将自己的 flag 置为 true；随后 P0 执行 turn=1，P1 执行 turn=0。此后两者都执行 while 条件检查时，谁能进入临界区？</span><span class="tag book">操作系统</span><span class="tag hard">困难</span></div>
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">关于 IEEE 802.11 无线局域网的基本工作模式，下列说法正确的是（ ）。</span><span class="tag book">计算机网络</span><span class="tag mid">中等</span></div>
   <div class="card-body">
-    <div class="q"><div class="opt">A. P0 和 P1 都能进入</div><div class="opt">B. 只有 P0 能进入</div><div class="opt">C. 只有 P1 能进入</div><div class="opt">D. 两者都不能进入</div></div>
+    <div class="q"><div class="opt">A. 基础设施模式中，所有无线站点必须直接两两通信，不能经过接入点</div><div class="opt">B. 自组网（Ad hoc）模式需要固定的无线接入点统一转发帧</div><div class="opt">C. 基础设施模式由接入点（AP）连接无线站点，并可通过分布式系统接入有线网络</div><div class="opt">D. 802.11 只能工作在自组网模式，不能支持基础设施模式</div></div>
     
     <button class="ans-btn">✅ 查看答案与解析</button>
     <div class="ans-box">
-      <div class="ans">答案：B</div>
-      <div class="exp"><b>📖 解析：</b>Peterson 算法中，P0 等待 flag[1] 且 turn==1；P1 等待 flag[0] 且 turn==0。最后一次写入使 turn=0，因此 P0 的等待条件为假，可以进入临界区；P1 的等待条件为真，只能等待 P0 离开并清除 flag[0]。这体现了 turn 变量在双方同时竞争时的仲裁作用。</div>
+      <div class="ans">答案：C</div>
+      <div class="exp"><b>📖 解析：</b>基础设施模式以 AP 为中心，无线站点通过 AP 接入分布式系统，并可连接有线网络。Ad hoc 是无中心的临时网络，不要求固定 AP；因此 A、B、D 均与两种模式的定义不符。</div>
+    </div>
+  </div>
+ </div>
+<div class="card open">
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">关于网络层功能的描述，下列说法正确的是（ ）。</span><span class="tag book">计算机网络</span><span class="tag hard">困难</span></div>
+  <div class="card-body">
+    <div class="q"><div class="opt">A. 分组转发负责根据路由选择算法建立完整路径，路由选择只负责查找转发表</div><div class="opt">B. 网络层只向相邻结点传输帧，不负责跨网络的分组传送</div><div class="opt">C. 路由选择确定分组从源到目的地的路径，分组转发依据转发表选择下一跳；拥塞控制用于缓解网络负载过重</div><div class="opt">D. 只要采用无连接网络，就不需要路由选择和拥塞控制</div></div>
+    
+    <button class="ans-btn">✅ 查看答案与解析</button>
+    <div class="ans-box">
+      <div class="ans">答案：C</div>
+      <div class="exp"><b>📖 解析：</b>路由选择是控制平面功能，用于计算或确定路径；分组转发是数据平面功能，依据转发表将分组送往下一跳。网络层还可能通过拥塞控制缓解资源过载。帧是数据链路层的基本传输单位，A、B、D 都混淆或否定了网络层功能。</div>
     </div>
   </div>
  </div>
@@ -189,47 +200,47 @@ class Solution:
 <div class="group"><div class="group-title">🇬🇧 考研单词 <span class="badge">20 词</span></div>
 <div class="card open">
   <div class="card-head"><span class="arrow">▶</span><span class="card-title">🇬🇧 考研单词 ×20</span><span class="tag book">高频词</span></div>
-  <div class="card-body"><div class="word-row"><span class="word">personal</span><span class="phon">/ˈpɜːrsənəl/</span></div>
-      <div class="def">个人的；私人的</div>
-      <div class="example">✏️ Personal experience alone is not sufficient evidence for a general conclusion.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">instead</span><span class="phon">/ɪnˈsted/</span></div>
-      <div class="def">代替；反而</div>
-      <div class="example">✏️ The policy should focus on prevention instead of merely dealing with the consequences.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">challenge</span><span class="phon">/ˈtʃælɪndʒ/</span></div>
-      <div class="def">挑战；质疑</div>
-      <div class="example">✏️ The rapid growth of the city poses a serious challenge to public transport.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">store</span><span class="phon">/stɔːr/</span></div>
-      <div class="def">储存；商店</div>
-      <div class="example">✏️ The device can store large amounts of data without consuming much energy.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">check</span><span class="phon">/tʃek/</span></div>
-      <div class="def">检查；核对</div>
-      <div class="example">✏️ Researchers must check the reliability of the data before drawing a conclusion.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">deal</span><span class="phon">/diːl/</span></div>
-      <div class="def">处理；交易；大量</div>
-      <div class="example">✏️ The new system is designed to deal with unexpected changes in demand.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">opportunity</span><span class="phon">/ˌɑːpərˈtuːnəti/</span></div>
-      <div class="def">机会</div>
-      <div class="example">✏️ Higher education can provide young people with more opportunities for employment.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">relationship</span><span class="phon">/rɪˈleɪʃənʃɪp/</span></div>
-      <div class="def">关系；联系</div>
-      <div class="example">✏️ The study explores the relationship between sleep and academic performance.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">list</span><span class="phon">/lɪst/</span></div>
-      <div class="def">清单；列出</div>
-      <div class="example">✏️ The report lists several reasons why the reform failed to achieve its goal.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">usually</span><span class="phon">/ˈjuːʒuəli/</span></div>
-      <div class="def">通常；平常</div>
-      <div class="example">✏️ People usually make better decisions when they have enough information.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">average</span><span class="phon">/ˈævərɪdʒ/</span></div>
-      <div class="def">平均的；平均数</div>
-      <div class="example">✏️ The average income has risen, but the benefits have not been equally distributed.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">although</span><span class="phon">/ɔːlˈðoʊ/</span></div>
-      <div class="def">虽然；尽管</div>
-      <div class="example">✏️ Although the experiment was limited in scale, its results are worth further study.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">eye</span><span class="phon">/aɪ/</span></div>
-      <div class="def">眼睛；注视</div>
-      <div class="example">✏️ The project keeps an eye on how technology changes the way people work.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">break</span><span class="phon">/breɪk/</span></div>
-      <div class="def">打破；休息；故障</div>
-      <div class="example">✏️ The discovery may break the traditional assumption that growth must harm the environment.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">fast</span><span class="phon">/fæst/</span></div>
-      <div class="def">快的；迅速地；牢固地</div>
-      <div class="example">✏️ Fast economic growth does not necessarily lead to an improvement in living standards.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">common</span><span class="phon">/ˈkɑːmən/</span></div>
-      <div class="def">普通的；共同的；常见的</div>
-      <div class="example">✏️ It is common for new technologies to create both benefits and risks.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">condition</span><span class="phon">/kənˈdɪʃən/</span></div>
-      <div class="def">条件；情况；状况</div>
-      <div class="example">✏️ Good working conditions are essential for attracting and retaining skilled employees.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">behavior</span><span class="phon">/bɪˈheɪvjər/</span></div>
-      <div class="def">行为；举止</div>
-      <div class="example">✏️ The research examines how social pressure influences consumer behavior.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">global</span><span class="phon">/ˈɡloʊbəl/</span></div>
-      <div class="def">全球的；全面的</div>
-      <div class="example">✏️ Climate change requires global cooperation rather than isolated national action.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">within</span><span class="phon">/wɪˈðɪn/</span></div>
-      <div class="def">在……之内；不超过</div>
-      <div class="example">✏️ The committee is expected to publish its recommendations within three months.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"></div>
+  <div class="card-body"><div class="word-row"><span class="word">difference</span><span class="phon">/ˈdɪfrəns/</span></div>
+      <div class="def">不同</div>
+      <div class="example">✏️ The study focuses on the difference between the two experimental groups.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">light</span><span class="phon">/laɪt/</span></div>
+      <div class="def">点亮、轻的</div>
+      <div class="example">✏️ The device is light enough to be carried during field research.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">growth</span><span class="phon">/ɡrəʊθ/</span></div>
+      <div class="def">生长</div>
+      <div class="example">✏️ Economic growth depends on technological innovation and education.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">shop</span><span class="phon">/ʃɒp/</span></div>
+      <div class="def">购物</div>
+      <div class="example">✏️ Many consumers shop online because it saves time.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">meet</span><span class="phon">/miːt/</span></div>
+      <div class="def">遇见、会见</div>
+      <div class="example">✏️ The policy must meet the needs of an ageing population.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">concern</span><span class="phon">/kənˈsɜːn/</span></div>
+      <div class="def">关心、涉及</div>
+      <div class="example">✏️ Environmental protection concerns every member of society.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">task</span><span class="phon">/tɑːsk/</span></div>
+      <div class="def">任务</div>
+      <div class="example">✏️ The first task of the research team is to collect reliable data.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">scientific</span><span class="phon">/ˌsaɪənˈtɪfɪk/</span></div>
+      <div class="def">科学的、细致严谨的</div>
+      <div class="example">✏️ The conclusion should be supported by scientific evidence.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">effort</span><span class="phon">/ˈefət/</span></div>
+      <div class="def">努力</div>
+      <div class="example">✏️ The project is the result of a joint effort by several universities.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">plant</span><span class="phon">/plɑːnt/</span></div>
+      <div class="def">植物、工厂</div>
+      <div class="example">✏️ The new plant will provide jobs for the local community.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">encourage</span><span class="phon">/ɪnˈkʌrɪdʒ/</span></div>
+      <div class="def">鼓励、发展</div>
+      <div class="example">✏️ Teachers should encourage students to think independently.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">career</span><span class="phon">/kəˈrɪə/</span></div>
+      <div class="def">职业</div>
+      <div class="example">✏️ Higher education can broaden students' career opportunities.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">fail</span><span class="phon">/feɪl/</span></div>
+      <div class="def">衰退、破产</div>
+      <div class="example">✏️ Without reform, the system may fail to serve the public.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">influence</span><span class="phon">/ˈɪnfluəns/</span></div>
+      <div class="def">影响</div>
+      <div class="example">✏️ Social background can influence a person's educational choices.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">avoid</span><span class="phon">/əˈvɔɪd/</span></div>
+      <div class="def">避免</div>
+      <div class="example">✏️ Clear rules help avoid misunderstandings in international communication.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">music</span><span class="phon">/ˈmjuːzɪk/</span></div>
+      <div class="def">音乐</div>
+      <div class="example">✏️ Research suggests that music can affect mood and memory.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">add</span><span class="phon">/æd/</span></div>
+      <div class="def">增加</div>
+      <div class="example">✏️ The author adds a new example to support the central argument.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">policy</span><span class="phon">/ˈpɒləsi/</span></div>
+      <div class="def">政策</div>
+      <div class="example">✏️ The government introduced a policy to reduce carbon emissions.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">item</span><span class="phon">/ˈaɪtəm/</span></div>
+      <div class="def">物品、条款</div>
+      <div class="example">✏️ The report treats public health as a key item on the agenda.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">force</span><span class="phon">/fɔːs/</span></div>
+      <div class="def">强迫、迫使</div>
+      <div class="example">✏️ Rising costs may force small businesses to change their plans.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"></div>
 </div>
 </div>
 <div class="footer">由 Hermes AI 生成 · 每天 08:00 更新 · 加油 💪</div>
