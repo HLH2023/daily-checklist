@@ -58,7 +58,7 @@
   <div class="card-head"><span class="arrow">▶</span><span class="card-title">🧩 LeetCode 每日一题：Construct Uniform Parity Array I</span><span class="tag easy">简单</span></div>
   <div class="card-body">
     <div class="q">给定一个由 n 个互不相同的整数构成的数组 nums1，需要构造长度同为 n 的 nums2，使其元素全部为奇数或全部为偶数。对每个下标 i，必须任选一种操作：保留 nums1[i]，或选择 j≠i 并令 nums2[i]=nums1[i]-nums1[j]。判断是否能够构造出满足条件的 nums2。</div>
-    <div class="exp"><b>💡 解题思路：</b>只需分析奇偶性。若 nums1 中同时存在奇数和偶数：对每个元素，保留它会得到原奇偶性；从另一个奇偶性的元素中减去它，会把奇偶性翻转。因此每个位置都可以被调整成奇数，也可以被调整成偶数，能够统一。若所有元素奇偶性相同，则直接全部保留即可。</div>
+    <div class="exp"><b>💡 解题思路：</b>目标可以统一为奇数。若 nums1 中存在奇数，所有奇数位置直接保留；每个偶数位置都可减去任意一个奇数，所得结果为奇数。若 nums1 中不存在奇数，则所有元素都是偶数，全部保留即可。因此在题目约束下总是可行。</div>
     <div class="exp"><b>🔧 题解：</b>目标可以始终统一为奇数：若 nums1 中有奇数，奇数位置直接保留；偶数位置减去任意一个奇数（若该位置本身不是该奇数，则 j≠i 自动满足；对偶数位置更是如此），结果为奇数。若数组中没有奇数，则所有元素本来都是偶数，全部保留即可。因此在题目约束下答案恒为 true，时间复杂度 O(1)，额外空间复杂度 O(1)。</div>
     <pre class="code">from typing import List
 
