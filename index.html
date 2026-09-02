@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>今日学习清单 · 2026-09-01</title>
+<title>今日学习清单 · 2026-09-02</title>
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Noto Sans SC", sans-serif; background: #f5f6fa; color: #1f2329; max-width: 640px; margin: 0 auto; padding: 16px 14px 40px; }
@@ -50,167 +50,131 @@
 
 <div class="hero">
   <h1>📋 今日学习清单</h1>
-  <div class="date">2026年9月1日 · 星期二</div>
+  <div class="date">2026年9月2日 · 星期三</div>
 </div>
 
 <div class="group"><div class="group-title">🔥 今日重点 <span class="badge">2 项</span></div>
 <div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">🧩 LeetCode 每日一题：Minimum Moves to Clean the Classroom</span><span class="tag mid">中等</span></div>
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">🧩 LeetCode 每日一题：Construct Uniform Parity Array I</span><span class="tag easy">简单</span></div>
   <div class="card-body">
-    <div class="q">给定一个 m×n 网格 classroom：S 是起点，L 是必须收集的垃圾，R 是可反复使用且能将能量恢复至满值的充能区，X 是不可通行的障碍，. 是空地。学生初始拥有 energy 点能量，每移动到相邻格消耗 1 点；能量为 0 时只有位于 R 才能继续移动。返回收集全部垃圾所需的最少移动次数；无法完成则返回 -1。</div>
-    <div class="exp"><b>💡 解题思路：</b>把已收集垃圾集合用二进制 mask 表示，状态为（行、列、mask、剩余能量）。从起点做 BFS，每次向四个方向扩展；进入 L 就置对应位，进入 R 就把能量恢复为初始值。BFS 首次到达 mask 全 1 的状态时即得到最少步数。访问标记必须包含剩余能量，因为同一位置和垃圾集合下，不同能量会决定后续可达性。</div>
-    <div class="exp"><b>🔧 题解：</b>先扫描网格记录起点和每个 L 的编号；队列元素为 (r, c, mask, remain, distance)。移动前要求 remain&gt;0，移动后若落在 R 则将 remain 重置为 energy。用集合去重状态，避免重复搜索；最多 10 个垃圾，因此 mask 至多 2^10 种。</div>
-    <pre class="code">from collections import deque
-from typing import List
+    <div class="q">给定一个由 n 个互不相同的整数构成的数组 nums1，需要构造长度同为 n 的 nums2，使其元素全部为奇数或全部为偶数。对每个下标 i，必须任选一种操作：保留 nums1[i]，或选择 j≠i 并令 nums2[i]=nums1[i]-nums1[j]。判断是否能够构造出满足条件的 nums2。</div>
+    <div class="exp"><b>💡 解题思路：</b>只需分析奇偶性。若 nums1 中同时存在奇数和偶数：对每个元素，保留它会得到原奇偶性；从另一个奇偶性的元素中减去它，会把奇偶性翻转。因此每个位置都可以被调整成奇数，也可以被调整成偶数，能够统一。若所有元素奇偶性相同，则直接全部保留即可。</div>
+    <div class="exp"><b>🔧 题解：</b>目标可以始终统一为奇数：若 nums1 中有奇数，奇数位置直接保留；偶数位置减去任意一个奇数（若该位置本身不是该奇数，则 j≠i 自动满足；对偶数位置更是如此），结果为奇数。若数组中没有奇数，则所有元素本来都是偶数，全部保留即可。因此在题目约束下答案恒为 true，时间复杂度 O(1)，额外空间复杂度 O(1)。</div>
+    <pre class="code">from typing import List
 
 class Solution:
-    def minMoves(self, classroom: List[str], energy: int) -&gt; int:
-        m, n = len(classroom), len(classroom[0])
-        start = None
-        litter_id = {}
-        for r in range(m):
-            for c, ch in enumerate(classroom[r]):
-                if ch == 'S':
-                    start = (r, c)
-                elif ch == 'L':
-                    litter_id[(r, c)] = len(litter_id)
-
-        target = (1 &lt;&lt; len(litter_id)) - 1
-        q = deque([(start[0], start[1], 0, energy, 0)])
-        seen = {(start[0], start[1], 0, energy)}
-        directions = ((1, 0), (-1, 0), (0, 1), (0, -1))
-
-        while q:
-            r, c, mask, remain, dist = q.popleft()
-            if mask == target:
-                return dist
-            if remain == 0:
-                continue
-            for dr, dc in directions:
-                nr, nc = r + dr, c + dc
-                if not (0 &lt;= nr &lt; m and 0 &lt;= nc &lt; n):
-                    continue
-                if classroom[nr][nc] == 'X':
-                    continue
-                next_remain = remain - 1
-                if classroom[nr][nc] == 'R':
-                    next_remain = energy
-                next_mask = mask
-                if (nr, nc) in litter_id:
-                    next_mask |= 1 &lt;&lt; litter_id[(nr, nc)]
-                state = (nr, nc, next_mask, next_remain)
-                if state not in seen:
-                    seen.add(state)
-                    q.append((nr, nc, next_mask, next_remain, dist + 1))
-        return -1</pre>
-    <a class="link" href="https://leetcode.com/problems/minimum-moves-to-clean-the-classroom/" target="_blank">🚀 去 LeetCode 做题 →</a>
+    def uniformArray(self, nums1: List[int]) -&gt; bool:
+        # 若奇偶性混合，可把偶数减去一个奇数变为奇数；
+        # 若奇偶性相同则直接保留，因此在题目约束下总是可行。
+        return True</pre>
+    <a class="link" href="https://leetcode.com/problems/construct-uniform-parity-array-i/" target="_blank">🚀 去 LeetCode 做题 →</a>
   </div>
 </div>
 </div>
 <div class="group"><div class="group-title">📐 数学知识点 <span class="badge">4 项</span></div>
 <div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">📐 高数·第1天·极限：数列极限与绝对值</span><span class="tag book">高数·第1天·极限</span></div>
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">📐 高数·第1天·极限：闭区间连续函数性质</span><span class="tag book">高数·第1天·极限</span></div>
   <div class="card-body">
-    <div class="q">lim x_n=0⟺lim|x_n|=0；lim x_n=a⟹lim|x_n|=|a|(反之不然)</div>
-    <div class="exp"><b>📌 要点：</b>若 lim x_n=a&gt;b，则从某项起 x_n&gt;b。取绝对值具有连续性，所以数列收敛时绝对值的极限等于极限的绝对值；但绝对值会丢失符号信息，反推一般不成立。</div>
-    <div class="exp">• lim x_n=a 时，必有 lim|x_n|=|a|</div><div class="exp">• lim|x_n|=|a| 不能推出 lim x_n=a</div><div class="exp">• 反例 x_n=(-1)^n：|x_n|恒为 1，但 x_n 不收敛</div>
-    <div class="exp" style="margin-top:6px">lim x_n=a⟹lim|x_n|=<b style="color:#d48806">＿＿＿</b>；lim|x_n|=|a|能否反推<b style="color:#d48806">＿＿＿</b></div><button class="ans-btn" style="font-size:12px;padding:4px 12px">✅ 答案</button><div class="ans-box"><div class="ans">|a|；不能(如x_n=(-1)^n)</div></div>
-    <div class="exp"><b>🧭 套路：</b>遇到绝对值极限先用绝对值函数的连续性；反向判断要检查符号是否稳定。</div>
+    <div class="q">零点定理：f(a)f(b)&lt;0⟹∃ξ,f(ξ)=0；端点单侧极限异号同样成立</div>
+    <div class="exp"><b>📌 要点：</b>在闭区间 [a,b] 上连续的函数必有界、能取到最大值和最小值，具有介值性，并且可积、存在原函数。若端点函数值异号，则由零点定理可知区间内部至少存在一个零点。</div>
+    <div class="exp">• 闭区间连续函数必有界并能取到最大值、最小值</div><div class="exp">• 连续函数具有介值性，端点异号可用零点定理</div><div class="exp">• 连续函数在闭区间上可积，并存在原函数</div>
+    <div class="exp" style="margin-top:6px">[a,b]连续⟹有界<b style="color:#d48806">＿＿＿</b>、<b style="color:#d48806">＿＿＿</b>、介值<b style="color:#d48806">＿＿＿</b>；f(a)f(b)&lt;0⟹<b style="color:#d48806">＿＿＿</b></div><button class="ans-btn" style="font-size:12px;padding:4px 12px">✅ 答案</button><div class="ans-box"><div class="ans">有界、取最值、介值性；∃ξ∈(a,b)使f(ξ)=0</div></div>
+    <div class="exp"><b>🧭 套路：</b>看到“闭区间上连续”要联想到有界性、最值性、介值性和可积性；看到 f(a)f(b)&lt;0，立即检查零点定理的连续条件。</div>
     
   </div>
  </div>
 <div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">📐 高数·第1天·极限：绝对值三角不等式</span><span class="tag book">高数·第1天·极限</span></div>
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">📐 高数·第1天·极限：等价无穷小与泰勒</span><span class="tag book">高数·第1天·极限</span></div>
   <div class="card-body">
-    <div class="q">||a|-|b||≤|a±b|≤|a|+|b|</div>
-    <div class="exp"><b>📌 要点：</b>绝对值三角不等式给出 |a+b| 或 |a-b| 的上下界。上界来自三角不等式，下界可由 |a|≤|a±b|+|b| 移项得到。</div>
-    <div class="exp">• |a±b|≤|a|+|b|</div><div class="exp">• |a±b|≥||a|-|b||</div><div class="exp">• 等号条件与两个量的方向或符号关系有关</div>
-    <div class="exp" style="margin-top:6px">|a±b|的范围<b style="color:#d48806">＿＿＿</b></div><button class="ans-btn" style="font-size:12px;padding:4px 12px">✅ 答案</button><div class="ans-box"><div class="ans">|a|-|b|≤|a±b|≤|a|+|b|</div></div>
-    <div class="exp"><b>🧭 套路：</b>求含绝对值表达式的范围时，先写下界 ||a|-|b||，再写上界 |a|+|b|。</div>
+    <div class="q">sin x~x,tan x~x,ln(1+x)~x,e^x-1~x</div>
+    <div class="exp"><b>📌 要点：</b>求极限时，乘除结构中的同阶无穷小通常可用等价无穷小替换；若存在加减相消或需要更高阶精度，则应使用泰勒展开。常用展开包括 sin x=x-x³/3!+o(x³)、ln(1+x)=x-x²/2+x³/3 和 e^x=1+x+x²/2+x³/6。</div>
+    <div class="exp">• 齐次乘除结构优先使用等价无穷小替换</div><div class="exp">• 加减相消时要展开到首个不被消掉的非零阶</div><div class="exp">• 常用关系：sin x~x、tan x~x、ln(1+x)~x、e^x−1~x</div>
+    <div class="exp" style="margin-top:6px">齐次结构用<b style="color:#d48806">＿＿＿</b>；加减相消用<b style="color:#d48806">＿＿＿</b></div><button class="ans-btn" style="font-size:12px;padding:4px 12px">✅ 答案</button><div class="ans-box"><div class="ans">等价无穷小；泰勒展开抓阶</div></div>
+    <div class="exp"><b>🧭 套路：</b>先判断表达式是乘除型还是加减相消型：前者可直接替换，后者通常必须用泰勒展开并控制展开阶数。</div>
     
   </div>
  </div>
 <div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">📐 线代·行列式与矩阵：矩阵运算法则</span><span class="tag book">线代·行列式与矩阵</span></div>
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">📐 线代·行列式与矩阵：范德蒙德行列式</span><span class="tag book">线代·行列式与矩阵</span></div>
   <div class="card-body">
-    <div class="q">(AB)C=A(BC)；A(B+C)=AB+AC；(kA)B=k(AB)</div>
-    <div class="exp"><b>📌 要点：</b>矩阵乘法满足结合律和分配律，但一般不满足交换律，AB≠BA；也不满足通常的消去律，AB=O 不能推出 A=O 或 B=O。方幂满足 A^nA^m=A^(n+m)。</div>
-    <div class="exp">• 结合律：(AB)C=A(BC)</div><div class="exp">• 分配律：A(B+C)=AB+AC</div><div class="exp">• 一般不交换、不能随意消去</div>
-    <div class="exp" style="margin-top:6px">默写核心结论：<b style="color:#d48806">＿＿＿</b></div><button class="ans-btn" style="font-size:12px;padding:4px 12px">✅ 答案</button><div class="ans-box"><div class="ans">(AB)C=A(BC)；A(B+C)=AB+AC；(kA)B=k(AB)</div></div>
-    <div class="exp"><b>🧭 套路：</b>矩阵等式变形时先检查乘法顺序与维数，不能照搬实数的交换律和消去律。</div>
+    <div class="q">D_n=∏(a_j-a_i)(1≤i&lt;j≤n)</div>
+    <div class="exp"><b>📌 要点：</b>范德蒙德行列式的典型形式是第一行（或第一列）全为 1，后续各行（列）依次为相应数的一次、二次直到 n−1 次幂。其值等于所有两两参数差的乘积；当且仅当 a_i 两两不同时，行列式不为零。</div>
+    <div class="exp">• 典型矩阵的幂次按 0,1,…,n−1 递增</div><div class="exp">• 行列式等于所有 a_j−a_i（i&lt;j）的乘积</div><div class="exp">• 参数两两互异当且仅当范德蒙德行列式非零</div>
+    <div class="exp" style="margin-top:6px">默写核心结论：<b style="color:#d48806">＿＿＿</b></div><button class="ans-btn" style="font-size:12px;padding:4px 12px">✅ 答案</button><div class="ans-box"><div class="ans">D_n=∏(a_j-a_i)(1≤i&lt;j≤n)</div></div>
+    <div class="exp"><b>🧭 套路：</b>计算前先核对参数排列和差值方向；交换两列会改变行列式符号，不能只看差值绝对值。</div>
     
   </div>
  </div>
 <div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">📐 线代·行列式与矩阵：矩阵乘法</span><span class="tag book">线代·行列式与矩阵</span></div>
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">📐 线代·行列式与矩阵：矩阵秩</span><span class="tag book">线代·行列式与矩阵</span></div>
   <div class="card-body">
-    <div class="q">c_ij=Σa_ik·b_kj；A_{m×s}B_{s×n}=C_{m×n}</div>
-    <div class="exp"><b>📌 要点：</b>A 的列数必须等于 B 的行数才可相乘；乘积的行数等于 A 的行数、列数等于 B 的列数；元素 c_ij 由 A 的第 i 行与 B 的第 j 列对应相乘再求和。</div>
-    <div class="exp">• 维数规则：A_{m×s}B_{s×n}=C_{m×n}</div><div class="exp">• 计算规则：行乘列求和</div><div class="exp">• 矩阵乘法一般不满足交换律</div>
-    <div class="exp" style="margin-top:6px">默写核心结论：<b style="color:#d48806">＿＿＿</b></div><button class="ans-btn" style="font-size:12px;padding:4px 12px">✅ 答案</button><div class="ans-box"><div class="ans">c_ij=Σa_ik·b_kj；A_{m×s}B_{s×n}=C_{m×n}</div></div>
-    <div class="exp"><b>🧭 套路：</b>先写出结果维数，再用左矩阵的行乘右矩阵的列逐项计算。</div>
-    <img src="images/2026-09-01_3.png" style="width:100%;border-radius:10px;margin-top:10px;border:1px solid #e5e7eb">
+    <div class="q">r(A)≤min{m,n}；r(A^T)=r(A)；r(PAQ)=r(A)(P,Q可逆)</div>
+    <div class="exp"><b>📌 要点：</b>矩阵的秩等于其最高阶非零子式的阶数。m×n 矩阵的秩不超过 min{m,n}；转置不改变秩；左乘和右乘可逆矩阵相当于初等行、列变换，也不改变秩。对方阵而言，满秩等价于可逆。</div>
+    <div class="exp">• r(A)≤min{m,n}，零矩阵的秩为 0</div><div class="exp">• 初等行变换、初等列变换均不改变矩阵的秩</div><div class="exp">• 方阵 r(A)=n 等价于 A 可逆；且 r(AB)≤min{r(A),r(B)}</div>
+    <div class="exp" style="margin-top:6px">默写核心结论：<b style="color:#d48806">＿＿＿</b></div><button class="ans-btn" style="font-size:12px;padding:4px 12px">✅ 答案</button><div class="ans-box"><div class="ans">r(A)≤min{m,n}；r(A^T)=r(A)；r(PAQ)=r(A)(P,Q可逆)</div></div>
+    <div class="exp"><b>🧭 套路：</b>判断秩时优先做初等变换化为阶梯形；遇到 PAQ 要确认 P、Q 可逆，遇到 AB=O 不要误用实数的消去律。</div>
+    
   </div>
  </div>
 </div>
 <div class="group"><div class="group-title">💻 408 选择题 <span class="badge">5 题</span></div>
 <div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">一棵含 n 个结点的非空二叉树采用二叉链表存储。所有结点共有多少个空指针域？</span><span class="tag book">数据结构</span><span class="tag easy">简单</span></div>
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">如图二叉树中，根结点为 A，A 的左、右孩子分别为 B、C；B 的右孩子为 D，C 的左孩子为 E。按根—左—右规则进行先序遍历，序列是：</span><span class="tag book">数据结构</span><span class="tag easy">简单</span></div>
   <div class="card-body">
-    <div class="q"><div class="opt">A. n-1</div><div class="opt">B. n</div><div class="opt">C. n+1</div><div class="opt">D. 2n</div></div>
-    <img src="images/2026-09-01_p0.png" style="width:100%;border-radius:10px;margin-top:10px;border:1px solid #e5e7eb">
+    <div class="q"><div class="opt">A. A、B、D、C、E</div><div class="opt">B. A、B、C、D、E</div><div class="opt">C. D、B、A、E、C</div><div class="opt">D. A、C、E、B、D</div></div>
+    <img src="images/2026-09-02_p0.png" style="width:100%;border-radius:10px;margin-top:10px;border:1px solid #e5e7eb">
     <button class="ans-btn">✅ 查看答案与解析</button>
     <div class="ans-box">
-      <div class="ans">答案：C</div>
-      <div class="exp"><b>📖 解析：</b>每个结点有 2 个孩子指针域，共 2n 个；树中非空孩子指针对应 n-1 条边，因此空指针域为 2n-(n-1)=n+1。</div>
+      <div class="ans">答案：A</div>
+      <div class="exp"><b>📖 解析：</b>先序遍历遵循根、左子树、右子树。先访问 A，再遍历左子树 B：B 没有左孩子，访问其右孩子 D；最后遍历右子树 C，先访问 C 再访问其左孩子 E，所以序列为 A、B、D、C、E。</div>
     </div>
   </div>
  </div>
 <div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">采用 4 位补码表示两个操作数，并用 8 位补码保存乘积。用 Booth 算法计算 (-3)×(+2)，所得 8 位结果是：</span><span class="tag book">计算机组成原理</span><span class="tag easy">简单</span></div>
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">下列关于算术逻辑单元（ALU）功能的说法中，正确的是：</span><span class="tag book">计算机组成原理</span><span class="tag easy">简单</span></div>
   <div class="card-body">
-    <div class="q"><div class="opt">A. 00000110₂</div><div class="opt">B. 11111010₂</div><div class="opt">C. 11111101₂</div><div class="opt">D. 00000011₂</div></div>
+    <div class="q"><div class="opt">A. 只负责从主存中取出指令</div><div class="opt">B. 主要完成算术运算、逻辑运算，并可形成相应标志位</div><div class="opt">C. 只负责控制各部件的时序，不参与数据运算</div><div class="opt">D. 只保存程序计数器和指令寄存器中的内容</div></div>
     
     <button class="ans-btn">✅ 查看答案与解析</button>
     <div class="ans-box">
       <div class="ans">答案：B</div>
-      <div class="exp"><b>📖 解析：</b>-3 的 4 位补码为 1101，+2 为 0010；乘积为 -6。-6 的 8 位补码是 11111010₂。Booth 算法处理符号位，结果与带符号整数乘法一致。</div>
+      <div class="exp"><b>📖 解析：</b>ALU 是运算器的核心部件，能够完成加、减等算术运算以及与、或、非、异或、移位等逻辑运算，并根据结果形成零标志、符号标志、进位标志、溢出标志等。取指和时序控制主要由控制器负责，寄存器负责暂存信息。</div>
     </div>
   </div>
  </div>
 <div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">某计数信号量 S 初值为 3，若只有 5 个进程各执行一次 P(S) 操作，且期间没有任何 V(S) 操作，则最终有多少个 P 操作能够顺利通过？</span><span class="tag book">操作系统</span><span class="tag easy">简单</span></div>
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">用信号量实现两个进程对同一临界区的互斥访问。若互斥信号量 mutex 的初值为 1，正确的临界区操作形式是：</span><span class="tag book">操作系统</span><span class="tag easy">简单</span></div>
   <div class="card-body">
-    <div class="q"><div class="opt">A. 0 个</div><div class="opt">B. 2 个</div><div class="opt">C. 3 个</div><div class="opt">D. 5 个</div></div>
-    
-    <button class="ans-btn">✅ 查看答案与解析</button>
-    <div class="ans-box">
-      <div class="ans">答案：C</div>
-      <div class="exp"><b>📖 解析：</b>计数信号量表示可用资源数。前 3 次 P 操作分别使 S 从 3 变为 2、1、0；后 2 次因资源为 0 而阻塞，因此只有 3 个通过。</div>
-    </div>
-  </div>
- </div>
-<div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">某 IPv4 数据报的 IHL 字段为 5，Total Length 字段为 1500 字节，且没有其他特殊首部。则该数据报的首部长度和数据部分长度分别为：</span><span class="tag book">计算机网络</span><span class="tag mid">中等</span></div>
-  <div class="card-body">
-    <div class="q"><div class="opt">A. 5 字节，1495 字节</div><div class="opt">B. 20 字节，1480 字节</div><div class="opt">C. 20 字节，1500 字节</div><div class="opt">D. 40 字节，1460 字节</div></div>
+    <div class="q"><div class="opt">A. 进入临界区前 V(mutex)，离开后 P(mutex)</div><div class="opt">B. 进入临界区前 P(mutex)，离开后 V(mutex)</div><div class="opt">C. 进入和离开临界区都执行 P(mutex)</div><div class="opt">D. 进入和离开临界区都执行 V(mutex)</div></div>
     
     <button class="ans-btn">✅ 查看答案与解析</button>
     <div class="ans-box">
       <div class="ans">答案：B</div>
-      <div class="exp"><b>📖 解析：</b>IPv4 的 IHL 以 32 位字为单位，IHL=5 表示 5×4=20 字节首部；Total Length 包括首部和数据，所以数据部分为 1500-20=1480 字节。</div>
+      <div class="exp"><b>📖 解析：</b>P 操作申请一个互斥资源，成功后信号量由 1 减为 0，其他进程不能同时进入；离开临界区时执行 V 操作释放资源，使信号量恢复并唤醒可能阻塞的进程。因此顺序必须是 P(mutex) → 临界区 → V(mutex)。</div>
     </div>
   </div>
  </div>
 <div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">采用 4 位无符号恢复余数法计算 1101₂ ÷ 0011₂，得到的商 Q 和余数 R 分别是：</span><span class="tag book">计算机组成原理</span><span class="tag hard">困难</span></div>
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">在采用默认分类编址、没有子网划分的 IPv4 网络中，主机 IP 地址为 172.16.5.9。该地址所属的类别及其网络地址分别是：</span><span class="tag book">计算机网络</span><span class="tag mid">中等</span></div>
   <div class="card-body">
-    <div class="q"><div class="opt">A. Q=0011₂，R=0100₂</div><div class="opt">B. Q=0100₂，R=0001₂</div><div class="opt">C. Q=0101₂，R=0010₂</div><div class="opt">D. Q=0100₂，R=0011₂</div></div>
+    <div class="q"><div class="opt">A. A 类，172.0.0.0</div><div class="opt">B. B 类，172.16.0.0</div><div class="opt">C. C 类，172.16.5.0</div><div class="opt">D. B 类，172.16.5.9</div></div>
     
     <button class="ans-btn">✅ 查看答案与解析</button>
     <div class="ans-box">
       <div class="ans">答案：B</div>
-      <div class="exp"><b>📖 解析：</b>1101₂=13，0011₂=3。13=3×4+1，因此商为 0100₂、余数为 0001₂；恢复余数法的每轮试减结果最终应满足 0≤R&lt;除数。</div>
+      <div class="exp"><b>📖 解析：</b>第一个字节 172 落在 128～191，故为 B 类地址。B 类默认网络号占前 16 位、主机号占后 16 位，因此网络地址将第三、第四字节置零，得到 172.16.0.0。C 类地址的第一个字节应在 192～223。</div>
+    </div>
+  </div>
+ </div>
+<div class="card open">
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">有界缓冲区大小为 N，生产者和消费者分别使用 empty、full、mutex 三个信号量。初值为 empty=N、full=0、mutex=1。下列哪组 P/V 操作顺序能正确实现生产者放入一个产品、消费者取出一个产品？</span><span class="tag book">操作系统</span><span class="tag hard">困难</span></div>
+  <div class="card-body">
+    <div class="q"><div class="opt">A. 生产者：P(mutex)，P(empty)，放入，V(full)，V(mutex)；消费者：P(mutex)，P(full)，取出，V(empty)，V(mutex)</div><div class="opt">B. 生产者：P(empty)，P(mutex)，放入，V(full)，V(mutex)；消费者：P(full)，P(mutex)，取出，V(empty)，V(mutex)</div><div class="opt">C. 生产者：P(full)，P(mutex)，放入，V(empty)，V(mutex)；消费者：P(empty)，P(mutex)，取出，V(full)，V(mutex)</div><div class="opt">D. 生产者：P(empty)，P(mutex)，放入，V(mutex)，V(full)；消费者：P(full)，P(mutex)，取出，V(mutex)，V(empty)</div></div>
+    
+    <button class="ans-btn">✅ 查看答案与解析</button>
+    <div class="ans-box">
+      <div class="ans">答案：B</div>
+      <div class="exp"><b>📖 解析：</b>生产者先 P(empty) 申请空槽，再 P(mutex) 进入临界区放入产品，离开时先 V(mutex) 释放互斥锁，再 V(full) 增加满槽数；消费者先 P(full) 确保有产品，再 P(mutex) 取出，之后 V(mutex) 和 V(empty)。A 将 P(mutex) 放在 P(empty) 前，缓冲区满时可能持锁等待空槽，导致消费者无法取出产品而死锁；D 在释放 mutex 前更新计数虽在部分实现中不改变计数结果，但给出的顺序不符合标准的“先释放互斥、再通知”规范。</div>
     </div>
   </div>
  </div>
@@ -218,47 +182,47 @@ class Solution:
 <div class="group"><div class="group-title">🇬🇧 考研单词 <span class="badge">20 词</span></div>
 <div class="card open">
   <div class="card-head"><span class="arrow">▶</span><span class="card-title">🇬🇧 考研单词 ×20</span><span class="tag book">高频词</span></div>
-  <div class="card-body"><div class="word-row"><span class="word">member</span><span class="phon">/ˈmembə(r)/</span></div>
-      <div class="def">成员</div>
-      <div class="example">✏️ Each member of the research team must explain the method clearly.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">explain</span><span class="phon">/ɪkˈspleɪn/</span></div>
-      <div class="def">解释</div>
-      <div class="example">✏️ The author explains why the experiment produced different results.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">translation</span><span class="phon">/trænzˈleɪʃn/</span></div>
-      <div class="def">翻译</div>
-      <div class="example">✏️ A faithful translation should preserve the main idea of the original text.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">side</span><span class="phon">/saɪd/</span></div>
-      <div class="def">一边；方面</div>
-      <div class="example">✏️ On the other side, the policy may create new opportunities for graduates.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">enjoy</span><span class="phon">/ɪnˈdʒɔɪ/</span></div>
-      <div class="def">享受；喜欢</div>
-      <div class="example">✏️ Students enjoy greater flexibility when online courses are well designed.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">cut</span><span class="phon">/kʌt/</span></div>
-      <div class="def">切、砍；削减</div>
-      <div class="example">✏️ The government plans to cut unnecessary energy consumption.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">adult</span><span class="phon">/ˈædʌlt/</span></div>
-      <div class="def">大人、成人</div>
-      <div class="example">✏️ Adult learners often return to education to improve their career prospects.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">international</span><span class="phon">/ˌɪntəˈnæʃənl/</span></div>
-      <div class="def">国际的</div>
-      <div class="example">✏️ International cooperation is essential for addressing climate change.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">training</span><span class="phon">/ˈtreɪnɪŋ/</span></div>
-      <div class="def">训练；培训</div>
-      <div class="example">✏️ Professional training can help workers adapt to technological change.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">general</span><span class="phon">/ˈdʒenrəl/</span></div>
-      <div class="def">一般的；总的；将军</div>
-      <div class="example">✏️ In general, regular review is more effective than last-minute study.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">nature</span><span class="phon">/ˈneɪtʃə(r)/</span></div>
-      <div class="def">自然界；性质</div>
-      <div class="example">✏️ The nature of the problem becomes clearer after careful comparison.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">type</span><span class="phon">/taɪp/</span></div>
-      <div class="def">类型；输入</div>
-      <div class="example">✏️ This type of evidence is useful in evaluating a scientific claim.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">doctor</span><span class="phon">/ˈdɒktə(r)/</span></div>
-      <div class="def">医生</div>
-      <div class="example">✏️ The doctor advised the patient to develop a healthier daily routine.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">mother</span><span class="phon">/ˈmʌðə(r)/</span></div>
-      <div class="def">妈妈；母亲</div>
-      <div class="example">✏️ The study examines how a mother’s education influences family decisions.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">situation</span><span class="phon">/ˌsɪtʃuˈeɪʃn/</span></div>
-      <div class="def">情况；形势</div>
-      <div class="example">✏️ In this situation, reliable information is more valuable than quick judgment.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">several</span><span class="phon">/ˈsevrəl/</span></div>
-      <div class="def">几个；若干</div>
-      <div class="example">✏️ Several studies have reached similar conclusions about the issue.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">save</span><span class="phon">/seɪv/</span></div>
-      <div class="def">保存；拯救；节省</div>
-      <div class="example">✏️ Digital tools can save researchers considerable time.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">essay</span><span class="phon">/ˈeseɪ/</span></div>
-      <div class="def">论文；短文</div>
-      <div class="example">✏️ The essay argues that technology should serve social needs.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">game</span><span class="phon">/ɡeɪm/</span></div>
-      <div class="def">游戏；比赛</div>
-      <div class="example">✏️ The researchers used a game to study how people make decisions.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">graduate</span><span class="phon">/ˈɡrædʒuət/</span></div>
-      <div class="def">毕业；获得学位</div>
-      <div class="example">✏️ Many students graduate with practical experience as well as theoretical knowledge.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"></div>
+  <div class="card-body"><div class="word-row"><span class="word">decade</span><span class="phon">/ˈdekeɪd/</span></div>
+      <div class="def">十年</div>
+      <div class="example">✏️ Over the past decade, digital technology has transformed scientific research.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">medical</span><span class="phon">/ˈmedɪkl/</span></div>
+      <div class="def">医疗的；医学的</div>
+      <div class="example">✏️ Medical advances have enabled doctors to diagnose diseases at an earlier stage.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">miss</span><span class="phon">/mɪs/</span></div>
+      <div class="def">错过；想念；未击中</div>
+      <div class="example">✏️ Students who miss regular review may find it difficult to recall key concepts.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">train</span><span class="phon">/treɪn/</span></div>
+      <div class="def">列车；训练；培养</div>
+      <div class="example">✏️ Universities should train students to solve unfamiliar problems independently.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">third</span><span class="phon">/θɜːd/</span></div>
+      <div class="def">第三；三分之一</div>
+      <div class="example">✏️ The third experiment produced results that were consistent with the first two.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">interview</span><span class="phon">/ˈɪntəvjuː/</span></div>
+      <div class="def">采访；面试</div>
+      <div class="example">✏️ The interview revealed how young researchers balance work and family life.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">stop</span><span class="phon">/stɒp/</span></div>
+      <div class="def">停止；阻止；车站</div>
+      <div class="example">✏️ Strict rules are needed to stop false information from spreading online.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">financial</span><span class="phon">/faɪˈnænʃl/</span></div>
+      <div class="def">财政的；金融的</div>
+      <div class="example">✏️ Financial support can help students from disadvantaged families continue their education.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">reach</span><span class="phon">/riːtʃ/</span></div>
+      <div class="def">到达；达到；伸手够到</div>
+      <div class="example">✏️ The two sides reached an agreement after several rounds of discussion.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">professional</span><span class="phon">/prəˈfeʃənl/</span></div>
+      <div class="def">职业的；专业的</div>
+      <div class="example">✏️ Professional knowledge should be combined with the ability to communicate clearly.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">sign</span><span class="phon">/saɪn/</span></div>
+      <div class="def">标牌；迹象；签名；表明</div>
+      <div class="example">✏️ A decline in pollution is a positive sign that the policy is working.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">earth</span><span class="phon">/ɜːθ/</span></div>
+      <div class="def">地球；泥土</div>
+      <div class="example">✏️ Protecting the earth requires both technological innovation and responsible choices.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">project</span><span class="phon">/ˈprɒdʒekt/</span></div>
+      <div class="def">项目；计划；投射</div>
+      <div class="example">✏️ The research project examines the effects of social media on reading habits.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">generation</span><span class="phon">/ˌdʒenəˈreɪʃn/</span></div>
+      <div class="def">产生；一代人；世代</div>
+      <div class="example">✏️ Each generation develops new ways of using technology in daily life.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">standard</span><span class="phon">/ˈstændəd/</span></div>
+      <div class="def">标准；标准的</div>
+      <div class="example">✏️ The new standard aims to improve the safety and efficiency of public transport.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">war</span><span class="phon">/wɔː/</span></div>
+      <div class="def">战争；斗争</div>
+      <div class="example">✏️ The novel describes how ordinary people suffered during the war.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">story</span><span class="phon">/ˈstɔːri/</span></div>
+      <div class="def">故事；叙述</div>
+      <div class="example">✏️ The article tells the story of a community that rebuilt its library.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">rich</span><span class="phon">/rɪtʃ/</span></div>
+      <div class="def">丰富的；富有的</div>
+      <div class="example">✏️ The museum provides visitors with a rich source of historical information.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">later</span><span class="phon">/ˈleɪtə/</span></div>
+      <div class="def">后来；较晚的</div>
+      <div class="example">✏️ The initial hypothesis was later revised in light of new evidence.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">again</span><span class="phon">/əˈɡen/</span></div>
+      <div class="def">再次；又</div>
+      <div class="example">✏️ The results should be tested again before a final conclusion is drawn.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"></div>
 </div>
 </div>
 <div class="footer">由 Hermes AI 生成 · 每天 08:00 更新 · 加油 💪</div>
