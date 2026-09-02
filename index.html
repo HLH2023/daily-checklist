@@ -119,14 +119,14 @@ class Solution:
 </div>
 <div class="group"><div class="group-title">💻 408 选择题 <span class="badge">5 题</span></div>
 <div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">如图二叉树中，根结点为 A，A 的左、右孩子分别为 B、C；B 的右孩子为 D，C 的左孩子为 E。按根—左—右规则进行先序遍历，序列是：</span><span class="tag book">数据结构</span><span class="tag easy">简单</span></div>
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">如图满二叉树中，根结点为 A，A 的左、右孩子分别为 B、C；B 的左、右孩子分别为 D、E，C 的左、右孩子分别为 F、G。按根—左—右规则进行先序遍历，序列是：</span><span class="tag book">数据结构</span><span class="tag easy">简单</span></div>
   <div class="card-body">
-    <div class="q"><div class="opt">A. A、B、D、C、E</div><div class="opt">B. A、B、C、D、E</div><div class="opt">C. D、B、A、E、C</div><div class="opt">D. A、C、E、B、D</div></div>
+    <div class="q"><div class="opt">A. A、B、D、E、C、F、G</div><div class="opt">B. A、B、D、E、C、G、F</div><div class="opt">C. D、E、B、F、G、C、A</div><div class="opt">D. A、C、F、G、B、D、E</div></div>
     <img src="images/2026-09-02_p0.png" style="width:100%;border-radius:10px;margin-top:10px;border:1px solid #e5e7eb">
     <button class="ans-btn">✅ 查看答案与解析</button>
     <div class="ans-box">
       <div class="ans">答案：A</div>
-      <div class="exp"><b>📖 解析：</b>先序遍历遵循根、左子树、右子树。先访问 A，再遍历左子树 B：B 没有左孩子，访问其右孩子 D；最后遍历右子树 C，先访问 C 再访问其左孩子 E，所以序列为 A、B、D、C、E。</div>
+      <div class="exp"><b>📖 解析：</b>先序遍历遵循根、左子树、右子树。先访问根 A，再递归遍历左子树 B、D、E，最后遍历右子树 C、F、G，所以序列为 A、B、D、E、C、F、G。</div>
     </div>
   </div>
  </div>
@@ -169,12 +169,12 @@ class Solution:
 <div class="card open">
   <div class="card-head"><span class="arrow">▶</span><span class="card-title">有界缓冲区大小为 N，生产者和消费者分别使用 empty、full、mutex 三个信号量。初值为 empty=N、full=0、mutex=1。下列哪组 P/V 操作顺序能正确实现生产者放入一个产品、消费者取出一个产品？</span><span class="tag book">操作系统</span><span class="tag hard">困难</span></div>
   <div class="card-body">
-    <div class="q"><div class="opt">A. 生产者：P(mutex)，P(empty)，放入，V(full)，V(mutex)；消费者：P(mutex)，P(full)，取出，V(empty)，V(mutex)</div><div class="opt">B. 生产者：P(empty)，P(mutex)，放入，V(full)，V(mutex)；消费者：P(full)，P(mutex)，取出，V(empty)，V(mutex)</div><div class="opt">C. 生产者：P(full)，P(mutex)，放入，V(empty)，V(mutex)；消费者：P(empty)，P(mutex)，取出，V(full)，V(mutex)</div><div class="opt">D. 生产者：P(empty)，P(mutex)，放入，V(mutex)，V(full)；消费者：P(full)，P(mutex)，取出，V(mutex)，V(empty)</div></div>
+    <div class="q"><div class="opt">A. 生产者：P(mutex)，P(empty)，放入，V(full)，V(mutex)；消费者：P(mutex)，P(full)，取出，V(empty)，V(mutex)</div><div class="opt">B. 生产者：P(empty)，P(mutex)，放入，V(full)，V(mutex)；消费者：P(full)，P(mutex)，取出，V(empty)，V(mutex)</div><div class="opt">C. 生产者：P(full)，P(mutex)，放入，V(empty)，V(mutex)；消费者：P(empty)，P(mutex)，取出，V(full)，V(mutex)</div><div class="opt">D. 生产者：P(empty)，P(mutex)，放入，V(mutex)，V(empty)；消费者：P(full)，P(mutex)，取出，V(mutex)，V(full)</div></div>
     
     <button class="ans-btn">✅ 查看答案与解析</button>
     <div class="ans-box">
       <div class="ans">答案：B</div>
-      <div class="exp"><b>📖 解析：</b>生产者先 P(empty) 申请空槽，再 P(mutex) 进入临界区放入产品，离开时先 V(mutex) 释放互斥锁，再 V(full) 增加满槽数；消费者先 P(full) 确保有产品，再 P(mutex) 取出，之后 V(mutex) 和 V(empty)。A 将 P(mutex) 放在 P(empty) 前，缓冲区满时可能持锁等待空槽，导致消费者无法取出产品而死锁；D 在释放 mutex 前更新计数虽在部分实现中不改变计数结果，但给出的顺序不符合标准的“先释放互斥、再通知”规范。</div>
+      <div class="exp"><b>📖 解析：</b>生产者先 P(empty) 申请空槽，再 P(mutex) 进入临界区放入产品，离开时释放 mutex 并 V(full) 增加满槽数；消费者先 P(full) 确保有产品，再 P(mutex) 取出，之后释放 mutex 并 V(empty) 增加空槽数。A 将 P(mutex) 放在 P(empty) 前，缓冲区满时可能持锁等待空槽，导致消费者无法取出产品而死锁；C 把生产者和消费者对 empty/full 的申请方向颠倒；D 把生产者和消费者应增加的信号量分别写错。</div>
     </div>
   </div>
  </div>
