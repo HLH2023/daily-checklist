@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>今日学习清单 · 2026-09-02</title>
+<title>今日学习清单 · 2026-09-03</title>
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Noto Sans SC", sans-serif; background: #f5f6fa; color: #1f2329; max-width: 640px; margin: 0 auto; padding: 16px 14px 40px; }
@@ -50,131 +50,131 @@
 
 <div class="hero">
   <h1>📋 今日学习清单</h1>
-  <div class="date">2026年9月2日 · 星期三</div>
+  <div class="date">2026年9月3日 · 星期四</div>
 </div>
 
 <div class="group"><div class="group-title">🔥 今日重点 <span class="badge">2 项</span></div>
 <div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">🧩 LeetCode 每日一题：Construct Uniform Parity Array I</span><span class="tag easy">简单</span></div>
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">🧩 LeetCode 每日一题：Construct Uniform Parity Array II</span><span class="tag mid">中等</span></div>
   <div class="card-body">
-    <div class="q">给定一个由 n 个互不相同的整数构成的数组 nums1，需要构造长度同为 n 的 nums2，使其元素全部为奇数或全部为偶数。对每个下标 i，必须任选一种操作：保留 nums1[i]，或选择 j≠i 并令 nums2[i]=nums1[i]-nums1[j]。判断是否能够构造出满足条件的 nums2。</div>
-    <div class="exp"><b>💡 解题思路：</b>目标可以统一为奇数。若 nums1 中存在奇数，所有奇数位置直接保留；每个偶数位置都可减去任意一个奇数，所得结果为奇数。若 nums1 中不存在奇数，则所有元素都是偶数，全部保留即可。因此在题目约束下总是可行。</div>
-    <div class="exp"><b>🔧 题解：</b>目标可以始终统一为奇数：若 nums1 中有奇数，奇数位置直接保留；偶数位置减去任意一个奇数（若该位置本身不是该奇数，则 j≠i 自动满足；对偶数位置更是如此），结果为奇数。若数组中没有奇数，则所有元素本来都是偶数，全部保留即可。因此在题目约束下答案恒为 true，时间复杂度 O(1)，额外空间复杂度 O(1)。</div>
+    <div class="q">给定一个由 n 个互不相同的正整数组成的数组 nums1，需要构造长度同为 n 的 nums2，使其元素全部为奇数或全部为偶数。对每个下标 i，必须任选一种操作：令 nums2[i]=nums1[i]，或选择 j≠i 且 nums1[i]-nums1[j]≥1，令 nums2[i]=nums1[i]-nums1[j]。判断是否能够构造出满足条件的 nums2。例：[1,4,7] 可构造为 [1,3,7]，答案为 true；[2,3] 无法统一奇偶性，答案为 false。</div>
+    <div class="exp"><b>💡 解题思路：</b>分别考虑目标为全奇数和全偶数。若数组最小值为奇数，可以把它作为减数：所有偶数减去这个更小的奇数后变成奇数，原本的奇数直接保留，因此可行。若数组中全为偶数，全部直接保留即可。反之，若最小值为偶数且数组中存在奇数，最小的奇数没有更小的奇数可供相减，不能变成偶数；它也不是偶数，所以不可能统一。</div>
+    <div class="exp"><b>🔧 题解：</b>设 mn=min(nums1)。目标为全奇数时，mn 为奇数即可：奇数元素保留，偶数元素减去 mn。目标为全偶数时，只有数组全为偶数才可行；若存在奇数，取最小的奇数，它没有更小的奇数可减，无法变成偶数。因此答案为 mn 为奇数，或所有元素均为偶数。只需一次扫描求最小值并检查是否全偶数，时间复杂度 O(n)，额外空间复杂度 O(1)。</div>
     <pre class="code">from typing import List
 
 class Solution:
     def uniformArray(self, nums1: List[int]) -&gt; bool:
-        # 若奇偶性混合，可把偶数减去一个奇数变为奇数；
-        # 若奇偶性相同则直接保留，因此在题目约束下总是可行。
-        return True</pre>
-    <a class="link" href="https://leetcode.com/problems/construct-uniform-parity-array-i/" target="_blank">🚀 去 LeetCode 做题 →</a>
+        mn = min(nums1)
+        # mn 为奇数时可统一为奇数；全偶数时直接保留即可。
+        return mn % 2 == 1 or all(x % 2 == 0 for x in nums1)</pre>
+    <a class="link" href="https://leetcode.com/problems/construct-uniform-parity-array-ii/" target="_blank">🚀 去 LeetCode 做题 →</a>
   </div>
 </div>
 </div>
 <div class="group"><div class="group-title">📐 数学知识点 <span class="badge">4 项</span></div>
 <div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">📐 高数·第1天·极限：闭区间连续函数性质</span><span class="tag book">高数·第1天·极限</span></div>
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">📐 高数·第1天·极限：增长阶比较</span><span class="tag book">高数·第1天·极限</span></div>
   <div class="card-body">
-    <div class="q">零点定理：f(a)f(b)&lt;0⟹∃ξ,f(ξ)=0；端点单侧极限异号同样成立</div>
-    <div class="exp"><b>📌 要点：</b>在闭区间 [a,b] 上连续的函数必有界、能取到最大值和最小值，具有介值性，并且可积、存在原函数。若端点函数值异号，则由零点定理可知区间内部至少存在一个零点。</div>
-    <div class="exp">• 闭区间连续函数必有界并能取到最大值、最小值</div><div class="exp">• 连续函数具有介值性，端点异号可用零点定理</div><div class="exp">• 连续函数在闭区间上可积，并存在原函数</div>
-    <div class="exp" style="margin-top:6px">[a,b]连续⟹有界<b style="color:#d48806">＿＿＿</b>、<b style="color:#d48806">＿＿＿</b>、介值<b style="color:#d48806">＿＿＿</b>；f(a)f(b)&lt;0⟹<b style="color:#d48806">＿＿＿</b></div><button class="ans-btn" style="font-size:12px;padding:4px 12px">✅ 答案</button><div class="ans-box"><div class="ans">有界、取最值、介值性；∃ξ∈(a,b)使f(ξ)=0</div></div>
-    <div class="exp"><b>🧭 套路：</b>看到“闭区间上连续”要联想到有界性、最值性、介值性和可积性；看到 f(a)f(b)&lt;0，立即检查零点定理的连续条件。</div>
+    <div class="q">lim x^n/e^x=0；lim ln x/x^n=0</div>
+    <div class="exp"><b>📌 要点：</b>当 x→+∞ 时，指数函数 e^x 的增长速度高于任意有限次幂 x^n，而 x^n 的增长速度又高于对数函数 ln x。处理含不同增长阶的无穷大或无穷小时，可先按增长阶比较主导项。</div>
+    <div class="exp">• x→+∞ 时 e^x≫x^n≫ln x</div><div class="exp">• lim x^n/e^x=0，指数增长压过任意多项式增长</div><div class="exp">• lim ln x/x^n=0，任意正次幂增长压过对数增长</div>
+    <div class="exp" style="margin-top:6px">x→+∞时<b style="color:#d48806">＿＿＿</b>≫<b style="color:#d48806">＿＿＿</b>≫<b style="color:#d48806">＿＿＿</b></div><button class="ans-btn" style="font-size:12px;padding:4px 12px">✅ 答案</button><div class="ans-box"><div class="ans">e^x≫x^n≫ln x</div></div>
+    <div class="exp"><b>🧭 套路：</b>遇到无穷大比值，先识别增长阶；必要时可用洛必达法则验证，但不要把增长阶关系误认为函数值的大小关系在所有 x 上都成立。</div>
     
   </div>
  </div>
 <div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">📐 高数·第1天·极限：等价无穷小与泰勒</span><span class="tag book">高数·第1天·极限</span></div>
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">📐 高数·第1天·极限：积分中值定理与夹逼</span><span class="tag book">高数·第1天·极限</span></div>
   <div class="card-body">
-    <div class="q">sin x~x,tan x~x,ln(1+x)~x,e^x-1~x</div>
-    <div class="exp"><b>📌 要点：</b>求极限时，乘除结构中的同阶无穷小通常可用等价无穷小替换；若存在加减相消或需要更高阶精度，则应使用泰勒展开。常用展开包括 sin x=x-x³/3!+o(x³)、ln(1+x)=x-x²/2+x³/3 和 e^x=1+x+x²/2+x³/6。</div>
-    <div class="exp">• 齐次乘除结构优先使用等价无穷小替换</div><div class="exp">• 加减相消时要展开到首个不被消掉的非零阶</div><div class="exp">• 常用关系：sin x~x、tan x~x、ln(1+x)~x、e^x−1~x</div>
-    <div class="exp" style="margin-top:6px">齐次结构用<b style="color:#d48806">＿＿＿</b>；加减相消用<b style="color:#d48806">＿＿＿</b></div><button class="ans-btn" style="font-size:12px;padding:4px 12px">✅ 答案</button><div class="ans-box"><div class="ans">等价无穷小；泰勒展开抓阶</div></div>
-    <div class="exp"><b>🧭 套路：</b>先判断表达式是乘除型还是加减相消型：前者可直接替换，后者通常必须用泰勒展开并控制展开阶数。</div>
+    <div class="q">∫_a^b f(n,x)dx=f(n,ξ)(b-a)；夹逼准则</div>
+    <div class="exp"><b>📌 要点：</b>连续函数的积分可以用区间内某点的函数值乘以区间长度表示；在积分型极限中，若被夹函数的上下界具有相同极限，可结合夹逼准则求极限。</div>
+    <div class="exp">• 积分中值定理把定积分写成 f(n,ξ_n)(b−a)</div><div class="exp">• 夹逼时要确认上下界对同一变量或参数的极限相同</div><div class="exp">• 使用定理前检查连续性、区间和不等式方向等条件</div>
+    <div class="exp" style="margin-top:6px">∫f(n,x)dx=<b style="color:#d48806">＿＿＿</b>；(a,b)连续且g_n≤f≤h_n且lim g_n=lim h_n=A⟹<b style="color:#d48806">＿＿＿</b></div><button class="ans-btn" style="font-size:12px;padding:4px 12px">✅ 答案</button><div class="ans-box"><div class="ans">f(n,ξ_n)(b-a)；lim f(n,x)=A</div></div>
+    <div class="exp"><b>🧭 套路：</b>遇到积分型极限，先尝试估计被积函数的上下界；若能把积分整体夹在两个有相同极限的量之间，就可直接使用夹逼准则。</div>
     
   </div>
  </div>
 <div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">📐 线代·行列式与矩阵：范德蒙德行列式</span><span class="tag book">线代·行列式与矩阵</span></div>
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">📐 线代·行列式与矩阵：秩的拼接与伴随矩阵秩</span><span class="tag book">线代·行列式与矩阵</span></div>
   <div class="card-body">
-    <div class="q">D_n=∏(a_j-a_i)(1≤i&lt;j≤n)</div>
-    <div class="exp"><b>📌 要点：</b>范德蒙德行列式的典型形式是第一行（或第一列）全为 1，后续各行（列）依次为相应数的一次、二次直到 n−1 次幂。其值等于所有两两参数差的乘积；当且仅当 a_i 两两不同时，行列式不为零。</div>
-    <div class="exp">• 典型矩阵的幂次按 0,1,…,n−1 递增</div><div class="exp">• 行列式等于所有 a_j−a_i（i&lt;j）的乘积</div><div class="exp">• 参数两两互异当且仅当范德蒙德行列式非零</div>
-    <div class="exp" style="margin-top:6px">默写核心结论：<b style="color:#d48806">＿＿＿</b></div><button class="ans-btn" style="font-size:12px;padding:4px 12px">✅ 答案</button><div class="ans-box"><div class="ans">D_n=∏(a_j-a_i)(1≤i&lt;j≤n)</div></div>
-    <div class="exp"><b>🧭 套路：</b>计算前先核对参数排列和差值方向；交换两列会改变行列式符号，不能只看差值绝对值。</div>
+    <div class="q">r(A,B)≤r(A)+r(B)；r(A*)={n,1,0}按r(A)={n,n-1,&lt;n-1}</div>
+    <div class="exp"><b>📌 要点：</b>横向或纵向拼接矩阵的秩不超过各部分秩之和；给矩阵增加列（或行）时秩至多增加 1。对 n 阶方阵 A，伴随矩阵 A* 的秩分三档：当 r(A)=n 时 r(A*)=n；当 r(A)=n−1 时 r(A*)=1；当 r(A)&lt;n−1 时 r(A*)=0。</div>
+    <div class="exp">• 拼接矩阵满足 r(A,B)≤r(A)+r(B)，并可结合子矩阵得到下界</div><div class="exp">• 分块对角矩阵的秩等于对角块秩之和</div><div class="exp">• 伴随矩阵秩由 r(A) 是否为 n、n−1 或小于 n−1 决定</div>
+    <div class="exp" style="margin-top:6px">默写核心结论：<b style="color:#d48806">＿＿＿</b></div><button class="ans-btn" style="font-size:12px;padding:4px 12px">✅ 答案</button><div class="ans-box"><div class="ans">r(A,B)≤r(A)+r(B)；r(A*)={n,1,0}按r(A)={n,n-1,&lt;n-1}</div></div>
+    <div class="exp"><b>🧭 套路：</b>看到伴随矩阵先按 A 的秩分三档；看到拼接矩阵不要简单把秩相加，只有列空间贡献彼此独立时才可能取到上界。</div>
     
   </div>
  </div>
 <div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">📐 线代·行列式与矩阵：矩阵秩</span><span class="tag book">线代·行列式与矩阵</span></div>
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">📐 线代·向量：线性组合与线性表示</span><span class="tag book">线代·向量</span></div>
   <div class="card-body">
-    <div class="q">r(A)≤min{m,n}；r(A^T)=r(A)；r(PAQ)=r(A)(P,Q可逆)</div>
-    <div class="exp"><b>📌 要点：</b>矩阵的秩等于其最高阶非零子式的阶数。m×n 矩阵的秩不超过 min{m,n}；转置不改变秩；左乘和右乘可逆矩阵相当于初等行、列变换，也不改变秩。对方阵而言，满秩等价于可逆。</div>
-    <div class="exp">• r(A)≤min{m,n}，零矩阵的秩为 0</div><div class="exp">• 初等行变换、初等列变换均不改变矩阵的秩</div><div class="exp">• 方阵 r(A)=n 等价于 A 可逆；且 r(AB)≤min{r(A),r(B)}</div>
-    <div class="exp" style="margin-top:6px">默写核心结论：<b style="color:#d48806">＿＿＿</b></div><button class="ans-btn" style="font-size:12px;padding:4px 12px">✅ 答案</button><div class="ans-box"><div class="ans">r(A)≤min{m,n}；r(A^T)=r(A)；r(PAQ)=r(A)(P,Q可逆)</div></div>
-    <div class="exp"><b>🧭 套路：</b>判断秩时优先做初等变换化为阶梯形；遇到 PAQ 要确认 P、Q 可逆，遇到 AB=O 不要误用实数的消去律。</div>
+    <div class="q">β=λ1α1+...+λsαs</div>
+    <div class="exp"><b>📌 要点：</b>向量 β 能由向量组 A={α1，…，αs} 线性表示，当且仅当存在一组数 λ1，…，λs 使 β=λ1α1+…+λsαs；等价地，方程组 Ax=β 有解，也等价于 r(A,β)=r(A)。</div>
+    <div class="exp">• 线性组合的系数 λ1，…，λs 可以是任意实数</div><div class="exp">• β 可由 A 线性表示等价于 Ax=β 有解</div><div class="exp">• 用增广矩阵比较 r(A,β) 与 r(A) 可判定线性表示</div>
+    <div class="exp" style="margin-top:6px">默写核心结论：<b style="color:#d48806">＿＿＿</b></div><button class="ans-btn" style="font-size:12px;padding:4px 12px">✅ 答案</button><div class="ans-box"><div class="ans">β=λ1α1+...+λsαs</div></div>
+    <div class="exp"><b>🧭 套路：</b>判断能否表示时，把给定向量作为增广列构造 Ax=β；若增广矩阵秩大于系数矩阵秩，则方程无解、不能表示。</div>
     
   </div>
  </div>
 </div>
 <div class="group"><div class="group-title">💻 408 选择题 <span class="badge">5 题</span></div>
 <div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">如图满二叉树中，根结点为 A，A 的左、右孩子分别为 B、C；B 的左、右孩子分别为 D、E，C 的左、右孩子分别为 F、G。按根—左—右规则进行先序遍历，序列是：</span><span class="tag book">数据结构</span><span class="tag easy">简单</span></div>
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">如图二叉树中，根结点为 A，A 的左、右孩子分别为 B、C；B 的左、右孩子分别为 D、E，C 的左、右孩子分别为 F、G。按左—根—右规则进行中序遍历，序列是：</span><span class="tag book">数据结构</span><span class="tag easy">简单</span></div>
   <div class="card-body">
-    <div class="q"><div class="opt">A. A、B、D、E、C、F、G</div><div class="opt">B. A、B、D、E、C、G、F</div><div class="opt">C. D、E、B、F、G、C、A</div><div class="opt">D. A、C、F、G、B、D、E</div></div>
-    <img src="images/2026-09-02_p0.png" style="width:100%;border-radius:10px;margin-top:10px;border:1px solid #e5e7eb">
+    <div class="q"><div class="opt">A. A、B、D、E、C、F、G</div><div class="opt">B. D、B、E、A、F、C、G</div><div class="opt">C. D、E、B、F、G、C、A</div><div class="opt">D. A、C、F、G、B、D、E</div></div>
+    <img src="images/2026-09-03_p0.png" style="width:100%;border-radius:10px;margin-top:10px;border:1px solid #e5e7eb">
+    <button class="ans-btn">✅ 查看答案与解析</button>
+    <div class="ans-box">
+      <div class="ans">答案：B</div>
+      <div class="exp"><b>📖 解析：</b>中序遍历遵循左子树、根、右子树。先遍历 A 的左子树得到 D、B、E，再访问根 A，最后遍历右子树得到 F、C、G，因此序列为 D、B、E、A、F、C、G。</div>
+    </div>
+  </div>
+ </div>
+<div class="card open">
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">下列关于存储器分类和特性的说法中，正确的是：</span><span class="tag book">计算机组成原理</span><span class="tag easy">简单</span></div>
+  <div class="card-body">
+    <div class="q"><div class="opt">A. SRAM 存储单元需要像 DRAM 一样周期性刷新</div><div class="opt">B. DRAM 断电后仍能保持数据，属于非易失性存储器</div><div class="opt">C. RAM 通常具有易失性，而 ROM 通常具有非易失性；Cache 常采用 SRAM</div><div class="opt">D. 外存的访问速度通常快于 CPU 寄存器，因而位于存储层次顶端</div></div>
+    <img src="images/2026-09-03_p1.png" style="width:100%;border-radius:10px;margin-top:10px;border:1px solid #e5e7eb">
+    <button class="ans-btn">✅ 查看答案与解析</button>
+    <div class="ans-box">
+      <div class="ans">答案：C</div>
+      <div class="exp"><b>📖 解析：</b>RAM 通常是易失性存储器，断电后数据丢失；ROM 属于非易失性存储器。DRAM 利用电容存储信息，需要周期性刷新，而 SRAM 不需要刷新但成本和功耗通常更高。Cache 为获得较快访问速度常采用 SRAM；寄存器位于存储层次最顶端，速度高于外存。</div>
+    </div>
+  </div>
+ </div>
+<div class="card open">
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">多个生产者和多个消费者共享大小为 N 的有界缓冲区，信号量 empty、full、mutex 的初值分别为 N、0、1。一个生产者放入一个产品时，正确的 P/V 操作顺序是：</span><span class="tag book">操作系统</span><span class="tag easy">简单</span></div>
+  <div class="card-body">
+    <div class="q"><div class="opt">A. P(mutex)，P(empty)，放入产品，V(full)，V(mutex)</div><div class="opt">B. P(empty)，P(mutex)，放入产品，V(mutex)，V(full)</div><div class="opt">C. P(full)，P(mutex)，放入产品，V(mutex)，V(empty)</div><div class="opt">D. P(empty)，V(mutex)，放入产品，P(mutex)，V(full)</div></div>
+    <img src="images/2026-09-03_p2.png" style="width:100%;border-radius:10px;margin-top:10px;border:1px solid #e5e7eb">
+    <button class="ans-btn">✅ 查看答案与解析</button>
+    <div class="ans-box">
+      <div class="ans">答案：B</div>
+      <div class="exp"><b>📖 解析：</b>生产者先执行 P(empty) 申请空槽；再执行 P(mutex) 进入临界区，完成写入；离开临界区时先 V(mutex) 释放互斥锁，再 V(full) 使满槽数加一。若先 P(mutex) 再等待 empty，缓冲区满时生产者会持锁阻塞，消费者可能无法获得锁取出产品而产生死锁。</div>
+    </div>
+  </div>
+ </div>
+<div class="card open">
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">将网络 192.168.10.0/24 划分为前缀长度为 /27 的子网，主机 192.168.10.77 所在子网的子网数量、每个子网可分配主机数和网络地址分别是：</span><span class="tag book">计算机网络</span><span class="tag mid">中等</span></div>
+  <div class="card-body">
+    <div class="q"><div class="opt">A. 4，62，192.168.10.64</div><div class="opt">B. 8，30，192.168.10.64</div><div class="opt">C. 8，32，192.168.10.64</div><div class="opt">D. 8，30，192.168.10.96</div></div>
+    <img src="images/2026-09-03_p3.png" style="width:100%;border-radius:10px;margin-top:10px;border:1px solid #e5e7eb">
+    <button class="ans-btn">✅ 查看答案与解析</button>
+    <div class="ans-box">
+      <div class="ans">答案：B</div>
+      <div class="exp"><b>📖 解析：</b>由 /24 变为 /27 借用 3 位作为子网号，所以子网数为 2^3=8。每个子网剩余 5 位主机号，可分配主机数为 2^5−2=30。/27 的地址块大小为 32，77 位于 64～95 这一块，因此网络地址为 192.168.10.64。</div>
+    </div>
+  </div>
+ </div>
+<div class="card open">
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">从 172.16.0.0/20 地址块开始，按 VLSM 为四个部门依次满足 400、200、100、50 个可用主机地址的需求，并按主机数从大到小、地址空间连续紧凑分配。下列分配方案正确的是：</span><span class="tag book">计算机网络</span><span class="tag hard">困难</span></div>
+  <div class="card-body">
+    <div class="q"><div class="opt">A. 400 台：172.16.0.0/23；200 台：172.16.2.0/24；100 台：172.16.3.0/25；50 台：172.16.3.128/26</div><div class="opt">B. 400 台：172.16.0.0/24；200 台：172.16.1.0/24；100 台：172.16.2.0/25；50 台：172.16.2.128/26</div><div class="opt">C. 400 台：172.16.0.0/23；200 台：172.16.1.0/24；100 台：172.16.2.0/25；50 台：172.16.2.128/26</div><div class="opt">D. 400 台：172.16.0.0/23；200 台：172.16.2.0/24；100 台：172.16.3.128/25；50 台：172.16.4.0/26</div></div>
+    
     <button class="ans-btn">✅ 查看答案与解析</button>
     <div class="ans-box">
       <div class="ans">答案：A</div>
-      <div class="exp"><b>📖 解析：</b>先序遍历遵循根、左子树、右子树。先访问根 A，再递归遍历左子树 B、D、E，最后遍历右子树 C、F、G，所以序列为 A、B、D、E、C、F、G。</div>
-    </div>
-  </div>
- </div>
-<div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">下列关于算术逻辑单元（ALU）功能的说法中，正确的是：</span><span class="tag book">计算机组成原理</span><span class="tag easy">简单</span></div>
-  <div class="card-body">
-    <div class="q"><div class="opt">A. 只负责从主存中取出指令</div><div class="opt">B. 主要完成算术运算、逻辑运算，并可形成相应标志位</div><div class="opt">C. 只负责控制各部件的时序，不参与数据运算</div><div class="opt">D. 只保存程序计数器和指令寄存器中的内容</div></div>
-    
-    <button class="ans-btn">✅ 查看答案与解析</button>
-    <div class="ans-box">
-      <div class="ans">答案：B</div>
-      <div class="exp"><b>📖 解析：</b>ALU 是运算器的核心部件，能够完成加、减等算术运算以及与、或、非、异或、移位等逻辑运算，并根据结果形成零标志、符号标志、进位标志、溢出标志等。取指和时序控制主要由控制器负责，寄存器负责暂存信息。</div>
-    </div>
-  </div>
- </div>
-<div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">用信号量实现两个进程对同一临界区的互斥访问。若互斥信号量 mutex 的初值为 1，正确的临界区操作形式是：</span><span class="tag book">操作系统</span><span class="tag easy">简单</span></div>
-  <div class="card-body">
-    <div class="q"><div class="opt">A. 进入临界区前 V(mutex)，离开后 P(mutex)</div><div class="opt">B. 进入临界区前 P(mutex)，离开后 V(mutex)</div><div class="opt">C. 进入和离开临界区都执行 P(mutex)</div><div class="opt">D. 进入和离开临界区都执行 V(mutex)</div></div>
-    
-    <button class="ans-btn">✅ 查看答案与解析</button>
-    <div class="ans-box">
-      <div class="ans">答案：B</div>
-      <div class="exp"><b>📖 解析：</b>P 操作申请一个互斥资源，成功后信号量由 1 减为 0，其他进程不能同时进入；离开临界区时执行 V 操作释放资源，使信号量恢复并唤醒可能阻塞的进程。因此顺序必须是 P(mutex) → 临界区 → V(mutex)。</div>
-    </div>
-  </div>
- </div>
-<div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">在采用默认分类编址、没有子网划分的 IPv4 网络中，主机 IP 地址为 172.16.5.9。该地址所属的类别及其网络地址分别是：</span><span class="tag book">计算机网络</span><span class="tag mid">中等</span></div>
-  <div class="card-body">
-    <div class="q"><div class="opt">A. A 类，172.0.0.0</div><div class="opt">B. B 类，172.16.0.0</div><div class="opt">C. C 类，172.16.5.0</div><div class="opt">D. B 类，172.16.5.9</div></div>
-    
-    <button class="ans-btn">✅ 查看答案与解析</button>
-    <div class="ans-box">
-      <div class="ans">答案：B</div>
-      <div class="exp"><b>📖 解析：</b>第一个字节 172 落在 128～191，故为 B 类地址。B 类默认网络号占前 16 位、主机号占后 16 位，因此网络地址将第三、第四字节置零，得到 172.16.0.0。C 类地址的第一个字节应在 192～223。</div>
-    </div>
-  </div>
- </div>
-<div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">有界缓冲区大小为 N，生产者和消费者分别使用 empty、full、mutex 三个信号量。初值为 empty=N、full=0、mutex=1。下列哪组 P/V 操作顺序能正确实现生产者放入一个产品、消费者取出一个产品？</span><span class="tag book">操作系统</span><span class="tag hard">困难</span></div>
-  <div class="card-body">
-    <div class="q"><div class="opt">A. 生产者：P(mutex)，P(empty)，放入，V(full)，V(mutex)；消费者：P(mutex)，P(full)，取出，V(empty)，V(mutex)</div><div class="opt">B. 生产者：P(empty)，P(mutex)，放入，V(full)，V(mutex)；消费者：P(full)，P(mutex)，取出，V(empty)，V(mutex)</div><div class="opt">C. 生产者：P(full)，P(mutex)，放入，V(empty)，V(mutex)；消费者：P(empty)，P(mutex)，取出，V(full)，V(mutex)</div><div class="opt">D. 生产者：P(empty)，P(mutex)，放入，V(mutex)，V(empty)；消费者：P(full)，P(mutex)，取出，V(mutex)，V(full)</div></div>
-    
-    <button class="ans-btn">✅ 查看答案与解析</button>
-    <div class="ans-box">
-      <div class="ans">答案：B</div>
-      <div class="exp"><b>📖 解析：</b>生产者先 P(empty) 申请空槽，再 P(mutex) 进入临界区放入产品，离开时释放 mutex 并 V(full) 增加满槽数；消费者先 P(full) 确保有产品，再 P(mutex) 取出，之后释放 mutex 并 V(empty) 增加空槽数。A 将 P(mutex) 放在 P(empty) 前，缓冲区满时可能持锁等待空槽，导致消费者无法取出产品而死锁；C 把生产者和消费者对 empty/full 的申请方向颠倒；D 把生产者和消费者应增加的信号量分别写错。</div>
+      <div class="exp"><b>📖 解析：</b>可用主机数为 H 时要满足 2^h−2≥H。400 需要 9 位主机号，对应 /23（510 个可用地址）；200 对应 /24（254 个）；100 对应 /25（126 个）；50 对应 /26（62 个）。从 172.16.0.0 连续分配时，四段依次为 0.0/23、2.0/24、3.0/25、3.128/26，且都满足相应前缀的对齐要求，因此 A 正确。B 容量不足，C 的 172.16.1.0/24 与前一个 /23 重叠，D 未按连续紧凑方式分配。</div>
     </div>
   </div>
  </div>
@@ -182,47 +182,47 @@ class Solution:
 <div class="group"><div class="group-title">🇬🇧 考研单词 <span class="badge">20 词</span></div>
 <div class="card open">
   <div class="card-head"><span class="arrow">▶</span><span class="card-title">🇬🇧 考研单词 ×20</span><span class="tag book">高频词</span></div>
-  <div class="card-body"><div class="word-row"><span class="word">decade</span><span class="phon">/ˈdekeɪd/</span></div>
-      <div class="def">十年</div>
-      <div class="example">✏️ Over the past decade, digital technology has transformed scientific research.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">medical</span><span class="phon">/ˈmedɪkl/</span></div>
-      <div class="def">医疗的；医学的</div>
-      <div class="example">✏️ Medical advances have enabled doctors to diagnose diseases at an earlier stage.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">miss</span><span class="phon">/mɪs/</span></div>
-      <div class="def">错过；想念；未击中</div>
-      <div class="example">✏️ Students who miss regular review may find it difficult to recall key concepts.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">train</span><span class="phon">/treɪn/</span></div>
-      <div class="def">列车；训练；培养</div>
-      <div class="example">✏️ Universities should train students to solve unfamiliar problems independently.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">third</span><span class="phon">/θɜːd/</span></div>
-      <div class="def">第三；三分之一</div>
-      <div class="example">✏️ The third experiment produced results that were consistent with the first two.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">interview</span><span class="phon">/ˈɪntəvjuː/</span></div>
-      <div class="def">采访；面试</div>
-      <div class="example">✏️ The interview revealed how young researchers balance work and family life.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">stop</span><span class="phon">/stɒp/</span></div>
-      <div class="def">停止；阻止；车站</div>
-      <div class="example">✏️ Strict rules are needed to stop false information from spreading online.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">financial</span><span class="phon">/faɪˈnænʃl/</span></div>
-      <div class="def">财政的；金融的</div>
-      <div class="example">✏️ Financial support can help students from disadvantaged families continue their education.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">reach</span><span class="phon">/riːtʃ/</span></div>
-      <div class="def">到达；达到；伸手够到</div>
-      <div class="example">✏️ The two sides reached an agreement after several rounds of discussion.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">professional</span><span class="phon">/prəˈfeʃənl/</span></div>
-      <div class="def">职业的；专业的</div>
-      <div class="example">✏️ Professional knowledge should be combined with the ability to communicate clearly.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">sign</span><span class="phon">/saɪn/</span></div>
-      <div class="def">标牌；迹象；签名；表明</div>
-      <div class="example">✏️ A decline in pollution is a positive sign that the policy is working.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">earth</span><span class="phon">/ɜːθ/</span></div>
-      <div class="def">地球；泥土</div>
-      <div class="example">✏️ Protecting the earth requires both technological innovation and responsible choices.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">project</span><span class="phon">/ˈprɒdʒekt/</span></div>
-      <div class="def">项目；计划；投射</div>
-      <div class="example">✏️ The research project examines the effects of social media on reading habits.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">generation</span><span class="phon">/ˌdʒenəˈreɪʃn/</span></div>
-      <div class="def">产生；一代人；世代</div>
-      <div class="example">✏️ Each generation develops new ways of using technology in daily life.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">standard</span><span class="phon">/ˈstændəd/</span></div>
-      <div class="def">标准；标准的</div>
-      <div class="example">✏️ The new standard aims to improve the safety and efficiency of public transport.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">war</span><span class="phon">/wɔː/</span></div>
-      <div class="def">战争；斗争</div>
-      <div class="example">✏️ The novel describes how ordinary people suffered during the war.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">story</span><span class="phon">/ˈstɔːri/</span></div>
-      <div class="def">故事；叙述</div>
-      <div class="example">✏️ The article tells the story of a community that rebuilt its library.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">rich</span><span class="phon">/rɪtʃ/</span></div>
-      <div class="def">丰富的；富有的</div>
-      <div class="example">✏️ The museum provides visitors with a rich source of historical information.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">later</span><span class="phon">/ˈleɪtə/</span></div>
-      <div class="def">后来；较晚的</div>
-      <div class="example">✏️ The initial hypothesis was later revised in light of new evidence.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">again</span><span class="phon">/əˈɡen/</span></div>
-      <div class="def">再次；又</div>
-      <div class="example">✏️ The results should be tested again before a final conclusion is drawn.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"></div>
+  <div class="card-body"><div class="word-row"><span class="word">air</span><span class="phon">/eə(r)/</span></div>
+      <div class="def">空气</div>
+      <div class="example">✏️ Air pollution has become a serious concern in many large cities.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">night</span><span class="phon">/naɪt/</span></div>
+      <div class="def">夜晚</div>
+      <div class="example">✏️ The researchers worked through the night to complete the experiment.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">contain</span><span class="phon">/kənˈteɪn/</span></div>
+      <div class="def">包含</div>
+      <div class="example">✏️ The report contains several suggestions for improving public education.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">main</span><span class="phon">/meɪn/</span></div>
+      <div class="def">主要的</div>
+      <div class="example">✏️ The main purpose of the study is to examine changes in reading habits.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">soon</span><span class="phon">/suːn/</span></div>
+      <div class="def">很快的</div>
+      <div class="example">✏️ The results will soon be available to researchers around the world.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">sound</span><span class="phon">/saʊnd/</span></div>
+      <div class="def">声音</div>
+      <div class="example">✏️ The machine produces a strange sound when its temperature rises.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">love</span><span class="phon">/lʌv/</span></div>
+      <div class="def">爱</div>
+      <div class="example">✏️ A love of learning can encourage students to persist through difficulties.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">account</span><span class="phon">/əˈkaʊnt/</span></div>
+      <div class="def">账户</div>
+      <div class="example">✏️ Users must protect their online account with a strong password.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">return</span><span class="phon">/rɪˈtɜːn/</span></div>
+      <div class="def">回归、返回</div>
+      <div class="example">✏️ The scientist plans to return to the university after completing the project.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">affect</span><span class="phon">/əˈfekt/</span></div>
+      <div class="def">影响</div>
+      <div class="example">✏️ A lack of sleep can affect students' ability to concentrate.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">translate</span><span class="phon">/trænzˈleɪt/</span></div>
+      <div class="def">解释、翻译、转变</div>
+      <div class="example">✏️ It is difficult to translate scientific discoveries into practical benefits without investment.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">sure</span><span class="phon">/ʃʊə(r)/</span></div>
+      <div class="def">肯定的</div>
+      <div class="example">✏️ Researchers must be sure that their conclusions are supported by reliable evidence.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">describe</span><span class="phon">/dɪˈskraɪb/</span></div>
+      <div class="def">描述</div>
+      <div class="example">✏️ The article describes how technology has changed the way people communicate.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">purpose</span><span class="phon">/ˈpɜːpəs/</span></div>
+      <div class="def">目的</div>
+      <div class="example">✏️ The purpose of the survey is to understand public attitudes toward science.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">full</span><span class="phon">/fʊl/</span></div>
+      <div class="def">满的</div>
+      <div class="example">✏️ The library was full of students preparing for the entrance examination.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">room</span><span class="phon">/ruːm/</span></div>
+      <div class="def">房间</div>
+      <div class="example">✏️ The laboratory provides enough room for several teams to work safely.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">appear</span><span class="phon">/əˈpɪə(r)/</span></div>
+      <div class="def">出现</div>
+      <div class="example">✏️ New evidence began to appear after the data were carefully reexamined.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">impact</span><span class="phon">/ˈɪmpækt/</span></div>
+      <div class="def">冲击</div>
+      <div class="example">✏️ The policy may have a significant impact on the development of rural areas.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">period</span><span class="phon">/ˈpɪəriəd/</span></div>
+      <div class="def">一段时间</div>
+      <div class="example">✏️ During a long period of observation, the researchers recorded only minor changes.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">television</span><span class="phon">/ˈtelɪvɪʒn/</span></div>
+      <div class="def">电视</div>
+      <div class="example">✏️ Television remains an important source of information for many households.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"></div>
 </div>
 </div>
 <div class="footer">由 Hermes AI 生成 · 每天 08:00 更新 · 加油 💪</div>
