@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>今日学习清单 · 2026-09-04</title>
+<title>今日学习清单 · 2026-09-05</title>
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Noto Sans SC", sans-serif; background: #f5f6fa; color: #1f2329; max-width: 640px; margin: 0 auto; padding: 16px 14px 40px; }
@@ -50,16 +50,16 @@
 
 <div class="hero">
   <h1>📋 今日学习清单</h1>
-  <div class="date">2026年9月4日 · 星期五</div>
+  <div class="date">2026年9月5日 · 星期六</div>
 </div>
 
 <div class="group"><div class="group-title">🔥 今日重点 <span class="badge">2 项</span></div>
 <div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">🧩 LeetCode 每日一题：Smallest Stable Index I</span><span class="tag easy">简单</span></div>
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">🧩 LeetCode 每日一题：Smallest Stable Index II</span><span class="tag mid">中等</span></div>
   <div class="card-body">
-    <div class="q">给定长度为 n 的整数数组 nums 和整数 k。对每个下标 i，定义不稳定度为 max(nums[0..i]) − min(nums[i..n−1])。若该值不超过 k，则 i 是稳定下标。请返回最小的稳定下标；若不存在则返回 −1。例如 nums=[5,0,1,4], k=3 时答案为 3；nums=[3,2,1], k=1 时答案为 −1。</div>
-    <div class="exp"><b>💡 解题思路：</b>把每个位置左侧（含当前位置）的最大值和右侧（含当前位置）的最小值预先算出。先从右向左建立 suffix_min，使 suffix_min[i]=min(nums[i..n−1])；再从左向右维护 prefix_max=max(nums[0..i])。按下标递增检查 prefix_max−suffix_min[i] 是否不超过 k，第一个满足条件的位置就是答案。</div>
-    <div class="exp"><b>🔧 题解：</b>后缀最小值数组只需一次逆序扫描，前缀最大值再扫描一次即可。不要把右侧区间写成 i+1 开始，因为题目明确包含 nums[i]；同样，左侧最大值也包含当前位置。时间复杂度 O(n)，额外空间复杂度 O(n)。</div>
+    <div class="q">给定长度为 n 的整数数组 nums 和整数 k。对每个下标 i，定义不稳定度为 max(nums[0..i]) − min(nums[i..n−1])。若该值不超过 k，则 i 是稳定下标。请返回最小的稳定下标；若不存在则返回 −1。示例：nums=[5,0,1,4], k=3 时返回 3；nums=[3,2,1], k=1 时返回 −1。</div>
+    <div class="exp"><b>💡 解题思路：</b>先从右向左预处理后缀最小值 suffix_min[i]=min(nums[i..n−1])，再从左向右维护前缀最大值 prefix_max=max(nums[0..i])。对每个 i 检查 prefix_max−suffix_min[i] 是否不超过 k，第一个满足条件的下标就是答案。</div>
+    <div class="exp"><b>🔧 题解：</b>题目要求左、右区间都包含当前位置，因此 prefix_max 和 suffix_min 都必须包含 nums[i]。后缀最小值一次逆序扫描，前缀最大值一次正序扫描，时间复杂度 O(n)，额外空间复杂度 O(n)。</div>
     <pre class="code">from typing import List
 
 class Solution:
@@ -76,114 +76,114 @@ class Solution:
             if prefix_max - suffix_min[i] &lt;= k:
                 return i
         return -1</pre>
-    <a class="link" href="https://leetcode.com/problems/smallest-stable-index-i/" target="_blank">🚀 去 LeetCode 做题 →</a>
+    <a class="link" href="https://leetcode.com/problems/smallest-stable-index-ii/" target="_blank">🚀 去 LeetCode 做题 →</a>
   </div>
 </div>
 </div>
 <div class="group"><div class="group-title">📐 数学知识点 <span class="badge">4 项</span></div>
 <div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">📐 高数·第1天·极限：(x+u)^m 展开取主导</span><span class="tag book">高数·第1天·极限</span></div>
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">📐 高数·第2天·极限：函数增长速度比较</span><span class="tag book">高数·第2天·极限</span></div>
   <div class="card-body">
-    <div class="q">(x+u)^m=x^m(1+u/x)^m=x^m+mx^(m-1)u+o(...)</div>
-    <div class="exp"><b>📌 要点：</b>当 u/x→0 时，将二项式写成 x^m(1+u/x)^m，并保留主导项和一阶修正项。展开时系数来自二项式系数，不能遗漏 m x^(m−1)u。</div>
-    <div class="exp">• 先提取 x^m，再令 u/x→0</div><div class="exp">• 一阶展开的修正项系数为 m</div><div class="exp">• 更高阶项相对前两项属于小量，可按题目精度舍去</div>
-    <div class="exp" style="margin-top:6px">(x+u)^m≈<b style="color:#d48806">＿＿＿</b>（u/x→0时）</div><button class="ans-btn" style="font-size:12px;padding:4px 12px">✅ 答案</button><div class="ans-box"><div class="ans">x^m+mx^(m-1)u</div></div>
-    <div class="exp"><b>🧭 套路：</b>先判断题目要求保留到几阶，再按二项式展开；不要把 (x+u)^m 直接当成 x^m，必须检查一阶项是否需要保留。</div>
-    
+    <div class="q">ln x=o(x^n)，x^n=o(a^x)，a^x=o(x^x)；x→-∞时a^x=o(1/|x|^n)</div>
+    <div class="exp"><b>📌 要点：</b>当 x→+∞ 时，常用增长速度大小规律为对数函数慢于幂函数，幂函数慢于指数函数，指数函数慢于 x^x；当 x→0+ 时，x^α|ln x|^m→0（α&gt;0）。比较无穷小或无穷大时，先识别函数类型和自变量趋向。</div>
+    <div class="exp">• x→+∞：ln x≪x^n≪a^x≪x^x（n&gt;0，a&gt;1）</div><div class="exp">• x→0+：任意正幂 x^α 都能压过有限次对数增长</div><div class="exp">• x→−∞ 时指数函数 a^x 衰减快于任意 1/|x|^n</div>
+    <div class="exp" style="margin-top:6px">x→+∞：<b style="color:#d48806">＿＿＿</b>≪x≪x²≪…≪x^n≪<b style="color:#d48806">＿＿＿</b>≪x^x</div><button class="ans-btn" style="font-size:12px;padding:4px 12px">✅ 答案</button><div class="ans-box"><div class="ans">ln x；e^x</div></div>
+    <div class="exp"><b>🧭 套路：</b>比较增长速度先统一趋向并确认参数条件；遇到倒数、负无穷或 x→0+ 时要同步转换表达式，不能机械套用 x→+∞ 的顺序。</div>
+    <img src="images/2026-09-05_0.png" style="width:100%;border-radius:10px;margin-top:10px;border:1px solid #e5e7eb">
   </div>
  </div>
 <div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">📐 高数·第2天·极限：幂指函数极限</span><span class="tag book">高数·第2天·极限</span></div>
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">📐 高数·第2天·极限：显函数求极限口诀</span><span class="tag book">高数·第2天·极限</span></div>
   <div class="card-body">
-    <div class="q">lim f(x)^g(x)=e^[lim g(x)ln f(x)]</div>
-    <div class="exp"><b>📌 要点：</b>对于 f(x)&gt;0 的幂指函数，令 y=f(x)^g(x)，取对数得 ln y=g(x)ln f(x)。先求乘积 g(x)ln f(x) 的极限，再用指数函数还原 y；该方法主要处理 1^∞、0^0、∞^0 等未定式。</div>
-    <div class="exp">• 取对数前必须保证底数 f(x)&gt;0</div><div class="exp">• 关键是把幂指型转化为乘积型极限</div><div class="exp">• 乘积极限存在时再取指数还原原极限</div>
-    <div class="exp" style="margin-top:6px">lim f(x)^g(x)=<b style="color:#d48806">＿＿＿</b>（f&gt;0）</div><button class="ans-btn" style="font-size:12px;padding:4px 12px">✅ 答案</button><div class="ans-box"><div class="ans">e^[lim g(x)ln f(x)]</div></div>
-    <div class="exp"><b>🧭 套路：</b>遇到 1^∞、0^0、∞^0，设 y=f^g 后取 ln；不要直接套底数或指数的极限分别计算。</div>
-    
+    <div class="q">显函数求极限时，按最高阶或主导项比较；子、母同增时，子母交替处理</div>
+    <div class="exp"><b>📌 要点：</b>显函数求极限时，应先判断分子、分母的主导项及其趋向，再约去共同的无穷因子或比较最高阶项。口诀‘子、母同增，子母交替’用于提醒在无穷大比值中分别观察分子和分母的增长方向，避免把局部变化误判为整体极限。</div>
+    <div class="exp">• 先确定分子、分母的趋向和主导项</div><div class="exp">• 同阶比保留首项系数，分子阶低于分母时极限常为 0</div><div class="exp">• 出现 0/0 或 ∞/∞ 未定式时，可因式分解、等价替换或使用洛必达法则</div>
+    <div class="exp" style="margin-top:6px">口诀：子、母<b style="color:#d48806">＿＿＿</b>增，子母交替</div><button class="ans-btn" style="font-size:12px;padding:4px 12px">✅ 答案</button><div class="ans-box"><div class="ans">同</div></div>
+    <div class="exp"><b>🧭 套路：</b>口诀：子、母同增，子母交替；真正计算时仍要写出主导项和等价变形，不能只凭口诀猜答案。</div>
+    <img src="images/2026-09-05_1.png" style="width:100%;border-radius:10px;margin-top:10px;border:1px solid #e5e7eb">
   </div>
  </div>
 <div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">📐 线代·第4章·向量：向量组等价</span><span class="tag book">线代·第4章·向量</span></div>
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">📐 线代·第4章·向量组的线性相关性：线性相关性常用结论</span><span class="tag book">线代·第4章·向量组的线性相关性</span></div>
   <div class="card-body">
-    <div class="q">A~B⟺r(A)=r(B)=r(A,B)</div>
-    <div class="exp"><b>📌 要点：</b>两个向量组等价，等价于它们可以相互线性表示，也等价于两组向量拼成的矩阵具有相同的秩，且拼接矩阵的秩不再增加。等价关系具有反身性、对称性和传递性。</div>
-    <div class="exp">• A~B 的核心是两组向量能够相互线性表示</div><div class="exp">• 可用 r(A)、r(B)、r(A,B) 的关系判定</div><div class="exp">• B 能由 A 线性表示时有 r(B)≤r(A)</div>
-    <div class="exp" style="margin-top:6px">默写核心结论：<b style="color:#d48806">＿＿＿</b></div><button class="ans-btn" style="font-size:12px;padding:4px 12px">✅ 答案</button><div class="ans-box"><div class="ans">A~B⟺r(A)=r(B)=r(A,B)</div></div>
-    <div class="exp"><b>🧭 套路：</b>判定向量组等价时，优先比较秩并检查拼接矩阵；只知道一组能表示另一组，通常只能得到秩的不等式，不能直接断言等价。</div>
-    
+    <div class="q">相关组加向量仍相关；无关组部分仍无关；延伸保持无关；s&gt;t时s个向量由t个表示必相关</div>
+    <div class="exp"><b>📌 要点：</b>向量组的线性相关性可通过齐次线性组合判断。n+1 个 n 维向量必线性相关；线性无关组的任一部分仍线性无关，在线性无关组后添加向量前要检查是否超出维数或落入原张成空间。</div>
+    <div class="exp">• 相关组中再加入任意向量仍然相关</div><div class="exp">• 无关组的任意部分仍然无关，延伸组未必保持无关</div><div class="exp">• s&gt;t 时，s 个向量若都由 t 个向量线性表示，则这 s 个向量必相关</div>
+    <div class="exp" style="margin-top:6px">默写核心结论：<b style="color:#d48806">＿＿＿</b></div><button class="ans-btn" style="font-size:12px;padding:4px 12px">✅ 答案</button><div class="ans-box"><div class="ans">相关组加向量仍相关；无关组部分仍无关；延伸保持无关；s&gt;t时s个向量由t个表示必相关</div></div>
+    <div class="exp"><b>🧭 套路：</b>判断相关与无关时优先转成矩阵秩或齐次方程；注意‘相关组加向量’与‘无关组加向量’的结论方向不同。</div>
+    <img src="images/2026-09-05_2.png" style="width:100%;border-radius:10px;margin-top:10px;border:1px solid #e5e7eb">
   </div>
  </div>
 <div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">📐 线代·第4章·向量：线性相关与线性无关</span><span class="tag book">线代·第4章·向量</span></div>
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">📐 线代·第4章·向量组的线性相关性：极大线性无关组</span><span class="tag book">线代·第4章·向量组的线性相关性</span></div>
   <div class="card-body">
-    <div class="q">相关⟺∃不全为零k使Σkα=0⟺Ax=0有非零解⟺r(A)&lt;s</div>
-    <div class="exp"><b>📌 要点：</b>含 s 个向量的向量组线性相关，当且仅当存在不全为零的系数使它们的线性组合为零；把向量作为矩阵列组成 A 后，这又等价于齐次方程 Ax=0 有非零解，或 r(A)&lt;s。反之，只有零解且 r(A)=s 时线性无关。</div>
-    <div class="exp">• 线性相关的系数不能全部为零</div><div class="exp">• 相关等价于齐次方程有非零解</div><div class="exp">• 矩阵列数为 s 时，相关判据为 r(A)&lt;s</div>
-    <div class="exp" style="margin-top:6px">默写核心结论：<b style="color:#d48806">＿＿＿</b></div><button class="ans-btn" style="font-size:12px;padding:4px 12px">✅ 答案</button><div class="ans-box"><div class="ans">相关⟺∃不全为零k使Σkα=0⟺Ax=0有非零解⟺r(A)&lt;s</div></div>
-    <div class="exp"><b>🧭 套路：</b>看到‘线性相关’先写齐次方程 Ax=0；注意比较的是矩阵秩与向量个数（列数），不要误把 r(A)&lt;行数当成判据。</div>
-    
+    <div class="q">秩=极大无关组向量个数</div>
+    <div class="exp"><b>📌 要点：</b>极大线性无关组同时满足：组内向量线性无关，且原向量组中的任意向量都能由它线性表示；等价地，向其中添加原组的任一向量都会变成相关组。向量组的秩就是极大线性无关组所含向量的个数，全零向量组的秩为 0。</div>
+    <div class="exp">• 极大无关组与原向量组等价，张成同一个向量空间</div><div class="exp">• 极大无关组不一定唯一，但其中向量个数一定相同</div><div class="exp">• 用矩阵化简时，主元列对应的原矩阵列可组成极大无关组</div>
+    <div class="exp" style="margin-top:6px">默写核心结论：<b style="color:#d48806">＿＿＿</b></div><button class="ans-btn" style="font-size:12px;padding:4px 12px">✅ 答案</button><div class="ans-box"><div class="ans">秩=极大无关组向量个数</div></div>
+    <div class="exp"><b>🧭 套路：</b>求极大无关组时保留原矩阵中的主元列，不要直接把行变换后的单位列当作原向量；先确定秩，再按主元位置选列。</div>
+    <img src="images/2026-09-05_3.png" style="width:100%;border-radius:10px;margin-top:10px;border:1px solid #e5e7eb">
   </div>
  </div>
 </div>
 <div class="group"><div class="group-title">💻 408 选择题 <span class="badge">5 题</span></div>
 <div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">二叉树的根结点为 A，A 的左、右孩子分别为 B、C；B 的左、右孩子分别为 D、E；C 的左、右孩子分别为 F、G。按左子树—根—右子树的后序遍历规则，遍历序列是：</span><span class="tag book">数据结构</span><span class="tag easy">简单</span></div>
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">一棵二叉树的先序遍历序列为 A、B、D、E、C、F、G，中序遍历序列为 D、B、E、A、F、C、G。该二叉树的后序遍历序列是：</span><span class="tag book">数据结构</span><span class="tag easy">简单</span></div>
   <div class="card-body">
-    <div class="q"><div class="opt">A. D、E、B、F、G、C、A</div><div class="opt">B. A、B、D、E、C、F、G</div><div class="opt">C. D、B、E、A、F、C、G</div><div class="opt">D. A、C、F、G、B、D、E</div></div>
-    <img src="images/2026-09-04_p0.png" style="width:100%;border-radius:10px;margin-top:10px;border:1px solid #e5e7eb">
+    <div class="q"><div class="opt">A. D、E、B、F、G、C、A</div><div class="opt">B. A、B、D、E、C、F、G</div><div class="opt">C. D、B、E、F、C、G、A</div><div class="opt">D. G、F、C、E、D、B、A</div></div>
+    <img src="images/2026-09-05_p0.png" style="width:100%;border-radius:10px;margin-top:10px;border:1px solid #e5e7eb">
     <button class="ans-btn">✅ 查看答案与解析</button>
     <div class="ans-box">
       <div class="ans">答案：A</div>
-      <div class="exp"><b>📖 解析：</b>后序遍历顺序是左子树、右子树、根。A 的左子树先得到 D、E、B，右子树得到 F、G、C，最后访问根 A，因此序列为 D、E、B、F、G、C、A。</div>
+      <div class="exp"><b>📖 解析：</b>先序第一个 A 是根；由中序序列可知左子树为 D、B、E，右子树为 F、C、G。继续按先序和中序划分可得左子树根 B、孩子 D/E，右子树根 C、孩子 F/G。后序按左—右—根访问，得到 D、E、B、F、G、C、A。</div>
     </div>
   </div>
  </div>
 <div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">某计算机 Cache 访问时间为 4 ns，Cache 命中率为 90%，未命中时还需访问主存，主存访问时间为 50 ns（忽略其他开销）。一次访存的平均访问时间为：</span><span class="tag book">计算机组成原理</span><span class="tag easy">简单</span></div>
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">关于 SRAM 与 DRAM，下列说法正确的是：</span><span class="tag book">计算机组成原理</span><span class="tag easy">简单</span></div>
   <div class="card-body">
-    <div class="q"><div class="opt">A. 4 ns</div><div class="opt">B. 5 ns</div><div class="opt">C. 9 ns</div><div class="opt">D. 54 ns</div></div>
-    <img src="images/2026-09-04_p1.png" style="width:100%;border-radius:10px;margin-top:10px;border:1px solid #e5e7eb">
+    <div class="q"><div class="opt">A. SRAM 使用电容存储信息，必须周期性刷新</div><div class="opt">B. DRAM 使用触发器存储信息，断电后仍能保持内容</div><div class="opt">C. SRAM 通常不需要刷新、速度较快但成本较高；DRAM 需要刷新、容量密度较高</div><div class="opt">D. SRAM 和 DRAM 都不需要刷新，且 DRAM 的访问速度通常更快</div></div>
+    <img src="images/2026-09-05_p1.png" style="width:100%;border-radius:10px;margin-top:10px;border:1px solid #e5e7eb">
     <button class="ans-btn">✅ 查看答案与解析</button>
     <div class="ans-box">
       <div class="ans">答案：C</div>
-      <div class="exp"><b>📖 解析：</b>每次访问都先查 Cache，耗时 4 ns；10% 的访问未命中，还需额外访问主存 50 ns。因此平均访问时间为 4+（1−0.9）×50=9 ns。这里的主存时间是未命中后的额外时间，不应把命中和未命中简单地都乘以完整路径时间。</div>
+      <div class="exp"><b>📖 解析：</b>SRAM 用双稳态触发器保存信息，只要供电就不需要周期性刷新，速度快、功耗和成本通常较高；DRAM 以电容存储电荷，存在漏电，需要定期刷新，但单元面积小、集成度高、单位容量成本低。</div>
     </div>
   </div>
  </div>
 <div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">读者—写者问题采用读者优先算法：读者进入时用 mutex 保护 read_count；第一个读者执行 P(rw)，最后一个读者执行 V(rw)；写者只执行 P(rw)、写操作、V(rw)。下列说法正确的是：</span><span class="tag book">操作系统</span><span class="tag hard">困难</span></div>
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">五位哲学家围坐在圆桌旁，每人先拿左边筷子，再拿右边筷子；筷子一次只能被一人持有。若五人同时拿起左边筷子，系统将发生：</span><span class="tag book">操作系统</span><span class="tag hard">困难</span></div>
   <div class="card-body">
-    <div class="q"><div class="opt">A. 写者可能因不断到来的读者而长期等待，发生写者饥饿</div><div class="opt">B. 任意时刻最多只能有一个读者进入临界区</div><div class="opt">C. 每个读者都必须执行一次 P(rw)，才能开始读</div><div class="opt">D. 写者修改 read_count 时必须先获得 mutex，否则读者不能并发</div></div>
-    
+    <div class="q"><div class="opt">A. 互斥失效，多个哲学家同时使用同一根筷子</div><div class="opt">B. 死锁：每人占有一根筷子并等待另一根，形成环路等待</div><div class="opt">C. 饥饿：所有哲学家都能继续运行但永远不能进餐</div><div class="opt">D. 缺页中断：筷子不足会自动换入新的资源</div></div>
+    <img src="images/2026-09-05_p2.png" style="width:100%;border-radius:10px;margin-top:10px;border:1px solid #e5e7eb">
     <button class="ans-btn">✅ 查看答案与解析</button>
     <div class="ans-box">
-      <div class="ans">答案：A</div>
-      <div class="exp"><b>📖 解析：</b>读者优先算法只在第一个读者到来时占用 rw，后续读者可继续进入，因此多个读者可以并发读；只有最后一个读者释放 rw。若读者持续到来，read_count 始终不为 0，等待中的写者可能长期得不到 rw，产生写者饥饿。mutex 只用于保护 read_count，不是写者修改它，因为写者不修改该变量。</div>
+      <div class="ans">答案：B</div>
+      <div class="exp"><b>📖 解析：</b>每位哲学家先占有左筷子，再等待右筷子；同时发生时，每根筷子都被一位哲学家占有，且每人都等待下一根筷子，形成循环等待，满足死锁的必要条件。可通过限制同时就餐人数、规定筷子编号顺序，或设置服务员信号量破坏死锁条件。</div>
     </div>
   </div>
  </div>
 <div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">内网主机 192.168.1.10:5000 访问 Internet 服务器 203.0.113.8:443。家用路由器的公网地址为 198.51.100.2，并为该连接分配公网端口 62001。NAT 建立映射后，发往 Internet 的报文源地址和源端口应为：</span><span class="tag book">计算机网络</span><span class="tag mid">中等</span></div>
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">关于 IPv6，下列说法正确的是：</span><span class="tag book">计算机网络</span><span class="tag mid">中等</span></div>
   <div class="card-body">
-    <div class="q"><div class="opt">A. 192.168.1.10:5000</div><div class="opt">B. 198.51.100.2:5000</div><div class="opt">C. 192.168.1.10:62001</div><div class="opt">D. 198.51.100.2:62001</div></div>
-    
+    <div class="q"><div class="opt">A. IPv6 地址长度为 32 位，仍主要采用点分十进制表示</div><div class="opt">B. IPv6 地址长度为 128 位，基本首部固定为 40 字节，并取消了首部校验和字段</div><div class="opt">C. IPv6 通过 ARP 获取下一跳 MAC 地址，广播仍是其主要地址类型</div><div class="opt">D. IPv6 首部固定包含 IPv4 的 IHL 和 Header Checksum 字段</div></div>
+    <img src="images/2026-09-05_p3.png" style="width:100%;border-radius:10px;margin-top:10px;border:1px solid #e5e7eb">
     <button class="ans-btn">✅ 查看答案与解析</button>
     <div class="ans-box">
-      <div class="ans">答案：D</div>
-      <div class="exp"><b>📖 解析：</b>源 NAT 会把私有源地址和源端口改写为路由器的公网地址及其分配的公网端口，所以外发报文的源端点是 198.51.100.2:62001。路由器内部保存映射 198.51.100.2:62001↔192.168.1.10:5000，收到返回报文后再反向改写。</div>
+      <div class="ans">答案：B</div>
+      <div class="exp"><b>📖 解析：</b>IPv6 地址为 128 位，通常用冒号分隔的十六进制表示；基本首部固定 40 字节，首部中没有 IPv4 的 IHL 和 Header Checksum 字段。IPv6 使用邻居发现协议（ND）完成地址解析等功能，并以单播、组播、任播为主要地址类型，不使用广播。</div>
     </div>
   </div>
  </div>
 <div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">对下图所示二叉树进行层序遍历。层序遍历从根开始，按从上到下、从左到右访问结点，其结果是：</span><span class="tag book">数据结构</span><span class="tag easy">简单</span></div>
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">关于只读存储器 ROM 的分类，下列说法正确的是：</span><span class="tag book">计算机组成原理</span><span class="tag easy">简单</span></div>
   <div class="card-body">
-    <div class="q"><div class="opt">A. A、B、C、D、E、F、G</div><div class="opt">B. A、B、D、E、C、F、G</div><div class="opt">C. D、E、B、F、G、C、A</div><div class="opt">D. A、C、B、F、G、D、E</div></div>
-    <img src="images/2026-09-04_p4.png" style="width:100%;border-radius:10px;margin-top:10px;border:1px solid #e5e7eb">
+    <div class="q"><div class="opt">A. MROM 出厂时由用户现场写入，PROM 可反复擦除改写</div><div class="opt">B. PROM 通常只能一次性编程，EPROM 可用紫外线擦除后重新写入</div><div class="opt">C. EEPROM 必须拆下芯片并用紫外线擦除，Flash 不能电擦除</div><div class="opt">D. 所有 ROM 在制造完成后都完全不能改变存储内容</div></div>
+    <img src="images/2026-09-05_p4.png" style="width:100%;border-radius:10px;margin-top:10px;border:1px solid #e5e7eb">
     <button class="ans-btn">✅ 查看答案与解析</button>
     <div class="ans-box">
-      <div class="ans">答案：A</div>
-      <div class="exp"><b>📖 解析：</b>层序遍历使用队列：先访问 A，再将 B、C 入队；随后访问 B 并加入 D、E，再访问 C 并加入 F、G；最后依次访问 D、E、F、G。因此结果为 A、B、C、D、E、F、G。</div>
+      <div class="ans">答案：B</div>
+      <div class="exp"><b>📖 解析：</b>MROM 在制造时由厂家固化；PROM 允许用户一次性编程；EPROM 可通过紫外线照射擦除后重新编程；EEPROM 可电擦除并改写；Flash 是 EEPROM 的一种改进形式，通常按块擦除。</div>
     </div>
   </div>
  </div>
@@ -191,47 +191,47 @@ class Solution:
 <div class="group"><div class="group-title">🇬🇧 考研单词 <span class="badge">20 词</span></div>
 <div class="card open">
   <div class="card-head"><span class="arrow">▶</span><span class="card-title">🇬🇧 考研单词 ×20</span><span class="tag book">高频词</span></div>
-  <div class="card-body"><div class="word-row"><span class="word">quite</span><span class="phon">/kwaɪt/</span></div>
-      <div class="def">相当；颇为</div>
-      <div class="example">✏️ The evidence is quite sufficient to support the author's conclusion.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">position</span><span class="phon">/pəˈzɪʃn/</span></div>
-      <div class="def">位置；立场；职位</div>
-      <div class="example">✏️ The researchers carefully recorded the position of each sample.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">attitude</span><span class="phon">/ˈætɪtjuːd/</span></div>
-      <div class="def">态度；看法</div>
-      <div class="example">✏️ A positive attitude toward failure may encourage students to keep trying.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">machine</span><span class="phon">/məˈʃiːn/</span></div>
-      <div class="def">机器；机械装置</div>
-      <div class="example">✏️ The machine can process large amounts of data in a short time.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">clear</span><span class="phon">/klɪə(r)/</span></div>
-      <div class="def">清楚的；明确的；清除</div>
-      <div class="example">✏️ The report provides clear evidence of the social problem.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">field</span><span class="phon">/fiːld/</span></div>
-      <div class="def">领域；场地；田地</div>
-      <div class="example">✏️ The discovery has had a major influence on the field of medicine.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">pass</span><span class="phon">/pɑːs/</span></div>
-      <div class="def">经过；通过；传递</div>
-      <div class="example">✏️ The proposal must pass several stages of scientific review.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">below</span><span class="phon">/bɪˈləʊ/</span></div>
-      <div class="def">在……下面；低于</div>
-      <div class="example">✏️ The temperature remained below the level required for normal growth.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">here</span><span class="phon">/hɪə(r)/</span></div>
-      <div class="def">这里；在此处</div>
-      <div class="example">✏️ The explanation given here is based on a careful analysis of the data.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">communication</span><span class="phon">/kəˌmjuːnɪˈkeɪʃn/</span></div>
-      <div class="def">交流；沟通；通信</div>
-      <div class="example">✏️ Effective communication is essential for cooperation between different groups.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">protect</span><span class="phon">/prəˈtekt/</span></div>
-      <div class="def">保护；防护</div>
-      <div class="example">✏️ Strict laws are needed to protect the environment from further damage.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">performance</span><span class="phon">/pəˈfɔːməns/</span></div>
-      <div class="def">表现；性能；演出</div>
-      <div class="example">✏️ The experiment measures the performance of the new computer system.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">lecture</span><span class="phon">/ˈlektʃə(r)/</span></div>
-      <div class="def">讲座；演讲；授课</div>
-      <div class="example">✏️ The professor used a practical example in the lecture on learning methods.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">factor</span><span class="phon">/ˈfæktə(r)/</span></div>
-      <div class="def">因素；因子</div>
-      <div class="example">✏️ Cost is an important factor in deciding whether the project is practical.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">top</span><span class="phon">/tɒp/</span></div>
-      <div class="def">顶端；顶部；最高的</div>
-      <div class="example">✏️ The university is ranked among the top institutions in the country.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">firm</span><span class="phon">/fɜːm/</span></div>
-      <div class="def">牢固的；坚定的；公司</div>
-      <div class="example">✏️ The researchers reached a firm conclusion after repeated experiments.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">draw</span><span class="phon">/drɔː/</span></div>
-      <div class="def">画；吸引；得出</div>
-      <div class="example">✏️ The study draws attention to the unequal distribution of educational resources.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">memory</span><span class="phon">/ˈmeməri/</span></div>
-      <div class="def">记忆；存储器</div>
-      <div class="example">✏️ The computer uses high-speed memory to store data temporarily.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">whole</span><span class="phon">/həʊl/</span></div>
-      <div class="def">全部的；整体；完整的</div>
-      <div class="example">✏️ The policy should be evaluated by considering the whole social context.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">writer</span><span class="phon">/ˈraɪtə(r)/</span></div>
-      <div class="def">作家；作者</div>
-      <div class="example">✏️ The writer supports the central argument with historical evidence.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"></div>
+  <div class="card-body"><div class="word-row"><span class="word">watch</span><span class="phon">/wɒtʃ/</span></div>
+      <div class="def">观看</div>
+      <div class="example">✏️ Researchers should watch for unexpected changes in the experimental data.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">death</span><span class="phon">/deθ/</span></div>
+      <div class="def">死亡</div>
+      <div class="example">✏️ The report examines how air pollution increases the risk of premature death.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">white</span><span class="phon">/waɪt/</span></div>
+      <div class="def">白色的</div>
+      <div class="example">✏️ The experiment used a white screen to reflect the light evenly.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">academic</span><span class="phon">/ˌækəˈdemɪk/</span></div>
+      <div class="def">学术的</div>
+      <div class="example">✏️ Academic research should be supported by reliable evidence.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">bear</span><span class="phon">/beə(r)/</span></div>
+      <div class="def">携带、承受</div>
+      <div class="example">✏️ The bridge must bear the weight of heavy vehicles safely.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">importance</span><span class="phon">/ɪmˈpɔːtəns/</span></div>
+      <div class="def">重要性</div>
+      <div class="example">✏️ The study emphasizes the importance of critical thinking in education.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">decline</span><span class="phon">/dɪˈklaɪn/</span></div>
+      <div class="def">拒绝、下降</div>
+      <div class="example">✏️ The decline in biodiversity has attracted attention from scientists.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">claim</span><span class="phon">/kleɪm/</span></div>
+      <div class="def">索要、声称</div>
+      <div class="example">✏️ The author claims that technology can improve access to education.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">model</span><span class="phon">/ˈmɒdl/</span></div>
+      <div class="def">模型</div>
+      <div class="example">✏️ The researchers developed a model to predict changes in climate.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">wrong</span><span class="phon">/rɒŋ/</span></div>
+      <div class="def">错误的</div>
+      <div class="example">✏️ A wrong assumption may lead to an inaccurate conclusion.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">expert</span><span class="phon">/ˈekspɜːt/</span></div>
+      <div class="def">专家、专门的</div>
+      <div class="example">✏️ An expert in computer security explained the risks of weak passwords.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">carry</span><span class="phon">/ˈkæri/</span></div>
+      <div class="def">携带</div>
+      <div class="example">✏️ Rivers carry nutrients from the land to the ocean.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">act</span><span class="phon">/ækt/</span></div>
+      <div class="def">行为、行动、扮演</div>
+      <div class="example">✏️ Governments must act quickly to reduce environmental damage.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">send</span><span class="phon">/send/</span></div>
+      <div class="def">发送</div>
+      <div class="example">✏️ The device can send data to the central server wirelessly.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">accept</span><span class="phon">/əkˈsept/</span></div>
+      <div class="def">接受</div>
+      <div class="example">✏️ A scientific journal will accept a paper only after careful review.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">potential</span><span class="phon">/pəˈtenʃl/</span></div>
+      <div class="def">潜在的</div>
+      <div class="example">✏️ The new material has the potential to reduce energy consumption.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">degree</span><span class="phon">/dɪˈɡriː/</span></div>
+      <div class="def">温度、程度</div>
+      <div class="example">✏️ The degree of risk depends on the quality of the available evidence.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">resource</span><span class="phon">/rɪˈsɔːs/</span></div>
+      <div class="def">资源</div>
+      <div class="example">✏️ Public libraries provide valuable educational resources for communities.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">pause</span><span class="phon">/pɔːz/</span></div>
+      <div class="def">暂停</div>
+      <div class="example">✏️ The system will pause the process when the temperature becomes unsafe.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">opinion</span><span class="phon">/əˈpɪnjən/</span></div>
+      <div class="def">意见</div>
+      <div class="example">✏️ The writer supports the opinion with statistics from recent research.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"></div>
 </div>
 </div>
 <div class="footer">由 Hermes AI 生成 · 每天 08:00 更新 · 加油 💪</div>
