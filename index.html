@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>今日学习清单 · 2026-09-05</title>
+<title>今日学习清单 · 2026-09-06</title>
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Noto Sans SC", sans-serif; background: #f5f6fa; color: #1f2329; max-width: 640px; margin: 0 auto; padding: 16px 14px 40px; }
@@ -50,140 +50,135 @@
 
 <div class="hero">
   <h1>📋 今日学习清单</h1>
-  <div class="date">2026年9月5日 · 星期六</div>
+  <div class="date">2026年9月6日 · 星期日</div>
 </div>
 
 <div class="group"><div class="group-title">🔥 今日重点 <span class="badge">2 项</span></div>
 <div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">🧩 LeetCode 每日一题：Smallest Stable Index II</span><span class="tag mid">中等</span></div>
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">🧩 LeetCode 每日一题：Distinct Subsequences</span><span class="tag hard">困难</span></div>
   <div class="card-body">
-    <div class="q">给定长度为 n 的整数数组 nums 和整数 k。对每个下标 i，定义不稳定度为 max(nums[0..i]) − min(nums[i..n−1])。若该值不超过 k，则 i 是稳定下标。请返回最小的稳定下标；若不存在则返回 −1。示例：nums=[5,0,1,4], k=3 时返回 3；nums=[3,2,1], k=1 时返回 −1。</div>
-    <div class="exp"><b>💡 解题思路：</b>先从右向左预处理后缀最小值 suffix_min[i]=min(nums[i..n−1])，再从左向右维护前缀最大值 prefix_max=max(nums[0..i])。对每个 i 检查 prefix_max−suffix_min[i] 是否不超过 k，第一个满足条件的下标就是答案。</div>
-    <div class="exp"><b>🔧 题解：</b>题目要求左、右区间都包含当前位置，因此 prefix_max 和 suffix_min 都必须包含 nums[i]。后缀最小值一次逆序扫描，前缀最大值一次正序扫描，时间复杂度 O(n)，额外空间复杂度 O(n)。</div>
+    <div class="q">给定两个字符串 s 和 t，请返回 s 中等于 t 的不同子序列数量。子序列可以通过删除 s 中的一些字符（也可以不删除）且不改变剩余字符相对顺序得到。示例：s="rabbbit"、t="rabbit" 时返回 3；s="babgbag"、t="bag" 时返回 5。</div>
+    <div class="exp"><b>💡 解题思路：</b>设 dp[j] 表示处理当前前缀 s 后，组成 t 前 j 个字符的方案数。初始化 dp[0]=1；扫描 s 的每个字符时，将 j 从后向前更新：若 s[i]==t[j]，则把不选当前字符和选当前字符两类方案相加，即 dp[j+1]+=dp[j]。倒序更新避免当前字符被重复使用。</div>
+    <div class="exp"><b>🔧 题解：</b>状态转移为 dp[i][j]=dp[i-1][j]+dp[i-1][j-1]（当 s[i-1]==t[j-1]），否则 dp[i][j]=dp[i-1][j]。用一维数组倒序压缩空间后，时间复杂度为 O(|s||t|)，额外空间复杂度为 O(|t|)。题目保证答案适合 32 位有符号整数。</div>
     <pre class="code">from typing import List
 
 class Solution:
-    def firstStableIndex(self, nums: List[int], k: int) -&gt; int:
-        n = len(nums)
-        suffix_min = [0] * n
-        suffix_min[-1] = nums[-1]
-        for i in range(n - 2, -1, -1):
-            suffix_min[i] = min(nums[i], suffix_min[i + 1])
-
-        prefix_max = nums[0]
-        for i, value in enumerate(nums):
-            prefix_max = max(prefix_max, value)
-            if prefix_max - suffix_min[i] &lt;= k:
-                return i
-        return -1</pre>
-    <a class="link" href="https://leetcode.com/problems/smallest-stable-index-ii/" target="_blank">🚀 去 LeetCode 做题 →</a>
+    def numDistinct(self, s: str, t: str) -&gt; int:
+        dp = [0] * (len(t) + 1)
+        dp[0] = 1
+        for ch in s:
+            for j in range(len(t) - 1, -1, -1):
+                if ch == t[j]:
+                    dp[j + 1] += dp[j]
+        return dp[-1]</pre>
+    <a class="link" href="https://leetcode.com/problems/distinct-subsequences/" target="_blank">🚀 去 LeetCode 做题 →</a>
   </div>
 </div>
 </div>
 <div class="group"><div class="group-title">📐 数学知识点 <span class="badge">4 项</span></div>
 <div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">📐 高数·第2天·极限：函数增长速度比较</span><span class="tag book">高数·第2天·极限</span></div>
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">📐 高数·第2天·导数：渐近线</span><span class="tag book">高数·第2天·导数</span></div>
   <div class="card-body">
-    <div class="q">ln x=o(x^n)，x^n=o(a^x)，a^x=o(x^x)；x→-∞时a^x=o(1/|x|^n)</div>
-    <div class="exp"><b>📌 要点：</b>当 x→+∞ 时，常用增长速度大小规律为对数函数慢于幂函数，幂函数慢于指数函数，指数函数慢于 x^x；当 x→0+ 时，x^α|ln x|^m→0（α&gt;0）。比较无穷小或无穷大时，先识别函数类型和自变量趋向。</div>
-    <div class="exp">• x→+∞：ln x≪x^n≪a^x≪x^x（n&gt;0，a&gt;1）</div><div class="exp">• x→0+：任意正幂 x^α 都能压过有限次对数增长</div><div class="exp">• x→−∞ 时指数函数 a^x 衰减快于任意 1/|x|^n</div>
-    <div class="exp" style="margin-top:6px">x→+∞：<b style="color:#d48806">＿＿＿</b>≪x≪x²≪…≪x^n≪<b style="color:#d48806">＿＿＿</b>≪x^x</div><button class="ans-btn" style="font-size:12px;padding:4px 12px">✅ 答案</button><div class="ans-box"><div class="ans">ln x；e^x</div></div>
-    <div class="exp"><b>🧭 套路：</b>比较增长速度先统一趋向并确认参数条件；遇到倒数、负无穷或 x→0+ 时要同步转换表达式，不能机械套用 x→+∞ 的顺序。</div>
-    <img src="images/2026-09-05_0.png" style="width:100%;border-radius:10px;margin-top:10px;border:1px solid #e5e7eb">
+    <div class="q">水平：lim f(x)=k⟹y=k；斜：f(x)=kx+b+o(1)，k=lim f(x)/x，b=lim[f(x)-kx]</div>
+    <div class="exp"><b>📌 要点：</b>渐近线分为竖直、水平和斜渐近线。求斜渐近线时先求 k=lim f(x)/x，再求 b=lim[f(x)-kx]；若 k=0，则得到水平渐近线 y=b。竖直渐近线通常由函数在某点附近趋于无穷大判定。</div>
+    <div class="exp">• 竖直渐近线：x=a 附近函数值趋于无穷大</div><div class="exp">• 水平渐近线：x→±∞ 时 f(x)→k，则 y=k</div><div class="exp">• 斜渐近线：先求 k，再求 b，形式为 y=kx+b</div>
+    <div class="exp" style="margin-top:6px">三类：<b style="color:#d48806">＿＿＿</b>（无穷型）、<b style="color:#d48806">＿＿＿</b>（y=k）、<b style="color:#d48806">＿＿＿</b>（y=kx+b）</div><button class="ans-btn" style="font-size:12px;padding:4px 12px">✅ 答案</button><div class="ans-box"><div class="ans">竖直、水平、斜</div></div>
+    <div class="exp"><b>🧭 套路：</b>先确定自变量趋向；斜渐近线必须依次计算 k 和 b，不能只看最高次项。</div>
+    <img src="images/2026-09-06_0.png" style="width:100%;border-radius:10px;margin-top:10px;border:1px solid #e5e7eb">
   </div>
  </div>
 <div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">📐 高数·第2天·极限：显函数求极限口诀</span><span class="tag book">高数·第2天·极限</span></div>
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">📐 高数·第2天·导数：导数定义</span><span class="tag book">高数·第2天·导数</span></div>
   <div class="card-body">
-    <div class="q">显函数求极限时，按最高阶或主导项比较；子、母同增时，子母交替处理</div>
-    <div class="exp"><b>📌 要点：</b>显函数求极限时，应先判断分子、分母的主导项及其趋向，再约去共同的无穷因子或比较最高阶项。口诀‘子、母同增，子母交替’用于提醒在无穷大比值中分别观察分子和分母的增长方向，避免把局部变化误判为整体极限。</div>
-    <div class="exp">• 先确定分子、分母的趋向和主导项</div><div class="exp">• 同阶比保留首项系数，分子阶低于分母时极限常为 0</div><div class="exp">• 出现 0/0 或 ∞/∞ 未定式时，可因式分解、等价替换或使用洛必达法则</div>
-    <div class="exp" style="margin-top:6px">口诀：子、母<b style="color:#d48806">＿＿＿</b>增，子母交替</div><button class="ans-btn" style="font-size:12px;padding:4px 12px">✅ 答案</button><div class="ans-box"><div class="ans">同</div></div>
-    <div class="exp"><b>🧭 套路：</b>口诀：子、母同增，子母交替；真正计算时仍要写出主导项和等价变形，不能只凭口诀猜答案。</div>
-    <img src="images/2026-09-05_1.png" style="width:100%;border-radius:10px;margin-top:10px;border:1px solid #e5e7eb">
+    <div class="q">f'(x0)=lim[f(x0+Δx)-f(x0)]/Δx</div>
+    <div class="exp"><b>📌 要点：</b>导数是函数增量与自变量增量之比在 Δx→0 时的极限。也可写成 x→x0 时的差商极限；在点 x0 可导，当且仅当左右导数都存在且相等。</div>
+    <div class="exp">• Δx 是自变量增量，Δy=f(x0+Δx)-f(x0) 是函数增量</div><div class="exp">• 导数定义的本质是差商的极限，不是简单代入 Δx=0</div><div class="exp">• 一点可导必连续，但连续不一定可导</div>
+    <div class="exp" style="margin-top:6px">f'(x0)=lim Δx→0 <b style="color:#d48806">＿＿＿</b>=lim x→x0 <b style="color:#d48806">＿＿＿</b>；存在⟺<b style="color:#d48806">＿＿＿</b></div><button class="ans-btn" style="font-size:12px;padding:4px 12px">✅ 答案</button><div class="ans-box"><div class="ans">[f(x0+Δx)-f(x0)]/Δx；[f(x)-f(x0)]/(x-x0)；左右导数存在且相等</div></div>
+    <div class="exp"><b>🧭 套路：</b>遇到分段函数或绝对值函数，重点检查左右导数；左右导数存在且相等才可导。</div>
+    <img src="images/2026-09-06_1.png" style="width:100%;border-radius:10px;margin-top:10px;border:1px solid #e5e7eb">
   </div>
  </div>
 <div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">📐 线代·第4章·向量组的线性相关性：线性相关性常用结论</span><span class="tag book">线代·第4章·向量组的线性相关性</span></div>
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">📐 线代·向量：向量组秩与线性表示</span><span class="tag book">线代·向量</span></div>
   <div class="card-body">
-    <div class="q">相关组加向量仍相关；无关组部分仍无关；延伸保持无关；s&gt;t时s个向量由t个表示必相关</div>
-    <div class="exp"><b>📌 要点：</b>向量组的线性相关性可通过齐次线性组合判断。n+1 个 n 维向量必线性相关；线性无关组的任一部分仍线性无关，在线性无关组后添加向量前要检查是否超出维数或落入原张成空间。</div>
-    <div class="exp">• 相关组中再加入任意向量仍然相关</div><div class="exp">• 无关组的任意部分仍然无关，延伸组未必保持无关</div><div class="exp">• s&gt;t 时，s 个向量若都由 t 个向量线性表示，则这 s 个向量必相关</div>
-    <div class="exp" style="margin-top:6px">默写核心结论：<b style="color:#d48806">＿＿＿</b></div><button class="ans-btn" style="font-size:12px;padding:4px 12px">✅ 答案</button><div class="ans-box"><div class="ans">相关组加向量仍相关；无关组部分仍无关；延伸保持无关；s&gt;t时s个向量由t个表示必相关</div></div>
-    <div class="exp"><b>🧭 套路：</b>判断相关与无关时优先转成矩阵秩或齐次方程；注意‘相关组加向量’与‘无关组加向量’的结论方向不同。</div>
-    <img src="images/2026-09-05_2.png" style="width:100%;border-radius:10px;margin-top:10px;border:1px solid #e5e7eb">
+    <div class="q">α可由β组表示⟹r(α组)≤r(β组)</div>
+    <div class="exp"><b>📌 要点：</b>若向量组 α 中每个向量都可由向量组 β 线性表示，则 α 组的秩不超过 β 组的秩。等价向量组秩相等，但秩相等不必然意味着两个向量组等价；秩为 r 的向量组中任意 r 个线性无关向量可构成极大无关组。</div>
+    <div class="exp">• α 可由 β 组表示时，r(α组)≤r(β组)</div><div class="exp">• 等价向量组秩相等，但秩相等不是等价的充分条件</div><div class="exp">• 极大无关组的向量个数等于原向量组的秩</div>
+    <div class="exp" style="margin-top:6px">默写核心结论：<b style="color:#d48806">＿＿＿</b></div><button class="ans-btn" style="font-size:12px;padding:4px 12px">✅ 答案</button><div class="ans-box"><div class="ans">α可由β组表示⟹r(α组)≤r(β组)</div></div>
+    <div class="exp"><b>🧭 套路：</b>判断表示关系时可转化为矩阵秩；注意‘能表示’给出的是秩的不等式方向。</div>
+    <img src="images/2026-09-06_2.png" style="width:100%;border-radius:10px;margin-top:10px;border:1px solid #e5e7eb">
   </div>
  </div>
 <div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">📐 线代·第4章·向量组的线性相关性：极大线性无关组</span><span class="tag book">线代·第4章·向量组的线性相关性</span></div>
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">📐 线代·向量：n个n维向量行列式判定</span><span class="tag book">线代·向量</span></div>
   <div class="card-body">
-    <div class="q">秩=极大无关组向量个数</div>
-    <div class="exp"><b>📌 要点：</b>极大线性无关组同时满足：组内向量线性无关，且原向量组中的任意向量都能由它线性表示；等价地，向其中添加原组的任一向量都会变成相关组。向量组的秩就是极大线性无关组所含向量的个数，全零向量组的秩为 0。</div>
-    <div class="exp">• 极大无关组与原向量组等价，张成同一个向量空间</div><div class="exp">• 极大无关组不一定唯一，但其中向量个数一定相同</div><div class="exp">• 用矩阵化简时，主元列对应的原矩阵列可组成极大无关组</div>
-    <div class="exp" style="margin-top:6px">默写核心结论：<b style="color:#d48806">＿＿＿</b></div><button class="ans-btn" style="font-size:12px;padding:4px 12px">✅ 答案</button><div class="ans-box"><div class="ans">秩=极大无关组向量个数</div></div>
-    <div class="exp"><b>🧭 套路：</b>求极大无关组时保留原矩阵中的主元列，不要直接把行变换后的单位列当作原向量；先确定秩，再按主元位置选列。</div>
-    <img src="images/2026-09-05_3.png" style="width:100%;border-radius:10px;margin-top:10px;border:1px solid #e5e7eb">
+    <div class="q">无关⟺|α1...αn|≠0；相关⟺行列式=0</div>
+    <div class="exp"><b>📌 要点：</b>对于 n 个 n 维向量，把它们作为列向量组成 n 阶方阵，就可以直接用行列式判定线性相关性：行列式非零等价于向量组线性无关，行列式为零等价于向量组线性相关。</div>
+    <div class="exp">• 必须是 n 个 n 维向量，才能直接用 n 阶行列式判定</div><div class="exp">• 行列式非零表示矩阵可逆，列向量线性无关</div><div class="exp">• 行列式为零表示矩阵不可逆，列向量线性相关</div>
+    <div class="exp" style="margin-top:6px">默写核心结论：<b style="color:#d48806">＿＿＿</b></div><button class="ans-btn" style="font-size:12px;padding:4px 12px">✅ 答案</button><div class="ans-box"><div class="ans">无关⟺|α1...αn|≠0；相关⟺行列式=0</div></div>
+    <div class="exp"><b>🧭 套路：</b>先核对‘向量个数=维数’这一前提；若不是方阵，应改用矩阵秩判断。</div>
+    <img src="images/2026-09-06_3.png" style="width:100%;border-radius:10px;margin-top:10px;border:1px solid #e5e7eb">
   </div>
  </div>
 </div>
 <div class="group"><div class="group-title">💻 408 选择题 <span class="badge">5 题</span></div>
 <div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">一棵二叉树的先序遍历序列为 A、B、D、E、C、F、G，中序遍历序列为 D、B、E、A、F、C、G。该二叉树的后序遍历序列是：</span><span class="tag book">数据结构</span><span class="tag easy">简单</span></div>
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">在采用 ltag/rtag 标志的中序线索二叉树中，若结点 p 的左孩子为空而右孩子非空，则下列说法正确的是：</span><span class="tag book">数据结构</span><span class="tag easy">简单</span></div>
   <div class="card-body">
-    <div class="q"><div class="opt">A. D、E、B、F、G、C、A</div><div class="opt">B. A、B、D、E、C、F、G</div><div class="opt">C. D、B、E、F、C、G、A</div><div class="opt">D. G、F、C、E、D、B、A</div></div>
-    <img src="images/2026-09-05_p0.png" style="width:100%;border-radius:10px;margin-top:10px;border:1px solid #e5e7eb">
+    <div class="q"><div class="opt">A. ltag=0，p 的左指针指向中序前驱；rtag=1，右指针指向中序后继</div><div class="opt">B. ltag=1，p 的左指针指向中序前驱；rtag=0，右指针仍指向实际右孩子</div><div class="opt">C. ltag=1，p 的左指针指向中序后继；rtag=1，右指针指向实际右孩子</div><div class="opt">D. ltag=0，p 的左指针为空；rtag=0，右指针指向中序后继</div></div>
+    <img src="images/2026-09-06_p0.png" style="width:100%;border-radius:10px;margin-top:10px;border:1px solid #e5e7eb">
     <button class="ans-btn">✅ 查看答案与解析</button>
     <div class="ans-box">
-      <div class="ans">答案：A</div>
-      <div class="exp"><b>📖 解析：</b>先序第一个 A 是根；由中序序列可知左子树为 D、B、E，右子树为 F、C、G。继续按先序和中序划分可得左子树根 B、孩子 D/E，右子树根 C、孩子 F/G。后序按左—右—根访问，得到 D、E、B、F、G、C、A。</div>
+      <div class="ans">答案：B</div>
+      <div class="exp"><b>📖 解析：</b>在线索二叉树中，通常 ltag=0/rtag=0 表示对应指针指向实际孩子，ltag=1/rtag=1 表示对应指针被改作线索。p 无左孩子，所以左指针改为中序前驱并置 ltag=1；p 有实际右孩子，所以 rtag=0，右指针仍指向该右孩子。</div>
     </div>
   </div>
  </div>
 <div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">关于 SRAM 与 DRAM，下列说法正确的是：</span><span class="tag book">计算机组成原理</span><span class="tag easy">简单</span></div>
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">用 2K×8 位的 RAM 芯片构成 8K×32 位的主存，需要的芯片总数以及每个存储字需要的片选信号数分别是：</span><span class="tag book">计算机组成原理</span><span class="tag easy">简单</span></div>
   <div class="card-body">
-    <div class="q"><div class="opt">A. SRAM 使用电容存储信息，必须周期性刷新</div><div class="opt">B. DRAM 使用触发器存储信息，断电后仍能保持内容</div><div class="opt">C. SRAM 通常不需要刷新、速度较快但成本较高；DRAM 需要刷新、容量密度较高</div><div class="opt">D. SRAM 和 DRAM 都不需要刷新，且 DRAM 的访问速度通常更快</div></div>
-    <img src="images/2026-09-05_p1.png" style="width:100%;border-radius:10px;margin-top:10px;border:1px solid #e5e7eb">
+    <div class="q"><div class="opt">A. 4 片，1 个片选信号</div><div class="opt">B. 8 片，2 个片选信号</div><div class="opt">C. 16 片，4 个片选信号</div><div class="opt">D. 32 片，8 个片选信号</div></div>
+    <img src="images/2026-09-06_p1.png" style="width:100%;border-radius:10px;margin-top:10px;border:1px solid #e5e7eb">
     <button class="ans-btn">✅ 查看答案与解析</button>
     <div class="ans-box">
       <div class="ans">答案：C</div>
-      <div class="exp"><b>📖 解析：</b>SRAM 用双稳态触发器保存信息，只要供电就不需要周期性刷新，速度快、功耗和成本通常较高；DRAM 以电容存储电荷，存在漏电，需要定期刷新，但单元面积小、集成度高、单位容量成本低。</div>
+      <div class="exp"><b>📖 解析：</b>位扩展方向：32/8=4 片并联，形成 2K×32；字扩展方向：8K/2K=4 组，因此总芯片数为 4×4=16。每次访问只选中一个 2K×32 的存储体，所以需要 4 个组片选信号（通常由高位地址经 2-4 译码器产生）。</div>
     </div>
   </div>
  </div>
 <div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">五位哲学家围坐在圆桌旁，每人先拿左边筷子，再拿右边筷子；筷子一次只能被一人持有。若五人同时拿起左边筷子，系统将发生：</span><span class="tag book">操作系统</span><span class="tag hard">困难</span></div>
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">吸烟者问题中，供应者每次将两种材料放到桌上，拥有第三种材料的吸烟者取走材料并吸烟。为了避免多个吸烟者同时操作桌面并保证供应者不会覆盖尚未取走的材料，最合理的同步设计是：</span><span class="tag book">操作系统</span><span class="tag hard">困难</span></div>
   <div class="card-body">
-    <div class="q"><div class="opt">A. 互斥失效，多个哲学家同时使用同一根筷子</div><div class="opt">B. 死锁：每人占有一根筷子并等待另一根，形成环路等待</div><div class="opt">C. 饥饿：所有哲学家都能继续运行但永远不能进餐</div><div class="opt">D. 缺页中断：筷子不足会自动换入新的资源</div></div>
-    <img src="images/2026-09-05_p2.png" style="width:100%;border-radius:10px;margin-top:10px;border:1px solid #e5e7eb">
+    <div class="q"><div class="opt">A. 取消所有信号量，让三个吸烟者轮流查询桌面状态</div><div class="opt">B. 用互斥机制保护桌面操作；吸烟者取走材料并完成本轮后通知供应者，供应者收到通知后再放下一组材料</div><div class="opt">C. 供应者连续放置材料，吸烟者只需对自己的材料执行 wait 操作</div><div class="opt">D. 每个吸烟者只等待自己拥有的材料，拿到后不必等待另一种材料即可吸烟</div></div>
+    <img src="images/2026-09-06_p2.png" style="width:100%;border-radius:10px;margin-top:10px;border:1px solid #e5e7eb">
     <button class="ans-btn">✅ 查看答案与解析</button>
     <div class="ans-box">
       <div class="ans">答案：B</div>
-      <div class="exp"><b>📖 解析：</b>每位哲学家先占有左筷子，再等待右筷子；同时发生时，每根筷子都被一位哲学家占有，且每人都等待下一根筷子，形成循环等待，满足死锁的必要条件。可通过限制同时就餐人数、规定筷子编号顺序，或设置服务员信号量破坏死锁条件。</div>
+      <div class="exp"><b>📖 解析：</b>桌面是共享资源，必须互斥访问；供应者还必须等待本轮吸烟者消费完成的信号，才能开始下一轮，否则可能覆盖桌面上的材料。吸烟者应等待与自己持有材料匹配的另外两种材料，取走后完成吸烟并 signal 供应者。这样同时满足互斥、同步和不覆盖条件。</div>
     </div>
   </div>
  </div>
 <div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">关于 IPv6，下列说法正确的是：</span><span class="tag book">计算机网络</span><span class="tag mid">中等</span></div>
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">主机 A 的 IP 地址为 192.168.1.10/24，默认网关为 192.168.1.1。主机 B 为 192.168.1.20，主机 C 为 192.168.2.20。A 分别向 B 和 C 发送 IP 数据报时，数据链路层目的 MAC 地址应分别填写：</span><span class="tag book">计算机网络</span><span class="tag mid">中等</span></div>
   <div class="card-body">
-    <div class="q"><div class="opt">A. IPv6 地址长度为 32 位，仍主要采用点分十进制表示</div><div class="opt">B. IPv6 地址长度为 128 位，基本首部固定为 40 字节，并取消了首部校验和字段</div><div class="opt">C. IPv6 通过 ARP 获取下一跳 MAC 地址，广播仍是其主要地址类型</div><div class="opt">D. IPv6 首部固定包含 IPv4 的 IHL 和 Header Checksum 字段</div></div>
-    <img src="images/2026-09-05_p3.png" style="width:100%;border-radius:10px;margin-top:10px;border:1px solid #e5e7eb">
+    <div class="q"><div class="opt">A. B 的 MAC 地址；C 的 MAC 地址</div><div class="opt">B. B 的 MAC 地址；默认网关的 MAC 地址</div><div class="opt">C. 默认网关的 MAC 地址；C 的 MAC 地址</div><div class="opt">D. 两次都填写默认网关的 MAC 地址</div></div>
+    <img src="images/2026-09-06_p3.png" style="width:100%;border-radius:10px;margin-top:10px;border:1px solid #e5e7eb">
     <button class="ans-btn">✅ 查看答案与解析</button>
     <div class="ans-box">
       <div class="ans">答案：B</div>
-      <div class="exp"><b>📖 解析：</b>IPv6 地址为 128 位，通常用冒号分隔的十六进制表示；基本首部固定 40 字节，首部中没有 IPv4 的 IHL 和 Header Checksum 字段。IPv6 使用邻居发现协议（ND）完成地址解析等功能，并以单播、组播、任播为主要地址类型，不使用广播。</div>
+      <div class="exp"><b>📖 解析：</b>A 与 B 同属 192.168.1.0/24，A 通过 ARP 请求 B 的 MAC，帧直接交给 B。C 位于另一网段，A 判断目的地址不在本地网段后，把帧交给默认网关，因此先通过 ARP 解析 192.168.1.1 的 MAC；IP 数据报的目的 IP 仍是 C。</div>
     </div>
   </div>
  </div>
 <div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">关于只读存储器 ROM 的分类，下列说法正确的是：</span><span class="tag book">计算机组成原理</span><span class="tag easy">简单</span></div>
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">关于管程（monitor）的说法，正确的是：</span><span class="tag book">操作系统</span><span class="tag easy">简单</span></div>
   <div class="card-body">
-    <div class="q"><div class="opt">A. MROM 出厂时由用户现场写入，PROM 可反复擦除改写</div><div class="opt">B. PROM 通常只能一次性编程，EPROM 可用紫外线擦除后重新写入</div><div class="opt">C. EEPROM 必须拆下芯片并用紫外线擦除，Flash 不能电擦除</div><div class="opt">D. 所有 ROM 在制造完成后都完全不能改变存储内容</div></div>
-    <img src="images/2026-09-05_p4.png" style="width:100%;border-radius:10px;margin-top:10px;border:1px solid #e5e7eb">
+    <div class="q"><div class="opt">A. 管程允许多个进程同时执行其中的过程，只要它们访问不同变量</div><div class="opt">B. 管程把共享数据及其操作封装起来，并保证任一时刻最多只有一个进程在管程内执行</div><div class="opt">C. 条件变量上的 wait 操作不会阻塞调用进程，只会降低其优先级</div><div class="opt">D. 管程中的 signal 操作可以替代对共享数据的互斥保护</div></div>
+    
     <button class="ans-btn">✅ 查看答案与解析</button>
     <div class="ans-box">
       <div class="ans">答案：B</div>
-      <div class="exp"><b>📖 解析：</b>MROM 在制造时由厂家固化；PROM 允许用户一次性编程；EPROM 可通过紫外线照射擦除后重新编程；EEPROM 可电擦除并改写；Flash 是 EEPROM 的一种改进形式，通常按块擦除。</div>
+      <div class="exp"><b>📖 解析：</b>管程将共享数据、操作这些数据的过程以及同步机制封装在一起，编译器或运行时保证互斥进入：任一时刻最多一个进程在管程内执行。条件变量用于条件同步，wait 通常会阻塞并释放管程占用，signal 用于唤醒等待者，但二者都不能替代管程本身的互斥保护。</div>
     </div>
   </div>
  </div>
@@ -191,47 +186,47 @@ class Solution:
 <div class="group"><div class="group-title">🇬🇧 考研单词 <span class="badge">20 词</span></div>
 <div class="card open">
   <div class="card-head"><span class="arrow">▶</span><span class="card-title">🇬🇧 考研单词 ×20</span><span class="tag book">高频词</span></div>
-  <div class="card-body"><div class="word-row"><span class="word">watch</span><span class="phon">/wɒtʃ/</span></div>
-      <div class="def">观看</div>
-      <div class="example">✏️ Researchers should watch for unexpected changes in the experimental data.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">death</span><span class="phon">/deθ/</span></div>
-      <div class="def">死亡</div>
-      <div class="example">✏️ The report examines how air pollution increases the risk of premature death.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">white</span><span class="phon">/waɪt/</span></div>
-      <div class="def">白色的</div>
-      <div class="example">✏️ The experiment used a white screen to reflect the light evenly.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">academic</span><span class="phon">/ˌækəˈdemɪk/</span></div>
-      <div class="def">学术的</div>
-      <div class="example">✏️ Academic research should be supported by reliable evidence.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">bear</span><span class="phon">/beə(r)/</span></div>
-      <div class="def">携带、承受</div>
-      <div class="example">✏️ The bridge must bear the weight of heavy vehicles safely.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">importance</span><span class="phon">/ɪmˈpɔːtəns/</span></div>
-      <div class="def">重要性</div>
-      <div class="example">✏️ The study emphasizes the importance of critical thinking in education.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">decline</span><span class="phon">/dɪˈklaɪn/</span></div>
-      <div class="def">拒绝、下降</div>
-      <div class="example">✏️ The decline in biodiversity has attracted attention from scientists.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">claim</span><span class="phon">/kleɪm/</span></div>
-      <div class="def">索要、声称</div>
-      <div class="example">✏️ The author claims that technology can improve access to education.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">model</span><span class="phon">/ˈmɒdl/</span></div>
-      <div class="def">模型</div>
-      <div class="example">✏️ The researchers developed a model to predict changes in climate.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">wrong</span><span class="phon">/rɒŋ/</span></div>
-      <div class="def">错误的</div>
-      <div class="example">✏️ A wrong assumption may lead to an inaccurate conclusion.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">expert</span><span class="phon">/ˈekspɜːt/</span></div>
-      <div class="def">专家、专门的</div>
-      <div class="example">✏️ An expert in computer security explained the risks of weak passwords.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">carry</span><span class="phon">/ˈkæri/</span></div>
-      <div class="def">携带</div>
-      <div class="example">✏️ Rivers carry nutrients from the land to the ocean.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">act</span><span class="phon">/ækt/</span></div>
-      <div class="def">行为、行动、扮演</div>
-      <div class="example">✏️ Governments must act quickly to reduce environmental damage.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">send</span><span class="phon">/send/</span></div>
-      <div class="def">发送</div>
-      <div class="example">✏️ The device can send data to the central server wirelessly.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">accept</span><span class="phon">/əkˈsept/</span></div>
-      <div class="def">接受</div>
-      <div class="example">✏️ A scientific journal will accept a paper only after careful review.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">potential</span><span class="phon">/pəˈtenʃl/</span></div>
-      <div class="def">潜在的</div>
-      <div class="example">✏️ The new material has the potential to reduce energy consumption.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">degree</span><span class="phon">/dɪˈɡriː/</span></div>
-      <div class="def">温度、程度</div>
-      <div class="example">✏️ The degree of risk depends on the quality of the available evidence.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">resource</span><span class="phon">/rɪˈsɔːs/</span></div>
-      <div class="def">资源</div>
-      <div class="example">✏️ Public libraries provide valuable educational resources for communities.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">pause</span><span class="phon">/pɔːz/</span></div>
-      <div class="def">暂停</div>
-      <div class="example">✏️ The system will pause the process when the temperature becomes unsafe.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">opinion</span><span class="phon">/əˈpɪnjən/</span></div>
-      <div class="def">意见</div>
-      <div class="example">✏️ The writer supports the opinion with statistics from recent research.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"></div>
+  <div class="card-body"><div class="word-row"><span class="word">income</span><span class="phon">/ˈɪnkʌm/</span></div>
+      <div class="def">收入</div>
+      <div class="example">✏️ A stable income enables families to invest more in education.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">amount</span><span class="phon">/əˈmaʊnt/</span></div>
+      <div class="def">数量</div>
+      <div class="example">✏️ The amount of scientific evidence has increased over the past decade.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">disease</span><span class="phon">/dɪˈziːz/</span></div>
+      <div class="def">疾病</div>
+      <div class="example">✏️ Regular exercise can reduce the risk of heart disease.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">stand</span><span class="phon">/stænd/</span></div>
+      <div class="def">站立</div>
+      <div class="example">✏️ The old bridge can no longer stand the pressure of heavy traffic.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">political</span><span class="phon">/pəˈlɪtɪkl/</span></div>
+      <div class="def">政治的</div>
+      <div class="example">✏️ Political decisions should be based on reliable public information.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">popular</span><span class="phon">/ˈpɒpjələ(r)/</span></div>
+      <div class="def">受欢迎的</div>
+      <div class="example">✏️ Online courses have become popular among working adults.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">argue</span><span class="phon">/ˈɑːɡjuː/</span></div>
+      <div class="def">论述、争论、争吵</div>
+      <div class="example">✏️ Some researchers argue that technology should serve social needs.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">physical</span><span class="phon">/ˈfɪzɪkl/</span></div>
+      <div class="def">自然科学的、肉体的</div>
+      <div class="example">✏️ Physical activity is closely related to mental well-being.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">team</span><span class="phon">/tiːm/</span></div>
+      <div class="def">团队</div>
+      <div class="example">✏️ The research team collected data from several universities.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">action</span><span class="phon">/ˈækʃn/</span></div>
+      <div class="def">行动、行为</div>
+      <div class="example">✏️ Immediate action is needed to protect the local environment.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">material</span><span class="phon">/məˈtɪəriəl/</span></div>
+      <div class="def">材料</div>
+      <div class="example">✏️ The new material is both light and resistant to heat.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">prove</span><span class="phon">/pruːv/</span></div>
+      <div class="def">证明</div>
+      <div class="example">✏️ The experiment did not prove that the two factors were related.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">compare</span><span class="phon">/kəmˈpeə(r)/</span></div>
+      <div class="def">比较</div>
+      <div class="example">✏️ The study compares the effects of two teaching methods.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">competition</span><span class="phon">/ˌkɒmpəˈtɪʃn/</span></div>
+      <div class="def">比赛</div>
+      <div class="example">✏️ Fair competition can encourage companies to improve their services.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">nothing</span><span class="phon">/ˈnʌθɪŋ/</span></div>
+      <div class="def">没有</div>
+      <div class="example">✏️ There is nothing more important than examining the evidence carefully.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">perhaps</span><span class="phon">/pəˈhæps/</span></div>
+      <div class="def">也许</div>
+      <div class="example">✏️ Perhaps the most effective solution is to combine the two approaches.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">private</span><span class="phon">/ˈpraɪvət/</span></div>
+      <div class="def">私人的</div>
+      <div class="example">✏️ Private companies can play an important role in scientific innovation.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">please</span><span class="phon">/pliːz/</span></div>
+      <div class="def">请、使愉快</div>
+      <div class="example">✏️ Please read the instructions before answering the questions.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">head</span><span class="phon">/hed/</span></div>
+      <div class="def">前往</div>
+      <div class="example">✏️ After the meeting, the researchers headed to the laboratory.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">street</span><span class="phon">/striːt/</span></div>
+      <div class="def">街道</div>
+      <div class="example">✏️ The city plans to make the central street safer for pedestrians.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"></div>
 </div>
 </div>
 <div class="footer">由 Hermes AI 生成 · 每天 08:00 更新 · 加油 💪</div>
