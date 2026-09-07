@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>今日学习清单 · 2026-09-06</title>
+<title>今日学习清单 · 2026-09-07</title>
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Noto Sans SC", sans-serif; background: #f5f6fa; color: #1f2329; max-width: 640px; margin: 0 auto; padding: 16px 14px 40px; }
@@ -50,135 +50,135 @@
 
 <div class="hero">
   <h1>📋 今日学习清单</h1>
-  <div class="date">2026年9月6日 · 星期日</div>
+  <div class="date">2026年9月7日 · 星期一</div>
 </div>
 
 <div class="group"><div class="group-title">🔥 今日重点 <span class="badge">2 项</span></div>
 <div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">🧩 LeetCode 每日一题：Distinct Subsequences</span><span class="tag hard">困难</span></div>
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">🧩 LeetCode 每日一题：Distinct Subsequences II</span><span class="tag hard">困难</span></div>
   <div class="card-body">
-    <div class="q">给定两个字符串 s 和 t，请返回 s 中等于 t 的不同子序列数量。子序列可以通过删除 s 中的一些字符（也可以不删除）且不改变剩余字符相对顺序得到。示例：s="rabbbit"、t="rabbit" 时返回 3；s="babgbag"、t="bag" 时返回 5。</div>
-    <div class="exp"><b>💡 解题思路：</b>设 dp[j] 表示处理当前前缀 s 后，组成 t 前 j 个字符的方案数。初始化 dp[0]=1；扫描 s 的每个字符时，将 j 从后向前更新：若 s[i]==t[j]，则把不选当前字符和选当前字符两类方案相加，即 dp[j+1]+=dp[j]。倒序更新避免当前字符被重复使用。</div>
-    <div class="exp"><b>🔧 题解：</b>状态转移为 dp[i][j]=dp[i-1][j]+dp[i-1][j-1]（当 s[i-1]==t[j-1]），否则 dp[i][j]=dp[i-1][j]。用一维数组倒序压缩空间后，时间复杂度为 O(|s||t|)，额外空间复杂度为 O(|t|)。题目保证答案适合 32 位有符号整数。</div>
-    <pre class="code">from typing import List
-
-class Solution:
-    def numDistinct(self, s: str, t: str) -&gt; int:
-        dp = [0] * (len(t) + 1)
-        dp[0] = 1
+    <div class="q">给定一个仅含小写英文字母的字符串 s，请返回 s 的不同非空子序列数量，结果对 10^9+7 取模。子序列通过删除若干字符（也可以不删）得到，且不能改变剩余字符的相对顺序。例如 s="aba" 时，不同非空子序列共有 6 个：a、b、ab、aa、ba、aba。</div>
+    <div class="exp"><b>💡 解题思路：</b>令 dp 表示处理当前前缀后不同子序列的数量（包含空序列），last[c] 记录上一次处理字符 c 之前的 dp 值。加入字符 c 时，所有旧子序列都可以选或不选它，得到 2×dp；其中以 c 结尾的重复子序列需要扣除 last[c]。更新为 new_dp=2×dp-last[c]，再令 last[c]=dp、dp=new_dp。最后减去空序列。</div>
+    <div class="exp"><b>🔧 题解：</b>一维动态规划：dp 初值为 1，表示空序列；遍历 s 中每个字符，保存旧 dp 后按 new_dp=(2*dp-last[c])%MOD 更新，并把 last[c] 设为旧 dp。重复字符的扣除保证每个非空子序列只计数一次，最终返回 (dp-1)%MOD。时间复杂度 O(n)，额外空间复杂度 O(1)（字符集固定为 26 个小写字母）。</div>
+    <pre class="code">class Solution:
+    def distinctSubseqII(self, s: str) -&gt; int:
+        MOD = 10**9 + 7
+        dp = 1  # 包含空序列
+        last = [0] * 26
         for ch in s:
-            for j in range(len(t) - 1, -1, -1):
-                if ch == t[j]:
-                    dp[j + 1] += dp[j]
-        return dp[-1]</pre>
-    <a class="link" href="https://leetcode.com/problems/distinct-subsequences/" target="_blank">🚀 去 LeetCode 做题 →</a>
+            i = ord(ch) - ord('a')
+            old_dp = dp
+            dp = (2 * dp - last[i]) % MOD
+            last[i] = old_dp
+        return (dp - 1) % MOD</pre>
+    <a class="link" href="https://leetcode.com/problems/distinct-subsequences-ii/" target="_blank">🚀 去 LeetCode 做题 →</a>
   </div>
 </div>
 </div>
 <div class="group"><div class="group-title">📐 数学知识点 <span class="badge">4 项</span></div>
 <div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">📐 高数·第2天·导数：渐近线</span><span class="tag book">高数·第2天·导数</span></div>
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">📐 高数·第2天·导数：可导-连续-导函数连续链</span><span class="tag book">高数·第2天·导数</span></div>
   <div class="card-body">
-    <div class="q">水平：lim f(x)=k⟹y=k；斜：f(x)=kx+b+o(1)，k=lim f(x)/x，b=lim[f(x)-kx]</div>
-    <div class="exp"><b>📌 要点：</b>渐近线分为竖直、水平和斜渐近线。求斜渐近线时先求 k=lim f(x)/x，再求 b=lim[f(x)-kx]；若 k=0，则得到水平渐近线 y=b。竖直渐近线通常由函数在某点附近趋于无穷大判定。</div>
-    <div class="exp">• 竖直渐近线：x=a 附近函数值趋于无穷大</div><div class="exp">• 水平渐近线：x→±∞ 时 f(x)→k，则 y=k</div><div class="exp">• 斜渐近线：先求 k，再求 b，形式为 y=kx+b</div>
-    <div class="exp" style="margin-top:6px">三类：<b style="color:#d48806">＿＿＿</b>（无穷型）、<b style="color:#d48806">＿＿＿</b>（y=k）、<b style="color:#d48806">＿＿＿</b>（y=kx+b）</div><button class="ans-btn" style="font-size:12px;padding:4px 12px">✅ 答案</button><div class="ans-box"><div class="ans">竖直、水平、斜</div></div>
-    <div class="exp"><b>🧭 套路：</b>先确定自变量趋向；斜渐近线必须依次计算 k 和 b，不能只看最高次项。</div>
-    <img src="images/2026-09-06_0.png" style="width:100%;border-radius:10px;margin-top:10px;border:1px solid #e5e7eb">
+    <div class="q">lim f(x)=f(x0)连续；lim f'(x)=f'(x0)导函数连续</div>
+    <div class="exp"><b>📌 要点：</b>导函数在 x0 连续时，必然在 x0 可导；一元函数在 x0 可导时必然在 x0 连续，但连续不一定可导。这里的连续对象要看清：导函数连续是比函数本身可导更强的条件。</div>
+    <div class="exp">• 导函数在 x0 连续 ⇒ f 在 x0 可导</div><div class="exp">• f 在 x0 可导 ⇒ f 在 x0 连续</div><div class="exp">• 连续不一定可导，典型例子是 f(x)=|x| 在 x=0 处连续但不可导</div>
+    <div class="exp" style="margin-top:6px">导函数连续⟹<b style="color:#d48806">＿＿＿</b>⟹左右导数相等⟹<b style="color:#d48806">＿＿＿</b></div><button class="ans-btn" style="font-size:12px;padding:4px 12px">✅ 答案</button><div class="ans-box"><div class="ans">导函数极限存在；可导</div></div>
+    <div class="exp"><b>🧭 套路：</b>判断条件链时注意方向：可导必连续，但连续不能反推可导；若已知导函数连续，则可直接推出可导。</div>
+    
   </div>
  </div>
 <div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">📐 高数·第2天·导数：导数定义</span><span class="tag book">高数·第2天·导数</span></div>
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">📐 高数·第2天·导数：可微定义</span><span class="tag book">高数·第2天·导数</span></div>
   <div class="card-body">
-    <div class="q">f'(x0)=lim[f(x0+Δx)-f(x0)]/Δx</div>
-    <div class="exp"><b>📌 要点：</b>导数是函数增量与自变量增量之比在 Δx→0 时的极限。也可写成 x→x0 时的差商极限；在点 x0 可导，当且仅当左右导数都存在且相等。</div>
-    <div class="exp">• Δx 是自变量增量，Δy=f(x0+Δx)-f(x0) 是函数增量</div><div class="exp">• 导数定义的本质是差商的极限，不是简单代入 Δx=0</div><div class="exp">• 一点可导必连续，但连续不一定可导</div>
-    <div class="exp" style="margin-top:6px">f'(x0)=lim Δx→0 <b style="color:#d48806">＿＿＿</b>=lim x→x0 <b style="color:#d48806">＿＿＿</b>；存在⟺<b style="color:#d48806">＿＿＿</b></div><button class="ans-btn" style="font-size:12px;padding:4px 12px">✅ 答案</button><div class="ans-box"><div class="ans">[f(x0+Δx)-f(x0)]/Δx；[f(x)-f(x0)]/(x-x0)；左右导数存在且相等</div></div>
-    <div class="exp"><b>🧭 套路：</b>遇到分段函数或绝对值函数，重点检查左右导数；左右导数存在且相等才可导。</div>
-    <img src="images/2026-09-06_1.png" style="width:100%;border-radius:10px;margin-top:10px;border:1px solid #e5e7eb">
+    <div class="q">Δy=AΔx+o(Δx)⟺可微；dy=f'(x0)dx</div>
+    <div class="exp"><b>📌 要点：</b>在 x0 附近，函数增量能够表示为关于 Δx 的线性主部 AΔx 加上比 Δx 高阶的无穷小 o(Δx) 时，函数在 x0 可微。一元函数中，可微与可导等价，且微分满足 dy=f'(x0)dx。</div>
+    <div class="exp">• 可微定义：Δy=AΔx+o(Δx)</div><div class="exp">• 一元函数可微 ⇔ 可导，且 A=f'(x0)</div><div class="exp">• 微分公式为 dy=f'(x0)dx，不是把 Δx 直接取为零</div>
+    <div class="exp" style="margin-top:6px">Δy=<b style="color:#d48806">＿＿＿</b>+o(Δx)，则称可微，dy=<b style="color:#d48806">＿＿＿</b></div><button class="ans-btn" style="font-size:12px;padding:4px 12px">✅ 答案</button><div class="ans-box"><div class="ans">AΔx；f'(x0)dx</div></div>
+    <div class="exp"><b>🧭 套路：</b>遇到分段函数或绝对值函数，先分别求左右导数；左右导数存在且相等才能判定可导、可微。</div>
+    
   </div>
  </div>
 <div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">📐 线代·向量：向量组秩与线性表示</span><span class="tag book">线代·向量</span></div>
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">📐 线代·第4章·向量组的线性相关性：求极大无关组步骤</span><span class="tag book">线代·第4章·向量组的线性相关性</span></div>
   <div class="card-body">
-    <div class="q">α可由β组表示⟹r(α组)≤r(β组)</div>
-    <div class="exp"><b>📌 要点：</b>若向量组 α 中每个向量都可由向量组 β 线性表示，则 α 组的秩不超过 β 组的秩。等价向量组秩相等，但秩相等不必然意味着两个向量组等价；秩为 r 的向量组中任意 r 个线性无关向量可构成极大无关组。</div>
-    <div class="exp">• α 可由 β 组表示时，r(α组)≤r(β组)</div><div class="exp">• 等价向量组秩相等，但秩相等不是等价的充分条件</div><div class="exp">• 极大无关组的向量个数等于原向量组的秩</div>
-    <div class="exp" style="margin-top:6px">默写核心结论：<b style="color:#d48806">＿＿＿</b></div><button class="ans-btn" style="font-size:12px;padding:4px 12px">✅ 答案</button><div class="ans-box"><div class="ans">α可由β组表示⟹r(α组)≤r(β组)</div></div>
-    <div class="exp"><b>🧭 套路：</b>判断表示关系时可转化为矩阵秩；注意‘能表示’给出的是秩的不等式方向。</div>
-    <img src="images/2026-09-06_2.png" style="width:100%;border-radius:10px;margin-top:10px;border:1px solid #e5e7eb">
+    <div class="q">A=(α1..αn)列排→初等行变换→阶梯形</div>
+    <div class="exp"><b>📌 要点：</b>把向量组 α1,…,αn 作为列组成矩阵 A，对 A 作初等行变换化为阶梯形。非零行数是向量组的秩，阶梯形中主元所在的列号对应原矩阵的列向量，这些原向量构成一个极大线性无关组。</div>
+    <div class="exp">• 将 α1,…,αn 按列组成矩阵 A</div><div class="exp">• 用初等行变换化为阶梯形，非零行数等于向量组的秩</div><div class="exp">• 取主元所在列对应的原向量，不能直接取变换后矩阵的列向量</div>
+    <div class="exp" style="margin-top:6px">默写核心结论：<b style="color:#d48806">＿＿＿</b></div><button class="ans-btn" style="font-size:12px;padding:4px 12px">✅ 答案</button><div class="ans-box"><div class="ans">A=(α1..αn)列排→初等行变换→阶梯形</div></div>
+    <div class="exp"><b>🧭 套路：</b>记录阶梯形矩阵的主元列号，并回到原向量组按相同列号取向量；行变换不改变列向量组的线性关系秩。</div>
+    
   </div>
  </div>
 <div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">📐 线代·向量：n个n维向量行列式判定</span><span class="tag book">线代·向量</span></div>
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">📐 线代·第3章·矩阵的初等变换与线性方程组：非齐次方程组解判别</span><span class="tag book">线代·第3章·矩阵的初等变换与线性方程组</span></div>
   <div class="card-body">
-    <div class="q">无关⟺|α1...αn|≠0；相关⟺行列式=0</div>
-    <div class="exp"><b>📌 要点：</b>对于 n 个 n 维向量，把它们作为列向量组成 n 阶方阵，就可以直接用行列式判定线性相关性：行列式非零等价于向量组线性无关，行列式为零等价于向量组线性相关。</div>
-    <div class="exp">• 必须是 n 个 n 维向量，才能直接用 n 阶行列式判定</div><div class="exp">• 行列式非零表示矩阵可逆，列向量线性无关</div><div class="exp">• 行列式为零表示矩阵不可逆，列向量线性相关</div>
-    <div class="exp" style="margin-top:6px">默写核心结论：<b style="color:#d48806">＿＿＿</b></div><button class="ans-btn" style="font-size:12px;padding:4px 12px">✅ 答案</button><div class="ans-box"><div class="ans">无关⟺|α1...αn|≠0；相关⟺行列式=0</div></div>
-    <div class="exp"><b>🧭 套路：</b>先核对‘向量个数=维数’这一前提；若不是方阵，应改用矩阵秩判断。</div>
-    <img src="images/2026-09-06_3.png" style="width:100%;border-radius:10px;margin-top:10px;border:1px solid #e5e7eb">
+    <div class="q">r(A)≠r(Ā)无解；r(A)=r(Ā)=n唯一解；r(A)=r(Ā)&lt;n无穷多解</div>
+    <div class="exp"><b>📌 要点：</b>对系数矩阵 A 和增广矩阵 Ā 作初等行变换并比较秩。若 r(A)≠r(Ā)，方程组无解；若二者相等，再根据是否等于未知数个数 n 判断唯一解或无穷多解。通解可写为一个特解加齐次方程组的通解。</div>
+    <div class="exp">• r(A)≠r(Ā) 时无解</div><div class="exp">• r(A)=r(Ā)=n 时有唯一解</div><div class="exp">• r(A)=r(Ā)&lt;n 时有无穷多解，自由未知数个数为 n-r(A)</div>
+    <div class="exp" style="margin-top:6px">默写核心结论：<b style="color:#d48806">＿＿＿</b></div><button class="ans-btn" style="font-size:12px;padding:4px 12px">✅ 答案</button><div class="ans-box"><div class="ans">r(A)≠r(Ā)无解；r(A)=r(Ā)=n唯一解；r(A)=r(Ā)&lt;n无穷多解</div></div>
+    <div class="exp"><b>🧭 套路：</b>先比较系数矩阵与增广矩阵的秩，再与未知数个数 n 比较；不要只看方程个数与未知数个数。</div>
+    
   </div>
  </div>
 </div>
 <div class="group"><div class="group-title">💻 408 选择题 <span class="badge">5 题</span></div>
 <div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">在采用 ltag/rtag 标志的中序线索二叉树中，若结点 p 的左孩子为空而右孩子非空，则下列说法正确的是：</span><span class="tag book">数据结构</span><span class="tag easy">简单</span></div>
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">在树的孩子兄弟表示法中，一个结点的左指针和右指针分别表示什么？</span><span class="tag book">数据结构</span><span class="tag easy">简单</span></div>
   <div class="card-body">
-    <div class="q"><div class="opt">A. ltag=0，p 的左指针指向中序前驱；rtag=1，右指针指向中序后继</div><div class="opt">B. ltag=1，p 的左指针指向中序前驱；rtag=0，右指针仍指向实际右孩子</div><div class="opt">C. ltag=1，p 的左指针指向中序后继；rtag=1，右指针指向实际右孩子</div><div class="opt">D. ltag=0，p 的左指针为空；rtag=0，右指针指向中序后继</div></div>
-    <img src="images/2026-09-06_p0.png" style="width:100%;border-radius:10px;margin-top:10px;border:1px solid #e5e7eb">
-    <button class="ans-btn">✅ 查看答案与解析</button>
-    <div class="ans-box">
-      <div class="ans">答案：B</div>
-      <div class="exp"><b>📖 解析：</b>在线索二叉树中，通常 ltag=0/rtag=0 表示对应指针指向实际孩子，ltag=1/rtag=1 表示对应指针被改作线索。p 无左孩子，所以左指针改为中序前驱并置 ltag=1；p 有实际右孩子，所以 rtag=0，右指针仍指向该右孩子。</div>
-    </div>
-  </div>
- </div>
-<div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">用 2K×8 位的 RAM 芯片构成 8K×32 位的主存，需要的芯片总数以及每个存储字需要的片选信号数分别是：</span><span class="tag book">计算机组成原理</span><span class="tag easy">简单</span></div>
-  <div class="card-body">
-    <div class="q"><div class="opt">A. 4 片，1 个片选信号</div><div class="opt">B. 8 片，2 个片选信号</div><div class="opt">C. 16 片，4 个片选信号</div><div class="opt">D. 32 片，8 个片选信号</div></div>
-    <img src="images/2026-09-06_p1.png" style="width:100%;border-radius:10px;margin-top:10px;border:1px solid #e5e7eb">
-    <button class="ans-btn">✅ 查看答案与解析</button>
-    <div class="ans-box">
-      <div class="ans">答案：C</div>
-      <div class="exp"><b>📖 解析：</b>位扩展方向：32/8=4 片并联，形成 2K×32；字扩展方向：8K/2K=4 组，因此总芯片数为 4×4=16。每次访问只选中一个 2K×32 的存储体，所以需要 4 个组片选信号（通常由高位地址经 2-4 译码器产生）。</div>
-    </div>
-  </div>
- </div>
-<div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">吸烟者问题中，供应者每次将两种材料放到桌上，拥有第三种材料的吸烟者取走材料并吸烟。为了避免多个吸烟者同时操作桌面并保证供应者不会覆盖尚未取走的材料，最合理的同步设计是：</span><span class="tag book">操作系统</span><span class="tag hard">困难</span></div>
-  <div class="card-body">
-    <div class="q"><div class="opt">A. 取消所有信号量，让三个吸烟者轮流查询桌面状态</div><div class="opt">B. 用互斥机制保护桌面操作；吸烟者取走材料并完成本轮后通知供应者，供应者收到通知后再放下一组材料</div><div class="opt">C. 供应者连续放置材料，吸烟者只需对自己的材料执行 wait 操作</div><div class="opt">D. 每个吸烟者只等待自己拥有的材料，拿到后不必等待另一种材料即可吸烟</div></div>
-    <img src="images/2026-09-06_p2.png" style="width:100%;border-radius:10px;margin-top:10px;border:1px solid #e5e7eb">
-    <button class="ans-btn">✅ 查看答案与解析</button>
-    <div class="ans-box">
-      <div class="ans">答案：B</div>
-      <div class="exp"><b>📖 解析：</b>桌面是共享资源，必须互斥访问；供应者还必须等待本轮吸烟者消费完成的信号，才能开始下一轮，否则可能覆盖桌面上的材料。吸烟者应等待与自己持有材料匹配的另外两种材料，取走后完成吸烟并 signal 供应者。这样同时满足互斥、同步和不覆盖条件。</div>
-    </div>
-  </div>
- </div>
-<div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">主机 A 的 IP 地址为 192.168.1.10/24，默认网关为 192.168.1.1。主机 B 为 192.168.1.20，主机 C 为 192.168.2.20。A 分别向 B 和 C 发送 IP 数据报时，数据链路层目的 MAC 地址应分别填写：</span><span class="tag book">计算机网络</span><span class="tag mid">中等</span></div>
-  <div class="card-body">
-    <div class="q"><div class="opt">A. B 的 MAC 地址；C 的 MAC 地址</div><div class="opt">B. B 的 MAC 地址；默认网关的 MAC 地址</div><div class="opt">C. 默认网关的 MAC 地址；C 的 MAC 地址</div><div class="opt">D. 两次都填写默认网关的 MAC 地址</div></div>
-    <img src="images/2026-09-06_p3.png" style="width:100%;border-radius:10px;margin-top:10px;border:1px solid #e5e7eb">
-    <button class="ans-btn">✅ 查看答案与解析</button>
-    <div class="ans-box">
-      <div class="ans">答案：B</div>
-      <div class="exp"><b>📖 解析：</b>A 与 B 同属 192.168.1.0/24，A 通过 ARP 请求 B 的 MAC，帧直接交给 B。C 位于另一网段，A 判断目的地址不在本地网段后，把帧交给默认网关，因此先通过 ARP 解析 192.168.1.1 的 MAC；IP 数据报的目的 IP 仍是 C。</div>
-    </div>
-  </div>
- </div>
-<div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">关于管程（monitor）的说法，正确的是：</span><span class="tag book">操作系统</span><span class="tag easy">简单</span></div>
-  <div class="card-body">
-    <div class="q"><div class="opt">A. 管程允许多个进程同时执行其中的过程，只要它们访问不同变量</div><div class="opt">B. 管程把共享数据及其操作封装起来，并保证任一时刻最多只有一个进程在管程内执行</div><div class="opt">C. 条件变量上的 wait 操作不会阻塞调用进程，只会降低其优先级</div><div class="opt">D. 管程中的 signal 操作可以替代对共享数据的互斥保护</div></div>
+    <div class="q"><div class="opt">A. 左指针指向双亲，右指针指向孩子</div><div class="opt">B. 左指针指向第一个孩子，右指针指向下一个兄弟</div><div class="opt">C. 左指针指向下一个兄弟，右指针指向第一个孩子</div><div class="opt">D. 左指针和右指针都只表示该结点在原树中的孩子</div></div>
     
     <button class="ans-btn">✅ 查看答案与解析</button>
     <div class="ans-box">
       <div class="ans">答案：B</div>
-      <div class="exp"><b>📖 解析：</b>管程将共享数据、操作这些数据的过程以及同步机制封装在一起，编译器或运行时保证互斥进入：任一时刻最多一个进程在管程内执行。条件变量用于条件同步，wait 通常会阻塞并释放管程占用，signal 用于唤醒等待者，但二者都不能替代管程本身的互斥保护。</div>
+      <div class="exp"><b>📖 解析：</b>孩子兄弟表示法（左孩子右兄弟表示法）把一般树转换为二叉树：左指针连接该结点的第一个孩子，右指针连接该结点的下一个兄弟。因此一个结点的所有孩子可沿左指针进入后不断沿右指针访问。</div>
+    </div>
+  </div>
+ </div>
+<div class="card open">
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">用 4K×8 位 RAM 芯片构成 16K×32 位主存，需要的芯片总数以及字扩展形成的存储体组数分别是：</span><span class="tag book">计算机组成原理</span><span class="tag easy">简单</span></div>
+  <div class="card-body">
+    <div class="q"><div class="opt">A. 8 片，2 组</div><div class="opt">B. 16 片，4 组</div><div class="opt">C. 16 片，8 组</div><div class="opt">D. 32 片，4 组</div></div>
+    
+    <button class="ans-btn">✅ 查看答案与解析</button>
+    <div class="ans-box">
+      <div class="ans">答案：B</div>
+      <div class="exp"><b>📖 解析：</b>先做位扩展：32/8=4 片并联组成 4K×32；再做字扩展：16K/4K=4 组。因此芯片总数为 4×4=16 片，字扩展形成 4 组，每次访问由高位地址选择其中一组。</div>
+    </div>
+  </div>
+ </div>
+<div class="card open">
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">下列情形中，最能直接说明两个进程发生死锁的是：</span><span class="tag book">操作系统</span><span class="tag easy">简单</span></div>
+  <div class="card-body">
+    <div class="q"><div class="opt">A. P1 正在使用 R1，P2 正在使用 R2，二者都能继续运行</div><div class="opt">B. P1 持有 R1 并等待 R2，P2 持有 R2 并等待 R1，二者都无法继续</div><div class="opt">C. P1 等待 I/O 完成，P2 正在使用 CPU</div><div class="opt">D. P1 和 P2 同时请求同一个可共享的只读文件</div></div>
+    
+    <button class="ans-btn">✅ 查看答案与解析</button>
+    <div class="ans-box">
+      <div class="ans">答案：B</div>
+      <div class="exp"><b>📖 解析：</b>B 形成循环等待：P1 占有 R1 等待 P2 持有的 R2，P2 占有 R2 等待 P1 持有的 R1，且资源不能被强制剥夺，两个进程都无法推进。这是死锁的典型例子；单纯等待 I/O 或竞争可共享资源不一定构成死锁。</div>
+    </div>
+  </div>
+ </div>
+<div class="card open">
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">关于 ICMP 协议及其典型应用，下列说法正确的是：</span><span class="tag book">计算机网络</span><span class="tag mid">中等</span></div>
+  <div class="card-body">
+    <div class="q"><div class="opt">A. ICMP 属于传输层，主要为 TCP 提供可靠字节流</div><div class="opt">B. ping 通常使用 ICMP 回送请求/回送应答，traceroute 可利用 TTL 超时产生的 ICMP 差错报告</div><div class="opt">C. ICMP 只用于 IPv6，IPv4 网络中不能使用 ICMP</div><div class="opt">D. ICMP 差错报告能够保证原 IP 数据报一定会被重传成功</div></div>
+    
+    <button class="ans-btn">✅ 查看答案与解析</button>
+    <div class="ans-box">
+      <div class="ans">答案：B</div>
+      <div class="exp"><b>📖 解析：</b>ICMP 是网络层的控制报文协议，用于报告差错和传递诊断信息。ping 使用 Echo Request/Echo Reply 测试可达性和往返时间；traceroute 逐步增加 TTL，路由器使 TTL 归零后通常返回 ICMP Time Exceeded。ICMP 本身不负责可靠重传。</div>
+    </div>
+  </div>
+ </div>
+<div class="card open">
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">关于距离向量路由算法和链路状态路由算法的比较，下列说法正确的是：</span><span class="tag book">计算机网络</span><span class="tag hard">困难</span></div>
+  <div class="card-body">
+    <div class="q"><div class="opt">A. 距离向量算法向所有路由器泛洪完整拓扑，并使用 Dijkstra 算法计算最短路</div><div class="opt">B. 链路状态算法只向邻居交换到各目的网络的距离，不需要建立拓扑数据库</div><div class="opt">C. 距离向量算法通常基于 Bellman-Ford 思想与邻居交换距离信息；链路状态算法泛洪链路状态并在本地运行 Dijkstra 算法</div><div class="opt">D. 两种算法都不会产生计数到无穷问题，因为路由器始终拥有全网拓扑</div></div>
+    
+    <button class="ans-btn">✅ 查看答案与解析</button>
+    <div class="ans-box">
+      <div class="ans">答案：C</div>
+      <div class="exp"><b>📖 解析：</b>距离向量路由器通常只掌握邻居通告的距离和方向，根据 Bellman-Ford 类递推更新路由，可能出现计数到无穷等收敛问题。链路状态路由器泛洪自身链路状态，形成全网拓扑数据库，再使用 Dijkstra 计算最短路径。因此 C 正确，A、B 混淆了两类算法，D 也错误。</div>
     </div>
   </div>
  </div>
@@ -186,47 +186,47 @@ class Solution:
 <div class="group"><div class="group-title">🇬🇧 考研单词 <span class="badge">20 词</span></div>
 <div class="card open">
   <div class="card-head"><span class="arrow">▶</span><span class="card-title">🇬🇧 考研单词 ×20</span><span class="tag book">高频词</span></div>
-  <div class="card-body"><div class="word-row"><span class="word">income</span><span class="phon">/ˈɪnkʌm/</span></div>
-      <div class="def">收入</div>
-      <div class="example">✏️ A stable income enables families to invest more in education.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">amount</span><span class="phon">/əˈmaʊnt/</span></div>
-      <div class="def">数量</div>
-      <div class="example">✏️ The amount of scientific evidence has increased over the past decade.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">disease</span><span class="phon">/dɪˈziːz/</span></div>
-      <div class="def">疾病</div>
-      <div class="example">✏️ Regular exercise can reduce the risk of heart disease.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">stand</span><span class="phon">/stænd/</span></div>
-      <div class="def">站立</div>
-      <div class="example">✏️ The old bridge can no longer stand the pressure of heavy traffic.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">political</span><span class="phon">/pəˈlɪtɪkl/</span></div>
-      <div class="def">政治的</div>
-      <div class="example">✏️ Political decisions should be based on reliable public information.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">popular</span><span class="phon">/ˈpɒpjələ(r)/</span></div>
-      <div class="def">受欢迎的</div>
-      <div class="example">✏️ Online courses have become popular among working adults.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">argue</span><span class="phon">/ˈɑːɡjuː/</span></div>
-      <div class="def">论述、争论、争吵</div>
-      <div class="example">✏️ Some researchers argue that technology should serve social needs.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">physical</span><span class="phon">/ˈfɪzɪkl/</span></div>
-      <div class="def">自然科学的、肉体的</div>
-      <div class="example">✏️ Physical activity is closely related to mental well-being.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">team</span><span class="phon">/tiːm/</span></div>
-      <div class="def">团队</div>
-      <div class="example">✏️ The research team collected data from several universities.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">action</span><span class="phon">/ˈækʃn/</span></div>
-      <div class="def">行动、行为</div>
-      <div class="example">✏️ Immediate action is needed to protect the local environment.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">material</span><span class="phon">/məˈtɪəriəl/</span></div>
-      <div class="def">材料</div>
-      <div class="example">✏️ The new material is both light and resistant to heat.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">prove</span><span class="phon">/pruːv/</span></div>
-      <div class="def">证明</div>
-      <div class="example">✏️ The experiment did not prove that the two factors were related.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">compare</span><span class="phon">/kəmˈpeə(r)/</span></div>
-      <div class="def">比较</div>
-      <div class="example">✏️ The study compares the effects of two teaching methods.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">competition</span><span class="phon">/ˌkɒmpəˈtɪʃn/</span></div>
-      <div class="def">比赛</div>
-      <div class="example">✏️ Fair competition can encourage companies to improve their services.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">nothing</span><span class="phon">/ˈnʌθɪŋ/</span></div>
-      <div class="def">没有</div>
-      <div class="example">✏️ There is nothing more important than examining the evidence carefully.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">perhaps</span><span class="phon">/pəˈhæps/</span></div>
-      <div class="def">也许</div>
-      <div class="example">✏️ Perhaps the most effective solution is to combine the two approaches.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">private</span><span class="phon">/ˈpraɪvət/</span></div>
-      <div class="def">私人的</div>
-      <div class="example">✏️ Private companies can play an important role in scientific innovation.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">please</span><span class="phon">/pliːz/</span></div>
-      <div class="def">请、使愉快</div>
-      <div class="example">✏️ Please read the instructions before answering the questions.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">head</span><span class="phon">/hed/</span></div>
-      <div class="def">前往</div>
-      <div class="example">✏️ After the meeting, the researchers headed to the laboratory.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">street</span><span class="phon">/striːt/</span></div>
-      <div class="def">街道</div>
-      <div class="example">✏️ The city plans to make the central street safer for pedestrians.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"></div>
+  <div class="card-body"><div class="word-row"><span class="word">available</span><span class="phon">/əˈveɪləbl/</span></div>
+      <div class="def">可行的</div>
+      <div class="example">✏️ The available evidence is not sufficient to support the conclusion.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">current</span><span class="phon">/ˈkʌrənt/</span></div>
+      <div class="def">当前、电流、趋向</div>
+      <div class="example">✏️ Current research suggests that early intervention can improve learning outcomes.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">boy</span><span class="phon">/bɔɪ/</span></div>
+      <div class="def">男孩</div>
+      <div class="example">✏️ The boy developed a strong interest in computer science at an early age.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">goal</span><span class="phon">/ɡəʊl/</span></div>
+      <div class="def">目标</div>
+      <div class="example">✏️ The main goal of the policy is to reduce energy consumption.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">loss</span><span class="phon">/lɒs/</span></div>
+      <div class="def">丢失</div>
+      <div class="example">✏️ The loss of biodiversity may threaten the stability of the ecosystem.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">evidence</span><span class="phon">/ˈevɪdəns/</span></div>
+      <div class="def">证据</div>
+      <div class="example">✏️ Researchers must examine the evidence before drawing a conclusion.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">together</span><span class="phon">/təˈɡeðə(r)/</span></div>
+      <div class="def">一共</div>
+      <div class="example">✏️ The two studies together provide a clearer picture of the problem.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">speed</span><span class="phon">/spiːd/</span></div>
+      <div class="def">加速</div>
+      <div class="example">✏️ New technology can speed up the process of collecting and analyzing data.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">middle</span><span class="phon">/ˈmɪdl/</span></div>
+      <div class="def">中间的</div>
+      <div class="example">✏️ The middle section of the report discusses the limits of the experiment.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">along</span><span class="phon">/əˈlɒŋ/</span></div>
+      <div class="def">沿着</div>
+      <div class="example">✏️ Several small communities have developed along the river.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">sale</span><span class="phon">/seɪl/</span></div>
+      <div class="def">销售</div>
+      <div class="example">✏️ The sale of used products can reduce waste and save resources.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">production</span><span class="phon">/prəˈdʌkʃn/</span></div>
+      <div class="def">生产</div>
+      <div class="example">✏️ The factory changed its production methods to lower carbon emissions.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">grade</span><span class="phon">/ɡreɪd/</span></div>
+      <div class="def">年级</div>
+      <div class="example">✏️ Students in the highest grade are expected to complete an independent project.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">visit</span><span class="phon">/ˈvɪzɪt/</span></div>
+      <div class="def">参观、访问</div>
+      <div class="example">✏️ The professor will visit several universities to discuss the new program.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">content</span><span class="phon">/ˈkɒntent/</span></div>
+      <div class="def">内容、目录、满足的</div>
+      <div class="example">✏️ The content of the article reflects recent developments in public health.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">source</span><span class="phon">/sɔːs/</span></div>
+      <div class="def">来源</div>
+      <div class="example">✏️ A reliable source is essential when evaluating a scientific claim.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">security</span><span class="phon">/sɪˈkjʊərəti/</span></div>
+      <div class="def">安全</div>
+      <div class="example">✏️ Data security has become a major concern for online services.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">pressure</span><span class="phon">/ˈpreʃə(r)/</span></div>
+      <div class="def">压力</div>
+      <div class="example">✏️ Excessive pressure may reduce students' ability to think creatively.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">gap</span><span class="phon">/ɡæp/</span></div>
+      <div class="def">间隙、分歧</div>
+      <div class="example">✏️ The study examines the gap between scientific knowledge and public understanding.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">across</span><span class="phon">/əˈkrɒs/</span></div>
+      <div class="def">穿过</div>
+      <div class="example">✏️ The survey collected responses from students across the country.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"></div>
 </div>
 </div>
 <div class="footer">由 Hermes AI 生成 · 每天 08:00 更新 · 加油 💪</div>
