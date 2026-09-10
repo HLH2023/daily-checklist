@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>今日学习清单 · 2026-09-09</title>
+<title>今日学习清单 · 2026-09-10</title>
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Noto Sans SC", sans-serif; background: #f5f6fa; color: #1f2329; max-width: 640px; margin: 0 auto; padding: 16px 14px 40px; }
@@ -50,135 +50,144 @@
 
 <div class="hero">
   <h1>📋 今日学习清单</h1>
-  <div class="date">2026年9月9日 星期三</div>
+  <div class="date">2026年9月10日</div>
 </div>
 
 <div class="group"><div class="group-title">🔥 今日重点 <span class="badge">2 项</span></div>
 <div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">🧩 LeetCode 每日一题：Count Commas in Range II</span><span class="tag mid">中等</span></div>
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">🧩 LeetCode 每日一题：Count Nodes Equal to Average of Subtree</span><span class="tag mid">Medium</span></div>
   <div class="card-body">
-    <div class="q">给定整数 n，返回按标准数字格式书写 1 到 n（含 n）时使用的逗号总数。标准格式从右侧起每三位数字插入一个逗号，少于 4 位的数字不含逗号。约束：1 ≤ n ≤ 10^15。</div>
-    <div class="exp"><b>💡 解题思路：</b>按逗号数量分组统计：1000～999999 的每个数含 1 个逗号，1000000～999999999 的每个数含 2 个逗号，依此类推。对第 k 组计算区间与 [1,n] 的交集大小，再乘以 k 并累加，避免逐个格式化数字。</div>
-    <div class="exp"><b>🔧 题解：</b>设当前组起点为 10^(3k)，终点为 10^(3k+3)-1；若 n 覆盖该组，就把 (min(n,终点)-起点+1)×k 加入答案，然后起点乘 1000、逗号数加 1。n ≤ 10^15，循环次数很少，时间复杂度 O(log n)，空间复杂度 O(1)。</div>
+    <div class="q">给定一棵二叉树，统计满足条件的结点数量：该结点的值等于其子树（包含结点自身）所有结点值的平均值向下取整。空子树不参与计算。</div>
+    <div class="exp"><b>💡 解题思路：</b>使用后序遍历。处理每个结点时，先得到左、右子树的结点总和与结点数，再把当前结点加入，计算整棵子树的总和与结点数；若当前结点值等于总和除以结点数的向下取整，答案加一。</div>
+    <div class="exp"><b>🔧 题解：</b>DFS返回二元组(sum, count)。后序遍历保证左右子树信息已经准备好；每个结点只访问一次，因此时间复杂度为 O(n)，递归栈空间为 O(h)。Python 的整除 // 正好实现题目要求的向下取整平均值。</div>
     <pre class="code">class Solution:
-    def countCommas(self, n: int) -&gt; int:
+    def averageOfSubtree(self, root: Optional[TreeNode]) -&gt; int:
         ans = 0
-        start = 1000
-        commas = 1
-        while start &lt;= n:
-            end = min(n, start * 1000 - 1)
-            ans += (end - start + 1) * commas
-            start *= 1000
-            commas += 1
+
+        def dfs(node):
+            nonlocal ans
+            if node is None:
+                return 0, 0
+
+            left_sum, left_count = dfs(node.left)
+            right_sum, right_count = dfs(node.right)
+            total = left_sum + right_sum + node.val
+            count = left_count + right_count + 1
+
+            if node.val == total // count:
+                ans += 1
+            return total, count
+
+        dfs(root)
         return ans</pre>
-    <a class="link" href="https://leetcode.com/problems/count-commas-in-range-ii/" target="_blank">🚀 去 LeetCode 做题 →</a>
+    <a class="link" href="https://leetcode.com/problems/count-nodes-equal-to-average-of-subtree/" target="_blank">🚀 去 LeetCode 做题 →</a>
   </div>
 </div>
 </div>
 <div class="group"><div class="group-title">📐 数学知识点 <span class="badge">4 项</span></div>
 <div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">📐 高数·第2天·导数：泰勒系数</span><span class="tag book">高数·第2天·导数</span></div>
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">📐 高数·第2天·导数应用：极值点与拐点的可疑点</span><span class="tag book">2</span></div>
   <div class="card-body">
-    <div class="q">f^(n)(x0)=n!a_n</div>
-    <div class="exp"><b>📌 要点：</b>在 x0 附近展开 f(x)=Σa_n(x-x0)^n 时，第 n 项系数由 n 阶导数在 x0 处的值确定：a_n=f^(n)(x0)/n!。高次项系数同样需要注意阶乘因子。</div>
-    <div class="exp">• a_n=f^(n)(x0)/n!，不要漏掉 n!</div><div class="exp">• 当 x0=0 时退化为 Maclaurin 展开系数</div><div class="exp">• 先求导数在展开点的值，再除以对应阶乘</div>
-    <div class="exp" style="margin-top:6px">f(x)=Σa_n(x-x0)^n 中 a_n=<b style="color:#d48806">＿＿＿</b></div><button class="ans-btn" style="font-size:12px;padding:4px 12px">✅ 答案</button><div class="ans-box"><div class="ans">f^(n)(x0)/n!</div></div>
-    <div class="exp"><b>🧭 套路：</b>看到幂级数系数先对照 (x-x0)^n 的指数，系数与 n 阶导数之间相差 n!。</div>
+    <div class="q">口诀：极值点两类点求导选一选；拐点两类点二次求导选一选</div>
+    <div class="exp"><b>📌 要点：</b>判定：f'变号(+→-极大，-→+极小)；f''变号⟺拐点；f''&gt;0凹上(极小)、f''&lt;0凹下(极大)</div>
+    <div class="exp">• 极值的必要候选点来自 f'=0 或 f' 不存在，但候选点还必须结合一阶导数变号判断。</div><div class="exp">• 拐点候选点来自 f''=0 或 f'' 不存在，核心是观察凹凸性是否发生改变。</div><div class="exp">• 二阶导数在点处大于0表示局部凹向上，小于0表示局部凹向下；仅有等于0不能直接断定极值或拐点。</div>
+    <div class="exp" style="margin-top:6px">极值可疑点：①<b style="color:#d48806">＿＿＿</b>②<b style="color:#d48806">＿＿＿</b>；拐点可疑点：①<b style="color:#d48806">＿＿＿</b>②<b style="color:#d48806">＿＿＿</b></div><button class="ans-btn" style="font-size:12px;padding:4px 12px">✅ 答案</button><div class="ans-box"><div class="ans">f'=0；f'不存在；f''=0；f''不存在</div></div>
+    <div class="exp"><b>🧭 套路：</b>先列出可疑点，再用 f' 左右变号判极值；判拐点时检查 f'' 左右符号是否改变。</div>
     
   </div>
  </div>
 <div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">📐 高数·第2天·导数：含极限函数方程</span><span class="tag book">高数·第2天·导数</span></div>
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">📐 高数·第2天·导数应用：隐函数求极值</span><span class="tag book">2</span></div>
   <div class="card-body">
-    <div class="q">lim[f(x+h)-f(x)]/h=f'(x)；f'(x)=P(x)f(x)+Q(x)</div>
-    <div class="exp"><b>📌 要点：</b>含极限的函数方程通常先把极限识别为导数定义，再整理成一阶微分方程，最后结合初值或边界条件确定积分常数。口诀是：去掉伪装方程壳，注意细节定常数。</div>
-    <div class="exp">• 先令 h→0，并核对分子是否为 f(x+h)-f(x) 的形式</div><div class="exp">• 得到导数后整理为一阶线性微分方程</div><div class="exp">• 通解中的常数必须由题目给出的条件确定</div>
-    <div class="exp" style="margin-top:6px">套路：极限→<b style="color:#d48806">＿＿＿</b>→<b style="color:#d48806">＿＿＿</b>→解出f(x)</div><button class="ans-btn" style="font-size:12px;padding:4px 12px">✅ 答案</button><div class="ans-box"><div class="ans">导数定义→微分方程</div></div>
-    <div class="exp"><b>🧭 套路：</b>极限→导数定义→微分方程→通解→代条件定常数；不要直接把未处理的极限当作普通代数式。</div>
+    <div class="q">Gx+Gy·y'=0⟹y'=-Gx/Gy；候选点{G=0,Gx=0}且Gy≠0</div>
+    <div class="exp"><b>📌 要点：</b>再求y''判定极值</div>
+    <div class="exp">• 由 G(x,y)=0 对 x 求导，得到 Gx+Gy·y'=0，从而 y'=-Gx/Gy（要求 Gy≠0）。</div><div class="exp">• 隐函数的极值候选点同时满足原方程 G(x,y)=0 与 Gx(x,y)=0。</div><div class="exp">• 找到候选点后还要通过二阶导数或一阶导数变号判断极大、极小，不能只凭 y'=0 下结论。</div>
+    <div class="exp" style="margin-top:6px">G(x,y)=0求极值：y'=<b style="color:#d48806">＿＿＿</b>；令y'=0得<b style="color:#d48806">＿＿＿</b>联立</div><button class="ans-btn" style="font-size:12px;padding:4px 12px">✅ 答案</button><div class="ans-box"><div class="ans">-Gx/Gy；Gx=0与G=0</div></div>
+    <div class="exp"><b>🧭 套路：</b>先联立 G=0 与 Gx=0 求候选点，再求二阶导数或考察一阶导数符号。</div>
     
   </div>
  </div>
 <div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">📐 线代·第3章·线性方程组：解空间维数</span><span class="tag book">线代·第3章·线性方程组</span></div>
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">📐 线代·线性方程组：非齐次解的性质</span><span class="tag book">线代·线性方程组</span></div>
   <div class="card-body">
-    <div class="q">r(S)=n-r(A)</div>
-    <div class="exp"><b>📌 要点：</b>齐次方程组 Ax=0 的解空间维数等于未知量个数 n 减去系数矩阵 A 的秩 r(A)。自由未知量的个数就是 n-r(A)，基础解系中向量的个数也等于该维数。</div>
-    <div class="exp">• r(S)=n-r(A)，其中 n 是未知量个数</div><div class="exp">• 自由未知量个数 = n-r(A)</div><div class="exp">• 通解是基础解系的线性组合</div>
-    <div class="exp" style="margin-top:6px">默写核心结论：<b style="color:#d48806">＿＿＿</b></div><button class="ans-btn" style="font-size:12px;padding:4px 12px">✅ 答案</button><div class="ans-box"><div class="ans">r(S)=n-r(A)</div></div>
-    <div class="exp"><b>🧭 套路：</b>先确认未知量总数 n，再通过行变换求 r(A)；不要把增广矩阵的列数直接当作未知量个数。</div>
+    <div class="q">ξ1-ξ2是Ax=0的解；η*+Σkξ=通解</div>
+    <div class="exp"><b>📌 要点：</b>两非齐次解之差为齐次解；特解+齐次解仍非齐次解；解集=特解平移齐次解空间(仿射空间)；有唯一解⟺导出组只有零解⟺r(A)=n</div>
+    <div class="exp">• 若 ξ1、ξ2 都是 Ax=b 的解，则 A(ξ1−ξ2)=0，所以两解之差属于对应齐次方程 Ax=0 的解空间。</div><div class="exp">• 非齐次方程的通解等于一个特解加上齐次方程的通解，解集是齐次解空间的平移。</div><div class="exp">• 当未知数个数为 n 时，Ax=b 有唯一解的条件是齐次方程只有零解，等价于 r(A)=n。</div>
+    <div class="exp" style="margin-top:6px">默写核心结论：<b style="color:#d48806">＿＿＿</b></div><button class="ans-btn" style="font-size:12px;padding:4px 12px">✅ 答案</button><div class="ans-box"><div class="ans">ξ1-ξ2是Ax=0的解；η*+Σkξ=通解</div></div>
+    <div class="exp"><b>🧭 套路：</b>遇到两个非齐次解先相减；求通解时先找一个特解，再叠加齐次通解。</div>
     
   </div>
  </div>
 <div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">📐 线代·第3章·线性方程组：齐次方程组求解步骤</span><span class="tag book">线代·第3章·线性方程组</span></div>
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">📐 线代·线性方程组：齐次解的性质</span><span class="tag book">线代·线性方程组</span></div>
   <div class="card-body">
-    <div class="q">行最简形→主元留左端→自由元取值(1,0..)</div>
-    <div class="exp"><b>📌 要点：</b>求齐次方程组的基础解系时，先将系数矩阵化为行最简形；主元变量用自由变量表示；每次令一个自由变量为 1、其余自由变量为 0，得到一个基础解系向量；通解是这些向量的线性组合。</div>
-    <div class="exp">• r(A)=n 时只有零解，r(A)&lt;n 时存在非零解</div><div class="exp">• 自由变量的个数为 n-r(A)</div><div class="exp">• 每次只让一个自由变量取 1，其余自由变量取 0，得到基础解系</div>
-    <div class="exp" style="margin-top:6px">默写核心结论：<b style="color:#d48806">＿＿＿</b></div><button class="ans-btn" style="font-size:12px;padding:4px 12px">✅ 答案</button><div class="ans-box"><div class="ans">行最简形→主元留左端→自由元取值(1,0..)</div></div>
-    <div class="exp"><b>🧭 套路：</b>行最简形之后先标出主元列和自由列，再按自由变量逐个赋值，最后回代写出向量。</div>
+    <div class="q">ξ1+ξ2、kξ均为Ax=0的解</div>
+    <div class="exp"><b>📌 要点：</b>齐次解集对加法和数乘封闭→构成线性空间</div>
+    <div class="exp">• 若 Aξ1=0 且 Aξ2=0，则 A(ξ1+ξ2)=Aξ1+Aξ2=0，加法封闭。</div><div class="exp">• 对任意数 k，有 A(kξ)=kAξ=0，齐次解集对数乘封闭。</div><div class="exp">• 因此 Ax=0 的全部解构成向量空间，其基础解系可以生成全部齐次解。</div>
+    <div class="exp" style="margin-top:6px">默写核心结论：<b style="color:#d48806">＿＿＿</b></div><button class="ans-btn" style="font-size:12px;padding:4px 12px">✅ 答案</button><div class="ans-box"><div class="ans">ξ1+ξ2、kξ均为Ax=0的解</div></div>
+    <div class="exp"><b>🧭 套路：</b>证明齐次解集的线性空间性质时，分别验证零向量、加法封闭和数乘封闭。</div>
     
   </div>
  </div>
 </div>
 <div class="group"><div class="group-title">💻 408 选择题 <span class="badge">5 题</span></div>
 <div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">对权值为 2、3、7、9、12 的 5 个叶结点构造哈夫曼树，采用每次合并两个最小权值结点的算法，所得哈夫曼树的带权路径长度（WPL）是多少？</span><span class="tag book">数据结构</span><span class="tag easy">简单</span></div>
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">有4个字符的权值分别为 A:5、B:7、C:10、D:15，采用二叉哈夫曼编码。每次合并权值最小的两个结点，则所得哈夫曼树的带权路径长度（WPL）和 D 的编码长度分别是多少？</span><span class="tag book">数据结构</span><span class="tag hard">困难</span></div>
   <div class="card-body">
-    <div class="q"><div class="opt">A. 61</div><div class="opt">B. 71</div><div class="opt">C. 79</div><div class="opt">D. 83</div></div>
-    <img src="images/2026-09-09_p0.png" style="width:100%;border-radius:10px;margin-top:10px;border:1px solid #e5e7eb">
-    <button class="ans-btn">✅ 查看答案与解析</button>
-    <div class="ans-box">
-      <div class="ans">答案：B. 71</div>
-      <div class="exp"><b>📖 解析：</b>依次合并 2+3=5，5+7=12，9+12=21，12+21=33。WPL 等于每次合并产生的新结点权值之和：5+12+21+33=71；也可按叶深度计算得到 2×3+3×3+7×2+9×2+12×2=71。</div>
-    </div>
-  </div>
- </div>
-<div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">某 Cache 访问时间为 1 ns，主存访问时间为 50 ns，Cache 命中率为 90%。若 Cache 未命中时还需访问一次主存，平均存储器访问时间是多少？</span><span class="tag book">计算机组成原理</span><span class="tag easy">简单</span></div>
-  <div class="card-body">
-    <div class="q"><div class="opt">A. 5 ns</div><div class="opt">B. 6 ns</div><div class="opt">C. 50 ns</div><div class="opt">D. 51 ns</div></div>
-    <img src="images/2026-09-09_p1.png" style="width:100%;border-radius:10px;margin-top:10px;border:1px solid #e5e7eb">
-    <button class="ans-btn">✅ 查看答案与解析</button>
-    <div class="ans-box">
-      <div class="ans">答案：B. 6 ns</div>
-      <div class="exp"><b>📖 解析：</b>先进行一次 Cache 查询，无论命中与否都耗时 1 ns；未命中概率为 10%，还需额外访问主存 50 ns。因此平均访问时间 = 1 + (1-0.90)×50 = 6 ns。</div>
-    </div>
-  </div>
- </div>
-<div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">下列措施中，能够破坏死锁必要条件‘请求并保持’的是？</span><span class="tag book">操作系统</span><span class="tag easy">简单</span></div>
-  <div class="card-body">
-    <div class="q"><div class="opt">A. 允许资源被强行剥夺</div><div class="opt">B. 进程在申请新资源前必须先释放已占有的资源，或一次性申请全部所需资源</div><div class="opt">C. 对资源请求按序分配，破坏循环等待</div><div class="opt">D. 让资源互斥使用，避免多个进程同时访问</div></div>
+    <div class="q"><div class="opt">A. WPL=71，D 的编码长度为1</div><div class="opt">B. WPL=71，D 的编码长度为2</div><div class="opt">C. WPL=74，D 的编码长度为1</div><div class="opt">D. WPL=74，D 的编码长度为2</div></div>
     
     <button class="ans-btn">✅ 查看答案与解析</button>
     <div class="ans-box">
-      <div class="ans">答案：B. 进程在申请新资源前必须先释放已占有的资源，或一次性申请全部所需资源</div>
-      <div class="exp"><b>📖 解析：</b>‘请求并保持’指进程已经占有部分资源，同时又等待申请其他资源。规定一次性申请全部资源，或申请新资源前释放已占资源，都能破坏该条件。A 破坏的是不可剥夺条件，C 破坏的是循环等待条件，D 不能破坏互斥条件。</div>
+      <div class="ans">答案：A</div>
+      <div class="exp"><b>📖 解析：</b>合并过程为 5+7=12，10+12=22，15+22=37。D 在根结点的一侧，编码长度为1；WPL=5×3+7×3+10×2+15×1=71。</div>
     </div>
   </div>
  </div>
 <div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">关于 OSPF 协议，下列说法正确的是？</span><span class="tag book">计算机网络</span><span class="tag mid">中等</span></div>
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">某机按字节编址，主存地址为32位，Cache采用全相联映射，块大小为16B。若不考虑有效位和脏位，主存地址中的标记字段应占多少位？</span><span class="tag book">计算机组成原理</span><span class="tag easy">简单</span></div>
   <div class="card-body">
-    <div class="q"><div class="opt">A. OSPF 是基于距离向量算法的路由选择协议，只向邻居发送完整路由表</div><div class="opt">B. OSPF 是基于链路状态的协议，路由器通过 LSA 建立链路状态数据库，并用 Dijkstra 算法计算最短路径树</div><div class="opt">C. OSPF 只能在单一区域内工作，不支持区域划分</div><div class="opt">D. OSPF 的度量值只能由跳数决定</div></div>
+    <div class="q"><div class="opt">A. 24位</div><div class="opt">B. 26位</div><div class="opt">C. 28位</div><div class="opt">D. 32位</div></div>
     
     <button class="ans-btn">✅ 查看答案与解析</button>
     <div class="ans-box">
-      <div class="ans">答案：B. OSPF 是基于链路状态的协议，路由器通过 LSA 建立链路状态数据库，并用 Dijkstra 算法计算最短路径树</div>
-      <div class="exp"><b>📖 解析：</b>OSPF 属于内部网关协议和链路状态路由协议，路由器泛洪链路状态通告（LSA），在本地区域内形成一致的链路状态数据库，再使用 SPF（Dijkstra）算法计算最短路径。OSPF 支持区域划分，度量通常是接口开销而非单纯跳数。</div>
+      <div class="ans">答案：C</div>
+      <div class="exp"><b>📖 解析：</b>块大小为16B=2^4B，因此块内地址占4位。全相联映射没有组号或行号字段，剩余的32−4=28位全部作为标记字段。</div>
     </div>
   </div>
  </div>
 <div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">某计算机按字节编址，主存地址为 32 位；Cache 采用直接映射，共 1024 行，每行大小为 64 B。访问主存地址 0x12345678 时，其 Cache 行号、标记字段和块内地址分别是多少？</span><span class="tag book">计算机组成原理</span><span class="tag hard">困难</span></div>
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">某系统有资源 R1、R2、R3，初始 Available=(1,1,1)。当前 Allocation 为 P1=(1,0,0)、P2=(0,1,0)、P3=(1,0,1)，Need 为 P1=(1,1,0)、P2=(2,0,1)、P3=(0,1,1)。按进程编号从小到大进行安全性检查时，得到的第一条安全序列是哪一条？</span><span class="tag book">操作系统</span><span class="tag easy">简单</span></div>
   <div class="card-body">
-    <div class="q"><div class="opt">A. 行号 345，标记 0x1234，块内地址 56</div><div class="opt">B. 行号 0x678，标记 0x1234，块内地址 0x56</div><div class="opt">C. 行号 345，标记 0x123456，块内地址 120</div><div class="opt">D. 行号 512，标记 0x1234，块内地址 56</div></div>
-    <img src="images/2026-09-09_p4.png" style="width:100%;border-radius:10px;margin-top:10px;border:1px solid #e5e7eb">
+    <div class="q"><div class="opt">A. P1→P2→P3</div><div class="opt">B. P2→P1→P3</div><div class="opt">C. P2→P3→P1</div><div class="opt">D. 系统不安全，不存在安全序列</div></div>
+    
     <button class="ans-btn">✅ 查看答案与解析</button>
     <div class="ans-box">
-      <div class="ans">答案：A. 行号 345，标记 0x1234，块内地址 56</div>
-      <div class="exp"><b>📖 解析：</b>每行 64 B，所以块内地址占 log2(64)=6 位；1024 行，所以行号占 log2(1024)=10 位；标记占 32-10-6=16 位。对地址 0x12345678：块内地址 = 0x12345678 &amp; 0x3F = 56；行号 = (地址&gt;&gt;6)&amp;0x3FF = 345；标记 = 地址&gt;&gt;16 = 0x1234。</div>
+      <div class="ans">答案：A</div>
+      <div class="exp"><b>📖 解析：</b>初始 Work=(1,1,1)，只有 P1 的 Need=(1,1,0) 不超过 Work，P1 完成后释放其 Allocation，Work=(2,1,1)。随后 P2 可完成，Work=(2,2,1)，最后 P3 可完成，因此第一条安全序列为 P1→P2→P3。</div>
+    </div>
+  </div>
+ </div>
+<div class="card open">
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">AS100 的 BGP 路由器 R 收到同一目的前缀的两条路由：路径1的 AS_PATH 为 [200,300]、LOCAL_PREF 为100；路径2的 AS_PATH 为 [400,500,300]、LOCAL_PREF 为100。假设其他属性均相同且无本地策略干预，R 应选择哪条路由？</span><span class="tag book">计算机网络</span><span class="tag mid">中等</span></div>
+  <div class="card-body">
+    <div class="q"><div class="opt">A. 路径1，因为 AS_PATH 更短</div><div class="opt">B. 路径2，因为下一跳 AS 号400更大</div><div class="opt">C. 两条路由等价，随机选择</div><div class="opt">D. 路径1，因为 BGP 只比较目的网络的IP地址</div></div>
+    
+    <button class="ans-btn">✅ 查看答案与解析</button>
+    <div class="ans-box">
+      <div class="ans">答案：A</div>
+      <div class="exp"><b>📖 解析：</b>BGP 是路径向量协议。在 LOCAL_PREF 等更高优先级属性相同的条件下，通常优先选择 AS_PATH 更短的路由。路径1长度为2，路径2长度为3，因此选择路径1。</div>
+    </div>
+  </div>
+ </div>
+<div class="card open">
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">死锁检测算法开始时 Work=(0,0)。有两个资源类型 R1、R2，三个进程的 Allocation 和 Request 分别为：P1 Allocation=(1,0)、Request=(0,1)；P2 Allocation=(0,1)、Request=(1,0)；P3 Allocation=(0,0)、Request=(1,1)。执行检测时，最终哪些进程会被判定为处于死锁状态？</span><span class="tag book">操作系统</span><span class="tag easy">简单</span></div>
+  <div class="card-body">
+    <div class="q"><div class="opt">A. 只有 P1</div><div class="opt">B. 只有 P2</div><div class="opt">C. P1、P2 和 P3</div><div class="opt">D. 没有进程，系统可以化简</div></div>
+    
+    <button class="ans-btn">✅ 查看答案与解析</button>
+    <div class="ans-box">
+      <div class="ans">答案：C</div>
+      <div class="exp"><b>📖 解析：</b>初始 Work=(0,0)，P1、P2、P3 的 Request 都不满足 Request≤Work，因此没有进程可以先完成并释放资源。检测算法无法化简任何进程，所有未完成进程 P1、P2、P3 均被判定为死锁相关进程。</div>
     </div>
   </div>
  </div>
@@ -186,47 +195,47 @@
 <div class="group"><div class="group-title">🇬🇧 考研单词 <span class="badge">20 词</span></div>
 <div class="card open">
   <div class="card-head"><span class="arrow">▶</span><span class="card-title">🇬🇧 考研单词 ×20</span><span class="tag book">高频词</span></div>
-  <div class="card-body"><div class="word-row"><span class="word">responsibility</span><span class="phon">/rɪˌspɒnsəˈbɪləti/</span></div>
-      <div class="def">责任；职责</div>
-      <div class="example">✏️ With greater power comes greater responsibility.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">similar</span><span class="phon">/ˈsɪmələ(r)/</span></div>
-      <div class="def">相似的；类似的</div>
-      <div class="example">✏️ The two experiments produced similar results.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">necessary</span><span class="phon">/ˈnesəsəri/</span></div>
-      <div class="def">必要的；必需的</div>
-      <div class="example">✏️ It is necessary to verify the assumption before solving the problem.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">chance</span><span class="phon">/tʃɑːns/</span></div>
-      <div class="def">机会；可能性</div>
-      <div class="example">✏️ There is a good chance that the new method will reduce errors.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">foreign</span><span class="phon">/ˈfɒrən/</span></div>
-      <div class="def">外国的；外来的</div>
-      <div class="example">✏️ The program can process both domestic and foreign data.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">apply</span><span class="phon">/əˈplaɪ/</span></div>
-      <div class="def">应用；申请</div>
-      <div class="example">✏️ Students should apply the theorem to the given equation.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">father</span><span class="phon">/ˈfɑːðə(r)/</span></div>
-      <div class="def">父亲</div>
-      <div class="example">✏️ His father encouraged him to study engineering.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">driver</span><span class="phon">/ˈdraɪvə(r)/</span></div>
-      <div class="def">驱动程序；驾驶员</div>
-      <div class="example">✏️ The operating system loads a device driver before using the hardware.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">oil</span><span class="phon">/ɔɪl/</span></div>
-      <div class="def">石油；油</div>
-      <div class="example">✏️ The country reduced its dependence on imported oil.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">anything</span><span class="phon">/ˈeniθɪŋ/</span></div>
-      <div class="def">任何事；任何东西</div>
-      <div class="example">✏️ The algorithm should not access anything outside the allocated memory.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">access</span><span class="phon">/ˈækses/</span></div>
-      <div class="def">进入；访问；存取</div>
-      <div class="example">✏️ The cache allows the processor to access frequently used data quickly.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">sport</span><span class="phon">/spɔːt/</span></div>
-      <div class="def">体育运动；运动</div>
-      <div class="example">✏️ Regular sport can improve concentration during long study sessions.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">exist</span><span class="phon">/ɪɡˈzɪst/</span></div>
-      <div class="def">存在；生存</div>
-      <div class="example">✏️ Several solutions may exist for the same equation.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">advantage</span><span class="phon">/ədˈvɑːntɪdʒ/</span></div>
-      <div class="def">优势；有利条件</div>
-      <div class="example">✏️ The main advantage of this structure is its fast search operation.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">newspaper</span><span class="phon">/ˈnjuːzpeɪpə(r)/</span></div>
-      <div class="def">报纸</div>
-      <div class="example">✏️ The newspaper reported a rapid growth in online education.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">remember</span><span class="phon">/rɪˈmembə(r)/</span></div>
-      <div class="def">记得；记住</div>
-      <div class="example">✏️ Remember to check the boundary condition after integration.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">agree</span><span class="phon">/əˈɡriː/</span></div>
-      <div class="def">同意；一致</div>
-      <div class="example">✏️ The independent measurements agree with the theoretical result.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">manager</span><span class="phon">/ˈmænɪdʒə(r)/</span></div>
-      <div class="def">经理；管理者</div>
-      <div class="example">✏️ The memory manager allocates and releases pages for processes.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">land</span><span class="phon">/lænd/</span></div>
-      <div class="def">着陆；土地</div>
-      <div class="example">✏️ The aircraft must land before the storm becomes severe.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">solve</span><span class="phon">/sɒlv/</span></div>
-      <div class="def">解决；解答</div>
-      <div class="example">✏️ We can solve the recurrence by expanding its first few terms.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"></div>
+  <div class="card-body"><div class="word-row"><span class="word">function</span><span class="phon">/ˈfʌŋkʃən/</span></div>
+      <div class="def">功能；作用；函数</div>
+      <div class="example">✏️ The main function of this policy is to reduce inequality.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">management</span><span class="phon">/ˈmænɪdʒmənt/</span></div>
+      <div class="def">经营；管理；管理层</div>
+      <div class="example">✏️ Effective management is essential to the success of a public project.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">phrase</span><span class="phon">/freɪz/</span></div>
+      <div class="def">短语；措辞；表达方式</div>
+      <div class="example">✏️ The phrase reflects the author's attitude toward social change.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">experiment</span><span class="phon">/ɪkˈsperɪmənt/</span></div>
+      <div class="def">实验；试验；尝试</div>
+      <div class="example">✏️ The experiment provides evidence for the proposed theory.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">structure</span><span class="phon">/ˈstrʌktʃə(r)/</span></div>
+      <div class="def">结构；构造；体系</div>
+      <div class="example">✏️ The structure of the education system has changed significantly.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">everything</span><span class="phon">/ˈevriθɪŋ/</span></div>
+      <div class="def">每件事；一切</div>
+      <div class="example">✏️ Technology has changed almost everything in modern workplaces.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">sit</span><span class="phon">/sɪt/</span></div>
+      <div class="def">坐；位于；参加考试</div>
+      <div class="example">✏️ Many students sit an important examination at the end of the year.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">seek</span><span class="phon">/siːk/</span></div>
+      <div class="def">寻求；试图；寻找</div>
+      <div class="example">✏️ Researchers seek reliable evidence before drawing a conclusion.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">message</span><span class="phon">/ˈmesɪdʒ/</span></div>
+      <div class="def">消息；信息；启示</div>
+      <div class="example">✏️ The article sends a clear message about environmental protection.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">per</span><span class="phon">/pə(r)/</span></div>
+      <div class="def">每；每一；按照</div>
+      <div class="example">✏️ The new rule limits the number of applications to two per person.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">promote</span><span class="phon">/prəˈməʊt/</span></div>
+      <div class="def">促进；提升；宣传</div>
+      <div class="example">✏️ The program aims to promote equal access to higher education.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">figure</span><span class="phon">/ˈfɪɡə(r)/</span></div>
+      <div class="def">数字；人物；认为；计算</div>
+      <div class="example">✏️ The latest figure suggests that employment is gradually recovering.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">road</span><span class="phon">/rəʊd/</span></div>
+      <div class="def">道路；途径；方法</div>
+      <div class="example">✏️ Education is often regarded as a road to social mobility.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">limit</span><span class="phon">/ˈlɪmɪt/</span></div>
+      <div class="def">限制；限度；界限</div>
+      <div class="example">✏️ There is a limit to what economic growth alone can achieve.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">sometimes</span><span class="phon">/ˈsʌmtaɪmz/</span></div>
+      <div class="def">有时；间或</div>
+      <div class="example">✏️ Sometimes a seemingly minor factor can influence the final result.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">fear</span><span class="phon">/fɪə(r)/</span></div>
+      <div class="def">害怕；恐惧；担忧</div>
+      <div class="example">✏️ Fear of failure should not prevent students from trying new methods.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">supply</span><span class="phon">/səˈplaɪ/</span></div>
+      <div class="def">供应；供给；提供</div>
+      <div class="example">✏️ A stable supply of clean water is vital to public health.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">argument</span><span class="phon">/ˈɑːɡjumənt/</span></div>
+      <div class="def">争论；论点；论据</div>
+      <div class="example">✏️ The author supports the argument with several independent studies.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">relate</span><span class="phon">/rɪˈleɪt/</span></div>
+      <div class="def">讲述；使相关；联系</div>
+      <div class="example">✏️ The findings relate closely to the problems discussed in the introduction.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">effective</span><span class="phon">/ɪˈfektɪv/</span></div>
+      <div class="def">有效的；起作用的</div>
+      <div class="example">✏️ Regular review is an effective way to improve long-term memory.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"></div>
 </div>
 </div>
 <div class="footer">由 Hermes AI 生成 · 每天 08:00 更新 · 加油 💪</div>
