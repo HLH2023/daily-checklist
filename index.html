@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>今日学习清单 · 2026-09-11</title>
+<title>今日学习清单 · 2026-09-12</title>
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Noto Sans SC", sans-serif; background: #f5f6fa; color: #1f2329; max-width: 640px; margin: 0 auto; padding: 16px 14px 40px; }
@@ -50,138 +50,162 @@
 
 <div class="hero">
   <h1>📋 今日学习清单</h1>
-  <div class="date">2026年9月11日</div>
+  <div class="date">2026年9月12日</div>
 </div>
 
 <div class="group"><div class="group-title">🔥 今日重点 <span class="badge">2 项</span></div>
 <div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">🧩 LeetCode 每日一题：Unique 3-Digit Even Numbers</span><span class="tag easy">Easy</span></div>
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">🧩 LeetCode 每日一题：Maximum Score of Non-overlapping Intervals</span><span class="tag hard">Hard</span></div>
   <div class="card-body">
-    <div class="q">给定一个数字数组 digits，每个数字最多使用一次，返回由这些数字组成的所有互不重复的三位偶数；三位数的百位不能为 0。</div>
-    <div class="exp"><b>💡 解题思路：</b>枚举 100 到 998 之间的所有偶数，并用计数表判断该数的每个数字出现次数是否不超过 digits 中的供给。枚举范围只有 450 个数，逻辑直接且能自然处理重复数字。</div>
-    <div class="exp"><b>🔧 题解：</b>用 Counter 统计 digits 中各数字的频次。对每个三位偶数转成字符串，再统计其各位数字；若每种数字的需求量都不超过原数组频次，就加入答案。结果按数值升序生成，时间复杂度为 O(900)，额外空间复杂度为 O(1)。</div>
-    <pre class="code">from collections import Counter
-from typing import List
+    <div class="q">给定 intervals[i] = [左端点, 右端点, 权重]，最多选择 4 个互不重叠的区间，使权重总和最大，并返回达到最大总分时字典序最小的原下标数组。两个区间只要共享端点也算重叠。</div>
+    <div class="exp"><b>💡 解题思路：</b>按右端点升序排序。对每个区间，用二分查找找到所有右端点严格小于当前左端点的前驱区间；再用 dp[k][i] 表示在排序后前 i 个区间中恰选 k 个时的最优结果，在跳过当前区间和选择当前区间之间取总权重更大者。最后在 0 到 4 个区间中选择总分最大、下标数组字典序最小的方案。</div>
+    <div class="exp"><b>🔧 题解：</b>排序后令 j=bisect_left(rights, left, 0, i)，这样前驱区间满足 right &lt; left，符合共享边界也重叠的题意。状态转移为 dp[k][i]=max(dp[k][i-1], weight+dp[k-1][j])；同分同数量时比较按原下标升序排列的元组，保留字典序更小者。时间复杂度 O(4n log n)，空间复杂度 O(4n)。</div>
+    <pre class="code">from bisect import bisect_left
+from typing import List, Optional, Tuple
 
 class Solution:
-    def findEvenNumbers(self, digits: List[int]) -&gt; List[int]:
-        available = Counter(digits)
-        answer = []
+    def maximumWeight(self, intervals: List[List[int]]) -&gt; List[int]:
+        items = sorted((l, r, w, idx) for idx, (l, r, w) in enumerate(intervals))
+        n = len(items)
+        rights = [item[1] for item in items]
+        # dp[k][i] = (score, original-index tuple), using first i sorted intervals
+        dp: List[List[Optional[Tuple[int, Tuple[int, ...]]]]] = [
+            [None] * (n + 1) for _ in range(5)
+        ]
+        for i in range(n + 1):
+            dp[0][i] = (0, ())
 
-        for number in range(100, 1000, 2):
-            need = Counter(str(number))
-            if all(need[d] &lt;= available[int(d)] for d in need):
-                answer.append(number)
+        def better(a, b):
+            if a is None:
+                return b
+            if b is None:
+                return a
+            if a[0] != b[0]:
+                return a if a[0] &gt; b[0] else b
+            return a if a[1] &lt; b[1] else b
 
-        return answer</pre>
-    <a class="link" href="https://leetcode.com/problems/unique-3-digit-even-numbers/" target="_blank">🚀 去 LeetCode 做题 →</a>
+        for i, (left, right, weight, original) in enumerate(items, 1):
+            for k in range(1, min(4, i) + 1):
+                best = dp[k][i - 1]
+                j = bisect_left(rights, left, 0, i - 1)
+                prev = dp[k - 1][j]
+                if prev is not None:
+                    candidate = (prev[0] + weight, tuple(sorted(prev[1] + (original,))))
+                    best = better(best, candidate)
+                dp[k][i] = best
+
+        best = None
+        for k in range(5):
+            best = better(best, dp[k][n])
+        return list(best[1])</pre>
+    <a class="link" href="https://leetcode.com/problems/maximum-score-of-non-overlapping-intervals/" target="_blank">🚀 去 LeetCode 做题 →</a>
   </div>
 </div>
 </div>
 <div class="group"><div class="group-title">📐 数学知识点 <span class="badge">4 项</span></div>
 <div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">📐 高数·第2天·导数应用：零点重数与图像</span><span class="tag book">2</span></div>
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">📐 高数·第3天·导数应用：经济应用函数</span><span class="tag book">3</span></div>
   <div class="card-body">
-    
-    <div class="exp"><b>📌 要点：</b>相邻零点间必有 f' 零点、f'' 零点（Rolle）；驻点不一定是极值点，要看 f' 是否变号。奇重零点图像穿过 x 轴，偶重零点图像相切但不穿过 x 轴。</div>
-    <div class="exp">• 奇重零点使函数符号在零点两侧改变，图像穿过 x 轴。</div><div class="exp">• 偶重零点使函数符号在零点两侧不变，图像与 x 轴相切但不穿过。</div><div class="exp">• 驻点是否为极值点不能只看 f'=0，还要检查一阶导数是否变号。</div>
-    <div class="exp" style="margin-top:6px">(x-1)(x-2)²(x-3)³(x-4)：奇重零点<b style="color:#d48806">＿＿＿</b>轴，偶重零点<b style="color:#d48806">＿＿＿</b>轴</div><button class="ans-btn" style="font-size:12px;padding:4px 12px">✅ 答案</button><div class="ans-box"><div class="ans">穿过；相切不穿过</div></div>
-    <div class="exp"><b>🧭 套路：</b>先看零点的重数奇偶判断图像是否穿轴，再结合 f' 左右符号判断驻点是否为极值。</div>
-    
-  </div>
- </div>
-<div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">📐 高数·第2天·导数应用：曲率与曲率半径</span><span class="tag book">2</span></div>
-  <div class="card-body">
-    <div class="q">K=|dα/ds|=|y''|/[1+(y')²]^(3/2)；ρ=1/K；ds=√(1+y'²)dx；tanα=y'</div>
-    <div class="exp"><b>📌 要点：</b>曲率圆满足 |DM|=ρ，D 为曲率圆圆心，位于曲线法线的凹侧。</div>
-    <div class="exp">• 曲率 K 描述曲线弯曲程度，曲率半径 ρ 与曲率互为倒数。</div><div class="exp">• 对 y=f(x)，曲率公式为 |y''|/[1+(y')²]^(3/2)。</div><div class="exp">• 曲率圆圆心在法线的凹侧，曲率越大时曲率半径越小。</div>
-    <div class="exp" style="margin-top:6px">K=<b style="color:#d48806">＿＿＿</b>；ρ=<b style="color:#d48806">＿＿＿</b>；圆心在<b style="color:#d48806">＿＿＿</b>侧法线上</div><button class="ans-btn" style="font-size:12px;padding:4px 12px">✅ 答案</button><div class="ans-box"><div class="ans">|y''|/[1+(y')²]^(3/2)；1/K；凹</div></div>
-    <div class="exp"><b>🧭 套路：</b>先求 y'、y''，代入曲率公式得到 K，再用 ρ=1/K；判断圆心方向时看曲线凹向。</div>
+    <div class="q">边际MC=C'(Q)、MR=R'(Q)、MΠ=Π'(Q)；需求弹性η=-P/Q·dQ/dP&gt;0</div>
+    <div class="exp"><b>📌 要点：</b>弹性η=(dy/y)/(dx/x)=x/y·y'；η&gt;1富有弹性、=1单位、&lt;1缺乏</div>
+    <div class="exp">• 需求函数通常表示价格 p 与需求量 Q 的关系，收益为价格与销量的乘积。</div><div class="exp">• 成本、收益、利润和平均成本分别由 C(Q)、R(Q)、Π(Q)=R(Q)-C(Q)、C(Q)/Q 表示。</div><div class="exp">• 边际量是相应函数对产量 Q 的导数，需求弹性用于判断需求量对价格变化的敏感程度。</div>
+    <div class="exp" style="margin-top:6px">需求Q=<b style="color:#d48806">＿＿＿</b>；成本C=<b style="color:#d48806">＿＿＿</b>；收益R=<b style="color:#d48806">＿＿＿</b>；利润Π=<b style="color:#d48806">＿＿＿</b>；平均成本<b style="color:#d48806">＿＿＿</b></div><button class="ans-btn" style="font-size:12px;padding:4px 12px">✅ 答案</button><div class="ans-box"><div class="ans">Q(p)；C0+C1(Q)；p(Q)·Q；R-C；C(Q)/Q</div></div>
+    <div class="exp"><b>🧭 套路：</b>先统一自变量：若需求写成 Q(p)，求收益时要把价格表示成产量的函数；再用导数求边际量，用弹性绝对值判断富有或缺乏弹性。</div>
     
   </div>
  </div>
 <div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">📐 线代·特征值与特征向量：内积与向量长度</span><span class="tag book">线代·特征值与特征向量</span></div>
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">📐 高数·第3天·积分：原函数存在定理</span><span class="tag book">3</span></div>
   <div class="card-body">
-    <div class="q">(α,β)=Σa_ib_i；||α||=√(α,α)</div>
-    <div class="exp"><b>📌 要点：</b>内积具有对称性、齐次性、可加性和正定性；向量长度具有非负性与齐次性 ||kα||=|k|||α||。单位化为 α/||α||；(α,β)=0 等价于 α 与 β 正交；非零正交向量组必线性无关。</div>
-    <div class="exp">• 内积为零表示两个向量正交，非零正交向量组一定线性无关。</div><div class="exp">• 非零向量 α 的单位化结果为 α/||α||，其长度为 1。</div><div class="exp">• 由内积可定义向量长度：||α||=√(α,α)，长度不可能为负。</div>
-    <div class="exp" style="margin-top:6px">默写核心结论：<b style="color:#d48806">＿＿＿</b></div><button class="ans-btn" style="font-size:12px;padding:4px 12px">✅ 答案</button><div class="ans-box"><div class="ans">(α,β)=Σa_ib_i；||α||=√(α,α)</div></div>
-    <div class="exp"><b>🧭 套路：</b>计算长度先求自身内积再开平方；判断正交直接计算两个向量的内积。</div>
+    <div class="q">导数具有Darboux介值性，不能出现跳跃间断</div>
+    <div class="exp"><b>📌 要点：</b>在区间上连续的函数必有原函数；有第一类间断点的函数一般没有原函数。导数虽不一定连续，但具有介值性。</div>
+    <div class="exp">• 连续函数在区间上必存在原函数，这是原函数存在的常用充分条件。</div><div class="exp">• 函数若有第一类间断点，一般不能作为某个函数在整个区间上的导数。</div><div class="exp">• 导数具有 Darboux 介值性，因此不能出现跳跃间断；不能把导数的介值性误认为导数连续。</div>
+    <div class="exp" style="margin-top:6px">区间上<b style="color:#d48806">＿＿＿</b>函数必有原函数；有第一类间断点<b style="color:#d48806">＿＿＿</b>原函数</div><button class="ans-btn" style="font-size:12px;padding:4px 12px">✅ 答案</button><div class="ans-box"><div class="ans">连续；一般没有</div></div>
+    <div class="exp"><b>🧭 套路：</b>遇到‘是否存在原函数’先检查连续性和间断点；遇到导数性质题，记住导数可不连续，但不能有跳跃型间断。</div>
     
   </div>
  </div>
 <div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">📐 线代·特征值与特征向量：施密特正交化</span><span class="tag book">线代·特征值与特征向量</span></div>
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">📐 线代·特征值与特征向量：正交矩阵</span><span class="tag book">线代·特征值与特征向量</span></div>
   <div class="card-body">
-    <div class="q">β1=α1；βn=αn-Σ[(αn,βi)/(βi,βi)]βi</div>
-    <div class="exp"><b>📌 要点：</b>施密特正交化把线性无关向量组变为正交向量组，二者等价且张成同一个子空间；再将每个正交向量单位化即可得到标准正交组。</div>
-    <div class="exp">• 第一步取 β1=α1，后续向量减去其在已得正交向量上的投影。</div><div class="exp">• 所得 β1、β2、… 两两正交，并与原向量组张成相同的空间。</div><div class="exp">• 将每个 βi 除以 ||βi||，即可得到标准正交组。</div>
-    <div class="exp" style="margin-top:6px">默写核心结论：<b style="color:#d48806">＿＿＿</b></div><button class="ans-btn" style="font-size:12px;padding:4px 12px">✅ 答案</button><div class="ans-box"><div class="ans">β1=α1；βn=αn-Σ[(αn,βi)/(βi,βi)]βi</div></div>
-    <div class="exp"><b>🧭 套路：</b>按顺序计算投影系数 (αn,βi)/(βi,βi)，每一步都减去已构造方向上的投影。</div>
+    <div class="q">A^TA=E⟺A^{-1}=A^T</div>
+    <div class="exp"><b>📌 要点：</b>列(行)向量组为正交单位向量组；|A|=±1；A^{-1}、AB仍正交；性质：正交变换保长度内积</div>
+    <div class="exp">• 正交矩阵的列向量组和行向量组都是正交单位向量组。</div><div class="exp">• 正交矩阵满足 A^T A=E，因此可逆且逆矩阵就是转置矩阵，行列式只能为 1 或 −1。</div><div class="exp">• 正交变换保持向量的长度和内积，正交矩阵的逆矩阵以及两个正交矩阵的乘积仍为正交矩阵。</div>
+    <div class="exp" style="margin-top:6px">默写核心结论：<b style="color:#d48806">＿＿＿</b></div><button class="ans-btn" style="font-size:12px;padding:4px 12px">✅ 答案</button><div class="ans-box"><div class="ans">A^TA=E⟺A^{-1}=A^T</div></div>
+    <div class="exp"><b>🧭 套路：</b>判断矩阵是否正交优先计算 A^T A；若结果为单位矩阵，就可以直接使用逆矩阵、行列式和保内积等性质。</div>
+    
+  </div>
+ </div>
+<div class="card open">
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">📐 线代·特征值与特征向量：特征值与特征向量定义</span><span class="tag book">线代·特征值与特征向量</span></div>
+  <div class="card-body">
+    <div class="q">Aα=λα(α≠0)⟺|λE-A|=0</div>
+    <div class="exp"><b>📌 要点：</b>特征方程|λE-A|=0；特征向量=齐次方程(λE-A)x=0的非零解；特征子空间维数=n-r(λE-A)</div>
+    <div class="exp">• 若存在非零向量 α 使 Aα=λα，则 λ 是 A 的特征值，α 是属于 λ 的特征向量。</div><div class="exp">• 求特征值先令特征多项式 |λE−A|=0，得到的根就是特征值。</div><div class="exp">• 求出 λ 后解齐次方程 (λE−A)x=0，所有非零解构成对应特征子空间中的特征向量。</div>
+    <div class="exp" style="margin-top:6px">默写核心结论：<b style="color:#d48806">＿＿＿</b></div><button class="ans-btn" style="font-size:12px;padding:4px 12px">✅ 答案</button><div class="ans-box"><div class="ans">Aα=λα(α≠0)⟺|λE-A|=0</div></div>
+    <div class="exp"><b>🧭 套路：</b>先求特征方程再逐个代入求特征向量；特征向量必须是非零解，同一特征值对应的特征向量可以有无穷多个。</div>
     
   </div>
  </div>
 </div>
 <div class="group"><div class="group-title">💻 408 选择题 <span class="badge">5 题</span></div>
 <div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">初始有 7 个互不相交的单元素集合 {1}～{7}。依次执行 Union(1,2)、Union(3,4)、Union(2,3)、Union(5,6)、Union(6,7)，不考虑树高优化的具体父指针形态，最终共有多少个互不相交集合？</span><span class="tag book">数据结构</span><span class="tag easy">简单</span></div>
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">空二叉排序树依次插入关键字 50、30、70、20、40、60、80。成功查找关键字 60 时，依次比较的结点关键字为 50、70、60，共需比较多少次？</span><span class="tag book">数据结构</span><span class="tag easy">简单</span></div>
   <div class="card-body">
-    <div class="q"><div class="opt">A. 1 个</div><div class="opt">B. 2 个</div><div class="opt">C. 3 个</div><div class="opt">D. 5 个</div></div>
+    <div class="q"><div class="opt">A. 2 次</div><div class="opt">B. 3 次</div><div class="opt">C. 4 次</div><div class="opt">D. 5 次</div></div>
     
     <button class="ans-btn">✅ 查看答案与解析</button>
     <div class="ans-box">
       <div class="ans">答案：B</div>
-      <div class="exp"><b>📖 解析：</b>前 3 次合并得到集合 {1,2,3,4}；后 2 次合并得到集合 {5,6,7}。因此 7 个单元素集合经过 5 次有效合并后，最终剩下 7−5=2 个互不相交集合。</div>
+      <div class="exp"><b>📖 解析：</b>插入后根结点为 50，60 大于 50 转向右子树；在结点 70 处因 60 小于 70 转向左孩子 60，第三次比较成功。因此共比较 3 次。</div>
     </div>
   </div>
  </div>
 <div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">某机按字节编址，主存地址为 32 位，Cache 容量为 16KB，块大小为 32B，采用 4 路组相联映射，不考虑有效位和脏位。主存地址中的标记字段应占多少位？</span><span class="tag book">计算机组成原理</span><span class="tag easy">简单</span></div>
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">某机按字节编址，主存地址为 32 位，Cache 容量为 32KB，块大小为 64B，采用 2 路组相联映射。忽略有效位和脏位，主存地址中的标记字段应占多少位？</span><span class="tag book">计算机组成原理</span><span class="tag easy">简单</span></div>
   <div class="card-body">
-    <div class="q"><div class="opt">A. 18 位</div><div class="opt">B. 20 位</div><div class="opt">C. 23 位</div><div class="opt">D. 25 位</div></div>
+    <div class="q"><div class="opt">A. 16 位</div><div class="opt">B. 18 位</div><div class="opt">C. 20 位</div><div class="opt">D. 22 位</div></div>
     
     <button class="ans-btn">✅ 查看答案与解析</button>
     <div class="ans-box">
       <div class="ans">答案：B</div>
-      <div class="exp"><b>📖 解析：</b>块大小 32B=2^5B，块内地址占 5 位。Cache 行数为 16KB/32B=512 行，4 路组相联时组数为 512/4=128=2^7，组号占 7 位。因此标记位数为 32−5−7=20 位。</div>
+      <div class="exp"><b>📖 解析：</b>块大小 64B=2^6B，块内地址占 6 位。Cache 行数为 32KB/64B=512 行，2 路组相联后组数为 256=2^8，组号占 8 位。因此标记位数为 32−6−8=18 位。</div>
     </div>
   </div>
  </div>
 <div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">系统中资源 R1 和 R2 各只有一个实例。资源分配图中，P1 已占有 R1 并请求 R2，P2 已占有 R2 并请求 R1。根据资源分配图，系统是否发生死锁？</span><span class="tag book">操作系统</span><span class="tag easy">简单</span></div>
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">下列哪一项不属于操作系统内存管理的主要功能？</span><span class="tag book">操作系统</span><span class="tag easy">简单</span></div>
   <div class="card-body">
-    <div class="q"><div class="opt">A. 发生死锁，图中存在 P1→R2→P2→R1→P1 的环路</div><div class="opt">B. 不发生死锁，因为只有两个进程</div><div class="opt">C. 不发生死锁，因为资源分配图有资源结点</div><div class="opt">D. 无法判断，必须知道两个进程的优先级</div></div>
+    <div class="q"><div class="opt">A. 内存空间的分配与回收</div><div class="opt">B. 逻辑地址到物理地址的转换</div><div class="opt">C. 进程间内存保护与共享</div><div class="opt">D. 根据时间片为进程选择下一次获得 CPU 的顺序</div></div>
     
     <button class="ans-btn">✅ 查看答案与解析</button>
     <div class="ans-box">
-      <div class="ans">答案：A</div>
-      <div class="exp"><b>📖 解析：</b>R1、R2 均为单实例资源。P1 等待 P2 释放 R2，P2 等待 P1 释放 R1，形成进程—资源交替环路，且两个进程都无法继续执行，因此发生死锁。</div>
+      <div class="ans">答案：D</div>
+      <div class="exp"><b>📖 解析：</b>分配回收、地址转换以及存储保护与共享都属于内存管理；根据时间片和调度策略选择进程运行顺序属于处理机调度，而不是内存管理。</div>
     </div>
   </div>
  </div>
 <div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">某路由器的路由表包含：192.168.1.0/24→接口 A，192.168.1.128/25→接口 B，0.0.0.0/0→接口 C。采用最长前缀匹配时，目的地址 192.168.1.200 的分组应从哪个接口转发？</span><span class="tag book">计算机网络</span><span class="tag mid">中等</span></div>
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">移动主机 M 的永久家乡地址为 H。M 离开家乡网络后接入外地网络，家乡代理 HA 和外地代理 FA 均正常工作。通信对端仍向 H 发送分组时，以下处理正确的是：</span><span class="tag book">计算机网络</span><span class="tag mid">中等</span></div>
   <div class="card-body">
-    <div class="q"><div class="opt">A. 接口 A</div><div class="opt">B. 接口 B</div><div class="opt">C. 接口 C</div><div class="opt">D. 丢弃，因为存在两个匹配表项</div></div>
-    
-    <button class="ans-btn">✅ 查看答案与解析</button>
-    <div class="ans-box">
-      <div class="ans">答案：B</div>
-      <div class="exp"><b>📖 解析：</b>192.168.1.200 同时匹配 192.168.1.0/24 和更具体的 192.168.1.128/25。最长前缀匹配优先选择前缀长度更长的 /25 表项，因此从接口 B 转发。</div>
-    </div>
-  </div>
- </div>
-<div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">在 IPv4 网络中，主机 192.168.1.10/24 要向本子网内所有主机发送数据；另一个应用要向组播组 239.1.1.1 发送数据。若路由器不转发广播但已开启组播路由，以下说法正确的是：</span><span class="tag book">计算机网络</span><span class="tag hard">困难</span></div>
-  <div class="card-body">
-    <div class="q"><div class="opt">A. 两种通信都应使用 255.255.255.255，且都不能跨越路由器</div><div class="opt">B. 前者目的地址为 192.168.1.255 且通常限于本子网；后者目的地址为 239.1.1.1，配置组播路由后可转发到其他存在成员的网段</div><div class="opt">C. 前者目的地址为 239.1.1.1，后者目的地址为 192.168.1.255</div><div class="opt">D. 前者必须使用 224.0.0.1，后者不能跨越任何路由器</div></div>
+    <div class="q"><div class="opt">A. HA 直接把分组广播到整个互联网，M 自行筛选</div><div class="opt">B. HA 截获发往 H 的分组，并通过隧道封装后发送给 FA，再由 FA 交付给 M</div><div class="opt">C. FA 修改通信对端的地址，使其改为 M 的永久家乡地址 H</div><div class="opt">D. M 必须更换永久地址，否则网络层无法继续通信</div></div>
     
     <button class="ans-btn">✅ 查看答案与解析</button>
     <div class="ans-box">
       <div class="ans">答案：B</div>
-      <div class="exp"><b>📖 解析：</b>/24 子网 192.168.1.0/24 的定向广播地址是 192.168.1.255，广播通常不会被路由器转发。239.1.1.1 属于 IPv4 组播地址，组播路由协议和转发表配置正确时，路由器可以把组播分组转发到有组成员的其他网段。</div>
+      <div class="exp"><b>📖 解析：</b>移动 IP 中，移动节点保留永久家乡地址 H。家乡代理截获发往 H 的分组，通过隧道将其封装并发送到外地代理，外地代理再解封装并交付给移动节点；通信对端无需知道移动节点当前所在网络。</div>
+    </div>
+  </div>
+ </div>
+<div class="card open">
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">空二叉排序树依次插入 50、30、70、20、40、60、80、65、75。删除根结点 50，并采用其中序后继替代法。删除并调整完成后，以下说法正确的是：</span><span class="tag book">数据结构</span><span class="tag hard">困难</span></div>
+  <div class="card-body">
+    <div class="q"><div class="opt">A. 新根为 40，且中序序列不再有序</div><div class="opt">B. 新根为 60，结点 65 仍是 70 的左子树中的结点</div><div class="opt">C. 新根为 65，结点 60 被直接丢弃</div><div class="opt">D. 新根仍为 50，只需删除其左孩子</div></div>
+    
+    <button class="ans-btn">✅ 查看答案与解析</button>
+    <div class="ans-box">
+      <div class="ans">答案：B</div>
+      <div class="exp"><b>📖 解析：</b>根 50 有左右两个孩子，采用中序后继时选择右子树中的最小结点 60 替代 50，再从原位置删除 60。原 60 的右子树为 65，因此 65 接到 70 的左侧；新根为 60，中序序列仍保持有序。</div>
     </div>
   </div>
  </div>
@@ -189,47 +213,47 @@ class Solution:
 <div class="group"><div class="group-title">🇬🇧 考研单词 <span class="badge">20 词</span></div>
 <div class="card open">
   <div class="card-head"><span class="arrow">▶</span><span class="card-title">🇬🇧 考研单词 ×20</span><span class="tag book">高频词</span></div>
-  <div class="card-body"><div class="word-row"><span class="word">prevent</span><span class="phon">/prɪˈvent/</span></div>
-      <div class="def">阻止；预防</div>
-      <div class="example">✏️ Effective laws can prevent the abuse of public power.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">pattern</span><span class="phon">/ˈpætən/</span></div>
-      <div class="def">模式；图案；规律</div>
-      <div class="example">✏️ The study reveals a clear pattern in students' reading habits.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">baby</span><span class="phon">/ˈbeɪbi/</span></div>
-      <div class="def">婴儿；宝贝</div>
-      <div class="example">✏️ The policy provides financial support for families with a new baby.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">search</span><span class="phon">/sɜːtʃ/</span></div>
-      <div class="def">搜索；寻找；搜查</div>
-      <div class="example">✏️ Researchers search for reliable evidence before reaching a conclusion.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">itself</span><span class="phon">/ɪtˈself/</span></div>
-      <div class="def">它自己；本身</div>
-      <div class="example">✏️ The technology itself cannot solve every social problem.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">response</span><span class="phon">/rɪˈspɒns/</span></div>
-      <div class="def">回应；反应；答复</div>
-      <div class="example">✏️ The government's response to the crisis was widely discussed.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">beyond</span><span class="phon">/bɪˈjɒnd/</span></div>
-      <div class="def">超越；在……之外</div>
-      <div class="example">✏️ The consequences of climate change may go beyond national borders.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">regard</span><span class="phon">/rɪˈɡɑːd/</span></div>
-      <div class="def">看待；认为；尊敬</div>
-      <div class="example">✏️ Many people regard education as a path to social mobility.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">reader</span><span class="phon">/ˈriːdə(r)/</span></div>
-      <div class="def">读者；读物</div>
-      <div class="example">✏️ The author invites the reader to reconsider a familiar assumption.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">serious</span><span class="phon">/ˈsɪəriəs/</span></div>
-      <div class="def">严肃认真的；严重的</div>
-      <div class="example">✏️ The report draws attention to a serious environmental risk.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">near</span><span class="phon">/nɪə(r)/</span></div>
-      <div class="def">近的；亲近的；接近</div>
-      <div class="example">✏️ The unemployment rate is near its lowest level in a decade.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">serve</span><span class="phon">/sɜːv/</span></div>
-      <div class="def">服务；供给；充当</div>
-      <div class="example">✏️ Public institutions should serve the needs of the whole community.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">president</span><span class="phon">/ˈprezɪdənt/</span></div>
-      <div class="def">总统；校长；主席</div>
-      <div class="example">✏️ The president called for closer international cooperation.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">climate</span><span class="phon">/ˈklaɪmət/</span></div>
-      <div class="def">气候；风气；氛围</div>
-      <div class="example">✏️ A changing climate poses new challenges for agriculture.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">heart</span><span class="phon">/hɑːt/</span></div>
-      <div class="def">心；核心；中心</div>
-      <div class="example">✏️ Trust lies at the heart of a healthy democratic society.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">black</span><span class="phon">/blæk/</span></div>
-      <div class="def">黑色的；黑人的；黑色</div>
-      <div class="example">✏️ The graph uses a black line to represent the control group.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">traffic</span><span class="phon">/ˈtræfɪk/</span></div>
-      <div class="def">交通；流量；贸易</div>
-      <div class="example">✏️ Heavy traffic makes it difficult for workers to arrive on time.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">walk</span><span class="phon">/wɔːk/</span></div>
-      <div class="def">走路；步行；散步</div>
-      <div class="example">✏️ A short walk can help people maintain both physical and mental health.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">determine</span><span class="phon">/dɪˈtɜːmɪn/</span></div>
-      <div class="def">决定；确定；测定</div>
-      <div class="example">✏️ Several factors determine whether a policy will succeed.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">gain</span><span class="phon">/ɡeɪn/</span></div>
-      <div class="def">获得；增加；收益</div>
-      <div class="example">✏️ Students gain confidence through regular practice and review.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"></div>
+  <div class="card-body"><div class="word-row"><span class="word">speech</span><span class="phon">/spiːtʃ/</span></div>
+      <div class="def">演讲；言语</div>
+      <div class="example">✏️ The student's speech focused on the value of lifelong learning.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">award</span><span class="phon">/əˈwɔːd/</span></div>
+      <div class="def">颁奖；奖励；奖项</div>
+      <div class="example">✏️ The researcher received an award for her contribution to public health.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">prepare</span><span class="phon">/prɪˈpeə(r)/</span></div>
+      <div class="def">准备</div>
+      <div class="example">✏️ Students should prepare carefully before writing an academic essay.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">except</span><span class="phon">/ɪkˈsept/</span></div>
+      <div class="def">除了……之外</div>
+      <div class="example">✏️ Everyone attended the meeting except the department manager.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">publish</span><span class="phon">/ˈpʌblɪʃ/</span></div>
+      <div class="def">公布；出版</div>
+      <div class="example">✏️ The journal plans to publish the study next month.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">digital</span><span class="phon">/ˈdɪdʒɪtl/</span></div>
+      <div class="def">数字的；数码的</div>
+      <div class="example">✏️ Digital technology has changed the way people access information.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">suffer</span><span class="phon">/ˈsʌfə(r)/</span></div>
+      <div class="def">遭受；受苦</div>
+      <div class="example">✏️ Many rural communities suffer from limited access to medical services.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">mental</span><span class="phon">/ˈmentl/</span></div>
+      <div class="def">精神的；心理的</div>
+      <div class="example">✏️ Regular exercise can improve both physical and mental health.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">positive</span><span class="phon">/ˈpɒzətɪv/</span></div>
+      <div class="def">积极的；正面的；阳性的</div>
+      <div class="example">✏️ A positive attitude helps students deal with pressure more effectively.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">outside</span><span class="phon">/ˌaʊtˈsaɪd/</span></div>
+      <div class="def">外面的；在外面</div>
+      <div class="example">✏️ The evidence falls outside the scope of the present study.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">party</span><span class="phon">/ˈpɑːti/</span></div>
+      <div class="def">政党；聚会；一方</div>
+      <div class="example">✏️ Both parties agreed that further discussion was necessary.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">dream</span><span class="phon">/driːm/</span></div>
+      <div class="def">梦想；梦</div>
+      <div class="example">✏️ Access to quality education remains a dream for some children.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">increasingly</span><span class="phon">/ɪnˈkriːsɪŋli/</span></div>
+      <div class="def">不断增加地；越来越多地</div>
+      <div class="example">✏️ People are increasingly aware of the importance of data privacy.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">trade</span><span class="phon">/treɪd/</span></div>
+      <div class="def">贸易；交易；交换</div>
+      <div class="example">✏️ International trade has connected markets across the world.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">contribute</span><span class="phon">/kənˈtrɪbjuːt/</span></div>
+      <div class="def">贡献；促成；投稿</div>
+      <div class="example">✏️ Every citizen can contribute to the protection of the environment.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">drink</span><span class="phon">/drɪŋk/</span></div>
+      <div class="def">喝；饮料</div>
+      <div class="example">✏️ Doctors advise people to drink enough water during hot weather.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">therefore</span><span class="phon">/ˈðeəfɔː(r)/</span></div>
+      <div class="def">因此；所以</div>
+      <div class="example">✏️ The sample was too small; therefore, the conclusion remains tentative.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">himself</span><span class="phon">/hɪmˈself/</span></div>
+      <div class="def">他自己；他本人</div>
+      <div class="example">✏️ The professor himself explained the importance of the new method.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">achieve</span><span class="phon">/əˈtʃiːv/</span></div>
+      <div class="def">实现；达到；取得</div>
+      <div class="example">✏️ Consistent effort is essential if students want to achieve their goals.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">conflict</span><span class="phon">/ˈkɒnflɪkt/</span></div>
+      <div class="def">冲突；矛盾</div>
+      <div class="example">✏️ The report examines the conflict between economic growth and conservation.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"></div>
 </div>
 </div>
 <div class="footer">由 Hermes AI 生成 · 每天 08:00 更新 · 加油 💪</div>
