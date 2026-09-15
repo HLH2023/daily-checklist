@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>今日学习清单 · 2026-09-14</title>
+<title>今日学习清单 · 2026-09-15</title>
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Noto Sans SC", sans-serif; background: #f5f6fa; color: #1f2329; max-width: 640px; margin: 0 auto; padding: 16px 14px 40px; }
@@ -50,131 +50,143 @@
 
 <div class="hero">
   <h1>📋 今日学习清单</h1>
-  <div class="date">2026年9月14日 · 星期一</div>
+  <div class="date">2026年9月15日 · 星期二</div>
 </div>
 
 <div class="group"><div class="group-title">🔥 今日重点 <span class="badge">2 项</span></div>
 <div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">🧩 LeetCode 每日一题：Rectangle Overlap</span><span class="tag easy">简单</span></div>
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">🧩 LeetCode 每日一题：Maximum Number of Non-overlapping Palindrome Substrings</span><span class="tag hard">困难</span></div>
   <div class="card-body">
-    <div class="q">给定两个轴对齐矩形 rec1=[x1,y1,x2,y2] 和 rec2=[x1,y1,x2,y2]，左下角与右上角坐标分别给出。若两个矩形的交集面积为正，返回 true；仅边或角接触不算重叠。</div>
-    <div class="exp"><b>💡 解题思路：</b>两个矩形有正面积交集，当且仅当它们在 x 方向的投影有正长度交集，并且在 y 方向的投影也有正长度交集。等价地，判断是否存在分离情况：一个矩形完全在另一个的左、右、上或下方；若没有分离，就必然重叠。</div>
-    <div class="exp"><b>🔧 题解：</b>对 x 轴和 y 轴分别计算交集长度：left=max(rec1[0],rec2[0])，right=min(rec1[2],rec2[2])；bottom=max(rec1[1],rec2[1])，top=min(rec1[3],rec2[3])。只有 right&gt;left 且 top&gt;bottom 时面积才为正，时间复杂度 O(1)，空间复杂度 O(1)。</div>
+    <div class="q">给定字符串 s 和整数 k，求最多能从 s 中选出多少个互不重叠的回文子串，要求每个子串的长度至少为 k。子串必须是连续的一段，选出的子串之间不能共享字符。</div>
+    <div class="exp"><b>💡 解题思路：</b>先识别所有回文子串，再用前缀动态规划选择数量最多且互不重叠的区间。令 dp[i] 表示前 i 个字符（s[0:i]）中最多能选出的回文子串数。扫描回文子串 s[l:r+1] 时，若长度至少为 k，则用 dp[l]+1 更新 dp[r+1]；同时允许跳过当前字符，用 dp[i+1]=max(dp[i+1], dp[i]) 保持最优值。</div>
+    <div class="exp"><b>🔧 题解：</b>用二维状态 pal[l][r] 判断 s[l:r+1] 是否为回文：两端字符相同且内部为空或内部也是回文。按子串长度递增填表，随后按右端点递增进行前缀 DP。每个符合长度要求的回文区间只与其左端之前的最优前缀拼接，因此不会重叠。时间复杂度 O(n²)，空间复杂度 O(n²)。</div>
     <pre class="code">class Solution:
-    def isRectangleOverlap(self, rec1: list[int], rec2: list[int]) -&gt; bool:
-        left = max(rec1[0], rec2[0])
-        right = min(rec1[2], rec2[2])
-        bottom = max(rec1[1], rec2[1])
-        top = min(rec1[3], rec2[3])
-        return right &gt; left and top &gt; bottom</pre>
-    <a class="link" href="https://leetcode.com/problems/rectangle-overlap/" target="_blank">🚀 去 LeetCode 做题 →</a>
+    def maxPalindromes(self, s: str, k: int) -&gt; int:
+        n = len(s)
+        pal = [[False] * n for _ in range(n)]
+        dp = [0] * (n + 1)
+
+        for length in range(1, n + 1):
+            for left in range(n - length + 1):
+                right = left + length - 1
+                pal[left][right] = (s[left] == s[right] and
+                                    (length &lt;= 2 or pal[left + 1][right - 1]))
+
+        for end in range(n):
+            dp[end + 1] = dp[end]
+            for start in range(end + 1):
+                if end - start + 1 &gt;= k and pal[start][end]:
+                    dp[end + 1] = max(dp[end + 1], dp[start] + 1)
+
+        return dp[n]</pre>
+    <a class="link" href="https://leetcode.com/problems/maximum-number-of-non-overlapping-palindrome-substrings/" target="_blank">🚀 去 LeetCode 做题 →</a>
   </div>
 </div>
 </div>
 <div class="group"><div class="group-title">📐 数学知识点 <span class="badge">4 项</span></div>
 <div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">📐 高数·第3天·第05章 定积分：可积条件</span><span class="tag book">高数·第3天·第05章 定积分</span></div>
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">📐 高数·第3天·第05章 定积分：p-型反常积分</span><span class="tag book">高数·第3天·第05章 定积分</span></div>
   <div class="card-body">
-    <div class="q">几何意义：曲边梯形面积代数和</div>
-    <div class="exp"><b>📌 要点：</b>可积必要条件是函数有界</div>
-    <div class="exp">• 连续函数一定有界，且在闭区间上连续时必可积。</div><div class="exp">• 有界函数只有有限个间断点时，在闭区间上可积。</div><div class="exp">• 黎曼可积函数必有界，但有界不等于可积。</div>
-    <div class="exp" style="margin-top:6px">连续⟹可积；有界且只有<b style="color:#d48806">＿＿＿</b>个间断点⟹可积；可积⟹<b style="color:#d48806">＿＿＿</b></div><button class="ans-btn" style="font-size:12px;padding:4px 12px">✅ 答案</button><div class="ans-box"><div class="ans">有限；有界</div></div>
-    <div class="exp"><b>🧭 套路：</b>判断可积性时先看定义域上的有界性，再检查间断点数量或类型；不要把“有界”误当成充分条件。</div>
-    <img src="images/2026-09-14_0.png" style="width:100%;border-radius:10px;margin-top:10px;border:1px solid #e5e7eb">
+    <div class="q">无穷远端看p&gt;1，零点附近看p&lt;1</div>
+    <div class="exp"><b>📌 要点：</b>判断 p-型反常积分的收敛性：无穷远端的 ∫_1^∞ dx/x^p 要求 p&gt;1；零点附近的 ∫_0^1 dx/x^p 要求 p&lt;1。</div>
+    <div class="exp">• ∫_1^∞ x^−p dx 在 p&gt;1 时收敛，在 p≤1 时发散。</div><div class="exp">• ∫_0^1 x^−p dx 在 p&lt;1 时收敛，在 p≥1 时发散。</div><div class="exp">• 同样的幂函数在无穷远端与零点附近的收敛条件相反，判断时先定位瑕点或无穷端。</div>
+    <div class="exp" style="margin-top:6px">∫_1^∞ dx/x^p：p<b style="color:#d48806">＿＿＿</b>收敛；∫_0^1 dx/x^p：p<b style="color:#d48806">＿＿＿</b>收敛</div><button class="ans-btn" style="font-size:12px;padding:4px 12px">✅ 答案</button><div class="ans-box"><div class="ans">p&gt;1；p&lt;1</div></div>
+    <div class="exp"><b>🧭 套路：</b>遇到反常积分先判断问题来自无穷区间还是被积函数在端点无界，再套用对应的 p 型判别条件。</div>
+    
   </div>
  </div>
 <div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">📐 高数·第3天·第05章 定积分：微积分基本定理</span><span class="tag book">高数·第3天·第05章 定积分</span></div>
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">📐 高数·第3天·第05章 定积分：含 ln 的瑕积分</span><span class="tag book">高数·第3天·第05章 定积分</span></div>
   <div class="card-body">
-    <div class="q">N-L公式：∫_a^b f=F(b)-F(a)</div>
-    <div class="exp"><b>📌 要点：</b>可导⟹连续</div>
-    <div class="exp">• 若 F′(x)=f(x)，则牛顿—莱布尼茨公式给出定积分的计算。</div><div class="exp">• 当 f 在 [a,b] 上连续时，变上限积分函数 F(x)=∫_a^x f(t)dt 可导。</div><div class="exp">• 变上限积分的导数为被积函数在上限处的值。</div>
-    <div class="exp" style="margin-top:6px">∫_a^b f(x)dx=<b style="color:#d48806">＿＿＿</b>；f连续⟹F(x)=∫_a^x f可导且F'=<b style="color:#d48806">＿＿＿</b></div><button class="ans-btn" style="font-size:12px;padding:4px 12px">✅ 答案</button><div class="ans-box"><div class="ans">F(b)-F(a)；f(x)</div></div>
-    <div class="exp"><b>🧭 套路：</b>遇到变上限积分先确认上限是 x 还是复合函数；若上限为 g(x)，还要乘 g′(x)。</div>
-    <img src="images/2026-09-14_1.png" style="width:100%;border-radius:10px;margin-top:10px;border:1px solid #e5e7eb">
+    <div class="q">α=1,β≤1发散；换元 t=−ln x 化为 ∫dt/t^β</div>
+    <div class="exp"><b>📌 要点：</b>对于 ∫_0^a dx/(x^α|ln x|^β)，零点附近的幂函数因素决定主要收敛性：α&lt;1 时收敛，α&gt;1 时发散；α=1 时再比较 β，β&gt;1 收敛。|ln x|^β 的增长速度远慢于幂函数。</div>
+    <div class="exp">• 当 α&lt;1 时，幂函数的奇性足够弱，积分收敛；当 α&gt;1 时积分发散。</div><div class="exp">• 临界情形 α=1 不能只看幂次，需要令 t=−ln x 转化为 ∫dt/t^β。</div><div class="exp">• α=1 时 β&gt;1 收敛，β≤1 发散；对数因子通常是临界情形下的判别因素。</div>
+    <div class="exp" style="margin-top:6px">∫_0^a dx/(x^α|ln x|^β)：α&lt;1<b style="color:#d48806">＿＿＿</b>、α&gt;1<b style="color:#d48806">＿＿＿</b>、α=1且β&gt;1<b style="color:#d48806">＿＿＿</b></div><button class="ans-btn" style="font-size:12px;padding:4px 12px">✅ 答案</button><div class="ans-box"><div class="ans">收敛；发散；收敛</div></div>
+    <div class="exp"><b>🧭 套路：</b>先比较 α；只有遇到 α=1 的临界情形才进一步检查 β，并注意换元后积分区间方向的变化不影响收敛性。</div>
+    
   </div>
  </div>
 <div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">📐 线代·第05章 相似矩阵及二次型：矩阵相似</span><span class="tag book">线代·第05章 相似矩阵及二次型</span></div>
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">📐 线代·第05章 相似矩阵及二次型：实对称矩阵对角化</span><span class="tag book">线代·第05章 相似矩阵及二次型</span></div>
   <div class="card-body">
-    <div class="q">P^{-1}AP=B⟺A~B</div>
-    <div class="exp"><b>📌 要点：</b>相似关系反身/对称/传递；相似必要条件：|A|=|B|、r(A)=r(B)、tr(A)=tr(B)、特征多项式/特征值相同、A^T~B^T、A*~B*、φ(A)~φ(B)、A^{-1}~B^{-1}</div>
-    <div class="exp">• 相似是矩阵之间的等价关系，具有反身性、对称性和传递性。</div><div class="exp">• 相似矩阵具有相同的特征多项式、特征值、行列式、秩和迹。</div><div class="exp">• 这些相同量是相似的必要条件，但一般不是充分条件。</div>
-    <div class="exp" style="margin-top:6px">默写核心结论：<b style="color:#d48806">＿＿＿</b></div><button class="ans-btn" style="font-size:12px;padding:4px 12px">✅ 答案</button><div class="ans-box"><div class="ans">P^{-1}AP=B⟺A~B</div></div>
-    <div class="exp"><b>🧭 套路：</b>证明相似通常寻找可逆矩阵 P；判断不相似可优先比较特征值、迹、行列式或秩等不变量。</div>
-    <img src="images/2026-09-14_2.png" style="width:100%;border-radius:10px;margin-top:10px;border:1px solid #e5e7eb">
+    <div class="q">Q^{-1}AQ=Λ（Q正交）</div>
+    <div class="exp"><b>📌 要点：</b>实对称矩阵的特征值为实数，不同特征值对应的特征向量相互正交，并且一定可以通过正交矩阵 Q 正交对角化。求 Q 时依次求特征值、求特征向量、对重特征值对应的向量作施密特正交化，最后单位化。</div>
+    <div class="exp">• 实对称矩阵的全部特征值为实数，属于不同特征值的特征向量相互正交。</div><div class="exp">• 实对称矩阵一定可正交对角化，Q 的列向量可取为一组标准正交特征向量。</div><div class="exp">• 若 Q 为正交矩阵，则 Q^−1=Q^T，故相似变换可写为 Q^TAQ=Λ。</div>
+    <div class="exp" style="margin-top:6px">默写核心结论：<b style="color:#d48806">＿＿＿</b></div><button class="ans-btn" style="font-size:12px;padding:4px 12px">✅ 答案</button><div class="ans-box"><div class="ans">Q^{-1}AQ=Λ（Q正交）</div></div>
+    <div class="exp"><b>🧭 套路：</b>构造 Q 时先按特征值分组求特征向量；不同特征值的向量无需再正交化，同一重特征值的向量需要正交化并单位化。</div>
+    
   </div>
  </div>
 <div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">📐 线代·第05章 相似矩阵及二次型：相似对角化</span><span class="tag book">线代·第05章 相似矩阵及二次型</span></div>
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">📐 线代·第05章 相似矩阵及二次型：二次型及其矩阵表示</span><span class="tag book">线代·第05章 相似矩阵及二次型</span></div>
   <div class="card-body">
-    <div class="q">P^{-1}AP=Λ=diag(λ1..λn)</div>
-    <div class="exp"><b>📌 要点：</b>A可对角化⟺有n个线性无关特征向量⟺每ki重特征值有ki个无关特征向量（几何重数=代数重数）；特征值互异⟹可对角化；P以特征向量为列、Λ对角元按序</div>
-    <div class="exp">• n 阶矩阵可对角化，当且仅当存在 n 个线性无关的特征向量。</div><div class="exp">• 每个重特征值的几何重数必须等于代数重数。</div><div class="exp">• P 的列由按顺序排列的特征向量组成，Λ 的对角元放置对应特征值。</div>
-    <div class="exp" style="margin-top:6px">默写核心结论：<b style="color:#d48806">＿＿＿</b></div><button class="ans-btn" style="font-size:12px;padding:4px 12px">✅ 答案</button><div class="ans-box"><div class="ans">P^{-1}AP=Λ=diag(λ1..λn)</div></div>
-    <div class="exp"><b>🧭 套路：</b>先求特征值及其代数重数，再比较各特征值对应特征子空间的维数；特征值互异时可直接判定可对角化。</div>
-    <img src="images/2026-09-14_3.png" style="width:100%;border-radius:10px;margin-top:10px;border:1px solid #e5e7eb">
+    <div class="q">f=x^TAx（A唯一对称）；a_ii=xi²系数，a_ij=交叉项系数一半</div>
+    <div class="exp"><b>📌 要点：</b>n 元二次型是变量的二次齐次函数，可写成 f(x)=x^TAx，其中 A 取唯一的对称矩阵。矩阵对角线元素对应平方项系数，非对角线元素是对应交叉项系数的一半。二次型的秩等于其矩阵 A 的秩。</div>
+    <div class="exp">• x^TAx 展开后，a_ii 对应 x_i² 项；当 A 对称时，a_ij 与 a_ji 共同产生 2a_ij x_i x_j。</div><div class="exp">• 同一个二次型的对称矩阵表示唯一；非对称矩阵的反对称部分对 x^TAx 没有贡献。</div><div class="exp">• 二次型的秩定义为其矩阵的秩，记为 r(f)=r(A)。</div>
+    <div class="exp" style="margin-top:6px">默写核心结论：<b style="color:#d48806">＿＿＿</b></div><button class="ans-btn" style="font-size:12px;padding:4px 12px">✅ 答案</button><div class="ans-box"><div class="ans">f=x^TAx（A唯一对称）；a_ii=xi²系数，a_ij=交叉项系数一半</div></div>
+    <div class="exp"><b>🧭 套路：</b>由展开式写矩阵时，先填平方项到主对角线，再把每个交叉项系数除以 2，分别填入对称位置。</div>
+    
   </div>
  </div>
 </div>
 <div class="group"><div class="group-title">💻 408 选择题 <span class="badge">5 题</span></div>
 <div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">关于红黑树，下列说法正确的是（ ）。</span><span class="tag book">数据结构</span><span class="tag easy">简单</span></div>
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">关于 m 阶 B 树，下列说法正确的是（ ）。</span><span class="tag book">数据结构</span><span class="tag easy">简单</span></div>
   <div class="card-body">
-    <div class="q"><div class="opt">A. 从根结点到任一外部叶结点的路径都包含相同数量的黑结点</div><div class="opt">B. 红色结点可以有红色孩子，只要整棵树高度平衡</div><div class="opt">C. 红黑树的根结点必须为红色</div><div class="opt">D. 红黑树不要求满足二叉搜索树的有序性</div></div>
+    <div class="q"><div class="opt">A. 非叶结点若有 k 个关键字，则一定有 k+1 棵非空子树</div><div class="opt">B. 每个结点都必须恰好包含 m−1 个关键字</div><div class="opt">C. 同一棵 B 树的叶结点可以出现在不同层次</div><div class="opt">D. 当 B 树只有根结点时，根结点也必须至少包含 ⌈m/2⌉ 个关键字</div></div>
     
     <button class="ans-btn">✅ 查看答案与解析</button>
     <div class="ans-box">
       <div class="ans">答案：A</div>
-      <div class="exp"><b>📖 解析：</b>红黑树首先是一棵二叉搜索树，并满足根为黑、外部叶结点为黑、红结点不能有红孩子、任一路径黑高相同等性质。A 正是黑高性质；B、C、D 分别违反红结点约束、根色约束和 BST 有序性。</div>
+      <div class="exp"><b>📖 解析：</b>B 树的非叶结点中，若有 k 个关键字，则有 k+1 个孩子指针（对应 k+1 棵子树）。结点关键字数可以在规定的上下限之间变化；B 树所有叶结点处于同一层；只有根结点时，根的最少关键字数有特殊规定，不能套用普通结点下限。</div>
     </div>
   </div>
  </div>
 <div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">某按字节编址的 32 位主存采用 16 KiB、4 路组相联 Cache，块大小为 64 B。若采用组相联地址格式“标记|组号|块内地址”，则标记字段应占（ ）位。</span><span class="tag book">计算机组成原理</span><span class="tag mid">中等</span></div>
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">关于虚拟存储器，下列说法正确的是（ ）。</span><span class="tag book">计算机组成原理</span><span class="tag easy">简单</span></div>
   <div class="card-body">
-    <div class="q"><div class="opt">A. 14 位</div><div class="opt">B. 16 位</div><div class="opt">C. 20 位</div><div class="opt">D. 26 位</div></div>
-    <img src="images/2026-09-14_p1.png" style="width:100%;border-radius:10px;margin-top:10px;border:1px solid #e5e7eb">
+    <div class="q"><div class="opt">A. 程序的逻辑地址空间可以大于主存容量，但运行时需把当前需要的部分调入主存</div><div class="opt">B. 采用虚拟存储器后，程序的全部内容仍必须一次性装入主存</div><div class="opt">C. 虚拟存储器直接增加了机器的物理主存容量</div><div class="opt">D. 虚拟存储器只用于解决 CPU 与 Cache 之间的速度差</div></div>
+    
+    <button class="ans-btn">✅ 查看答案与解析</button>
+    <div class="ans-box">
+      <div class="ans">答案：A</div>
+      <div class="exp"><b>📖 解析：</b>虚拟存储器利用主存—辅存层次和地址映射，使程序可以在部分装入主存的情况下运行，逻辑地址空间也可以大于物理主存。它并不增加实际主存容量，主要解决主存容量有限与程序规模较大的矛盾，而不是 CPU 与 Cache 的速度差。</div>
+    </div>
+  </div>
+ </div>
+<div class="card open">
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">在动态分区分配中，采用紧凑技术的主要作用是（ ）。</span><span class="tag book">操作系统</span><span class="tag easy">简单</span></div>
+  <div class="card-body">
+    <div class="q"><div class="opt">A. 移动已分配分区，使分散的空闲区合并为较大的连续空闲区</div><div class="opt">B. 把所有进程固定装入相同大小的分区</div><div class="opt">C. 在不移动进程的情况下消除全部外部碎片</div><div class="opt">D. 减少进程实际占用的内存总量</div></div>
+    
+    <button class="ans-btn">✅ 查看答案与解析</button>
+    <div class="ans-box">
+      <div class="ans">答案：A</div>
+      <div class="exp"><b>📖 解析：</b>紧凑技术通过移动内存中的进程并调整其地址，将多个分散的小空闲区合并成较大的连续空闲区，从而缓解外部碎片。它通常需要动态重定位支持；不会改变已分配进程的总内存需求，也不是固定分区技术。</div>
+    </div>
+  </div>
+ </div>
+<div class="card open">
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">关于 UDP，下列说法正确的是（ ）。</span><span class="tag book">计算机网络</span><span class="tag mid">中等</span></div>
+  <div class="card-body">
+    <div class="q"><div class="opt">A. UDP 发送数据前必须通过三次握手建立连接</div><div class="opt">B. UDP 通过序号、确认和重传机制保证数据可靠且按序到达</div><div class="opt">C. UDP 首部固定为 8 字节，包含源端口、目的端口、长度和校验和四个字段</div><div class="opt">D. UDP 校验和只覆盖应用数据，不覆盖 UDP 首部</div></div>
+    
     <button class="ans-btn">✅ 查看答案与解析</button>
     <div class="ans-box">
       <div class="ans">答案：C</div>
-      <div class="exp"><b>📖 解析：</b>Cache 行数=16 KiB/64 B=256 行；4 路组相联，所以组数=256/4=64，组号占 log₂64=6 位。块内地址占 log₂64=6 位。因此标记位数=32−6−6=20 位。</div>
+      <div class="exp"><b>📖 解析：</b>UDP 是无连接、尽力而为的传输协议，不提供 TCP 那样的可靠传输、按序交付和拥塞控制。UDP 首部由源端口、目的端口、长度、校验和四个 16 位字段组成，因此固定为 8 字节；校验和计算范围包括伪首部、UDP 首部和数据。</div>
     </div>
   </div>
  </div>
 <div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">在连续分配管理中，固定分区分配相对于动态分区分配最容易产生的空间浪费是（ ）。</span><span class="tag book">操作系统</span><span class="tag easy">简单</span></div>
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">发送端已将 UDP 伪首部、UDP 首部（校验和字段置 0）和数据按 16 位分组，依次得到：C123H、0102H、000CH、0000H、4869H、0000H（最后的 0000H 为填充）。采用反码求和并取反，UDP 校验和应为（ ）。</span><span class="tag book">计算机网络</span><span class="tag hard">困难</span></div>
   <div class="card-body">
-    <div class="q"><div class="opt">A. 外部碎片</div><div class="opt">B. 内部碎片</div><div class="opt">C. 页面抖动</div><div class="opt">D. 地址越界</div></div>
+    <div class="q"><div class="opt">A. 0A9BH</div><div class="opt">B. F564H</div><div class="opt">C. 5F64H</div><div class="opt">D. 0FFFFH</div></div>
     
     <button class="ans-btn">✅ 查看答案与解析</button>
     <div class="ans-box">
       <div class="ans">答案：B</div>
-      <div class="exp"><b>📖 解析：</b>固定分区大小预先确定，进程装入分区后，分区内未被进程使用的空间不能再分给其他进程，形成内部碎片。动态分区主要面对分区之间难以利用的外部碎片。</div>
-    </div>
-  </div>
- </div>
-<div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">关于端口号和套接字，下列说法正确的是（ ）。</span><span class="tag book">计算机网络</span><span class="tag easy">简单</span></div>
-  <div class="card-body">
-    <div class="q"><div class="opt">A. 套接字通常由 IP 地址和端口号共同标识一个通信端点</div><div class="opt">B. 端口号只在物理层使用，用于标识网卡</div><div class="opt">C. TCP 连接只由一个端口号唯一确定</div><div class="opt">D. 服务器提供 HTTP 服务时必须使用动态端口 49152～65535</div></div>
-    
-    <button class="ans-btn">✅ 查看答案与解析</button>
-    <div class="ans-box">
-      <div class="ans">答案：A</div>
-      <div class="exp"><b>📖 解析：</b>套接字（socket）通常表示“IP 地址+端口号”的通信端点。TCP 连接由源 IP、源端口、目的 IP、目的端口四元组唯一确定；端口属于传输层寻址。HTTP 服务通常使用熟知端口 80（HTTPS 为 443），并非必须使用动态端口。</div>
-    </div>
-  </div>
- </div>
-<div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">空闲分区按地址顺序为 100 KB、500 KB、200 KB、300 KB、600 KB。依次申请 212 KB、417 KB、112 KB、426 KB，采用最佳适应算法且每次从当前空闲分区中选择最小的可用分区。第四次申请后，结果是（ ）。</span><span class="tag book">操作系统</span><span class="tag hard">困难</span></div>
-  <div class="card-body">
-    <div class="q"><div class="opt">A. 申请成功，最大空闲分区为 174 KB</div><div class="opt">B. 申请成功，最大空闲分区为 188 KB</div><div class="opt">C. 申请失败，因为第二次申请后无足够空间</div><div class="opt">D. 申请失败，因为第四次申请时不存在不小于 426 KB 的空闲分区</div></div>
-    
-    <button class="ans-btn">✅ 查看答案与解析</button>
-    <div class="ans-box">
-      <div class="ans">答案：A</div>
-      <div class="exp"><b>📖 解析：</b>最佳适应依次选择：212 KB 从 300 KB 中分配，余 88 KB；417 KB 从 500 KB 中分配，余 83 KB；112 KB 从 200 KB 中分配，余 88 KB；426 KB 从 600 KB 中分配，余 174 KB。最终空闲分区为 100、83、88、88、174 KB，最大值为 174 KB，故选 A。</div>
+      <div class="exp"><b>📖 解析：</b>先进行 16 位反码加法：C123H+0102H+000CH+0000H+4869H+0000H=10A9BH；回卷进位后为 0A9BH。再按位取反，得到校验和 F564H。计算范围包含伪首部、UDP 首部和数据，接收端通常对全部字段（含校验和）做反码求和，结果应为 FFFFH。</div>
     </div>
   </div>
  </div>
@@ -182,47 +194,47 @@
 <div class="group"><div class="group-title">🇬🇧 考研单词 <span class="badge">20 词</span></div>
 <div class="card open">
   <div class="card-head"><span class="arrow">▶</span><span class="card-title">🇬🇧 考研单词 ×20</span><span class="tag book">高频词</span></div>
-  <div class="card-body"><div class="word-row"><span class="word">meeting</span><span class="phon">/ˈmiːtɪŋ/</span></div>
-      <div class="def">会议</div>
-      <div class="example">✏️ The committee held a meeting to discuss the reform of higher education.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">tax</span><span class="phon">/tæks/</span></div>
-      <div class="def">税、对……征税</div>
-      <div class="example">✏️ The government may raise the tax to support public services.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">feature</span><span class="phon">/ˈfiːtʃə(r)/</span></div>
-      <div class="def">特征、容貌、以……为特色</div>
-      <div class="example">✏️ A key feature of the theory is its emphasis on social equality.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">express</span><span class="phon">/ɪkˈspres/</span></div>
-      <div class="def">表达</div>
-      <div class="example">✏️ The experiment expresses the relationship between pressure and volume.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">shift</span><span class="phon">/ʃɪft/</span></div>
-      <div class="def">转移、转换</div>
-      <div class="example">✏️ The policy shift changed the direction of economic development.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">hundred</span><span class="phon">/ˈhʌndrəd/</span></div>
-      <div class="def">百、许多</div>
-      <div class="example">✏️ The survey involved more than a hundred university students.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">simple</span><span class="phon">/ˈsɪmpəl/</span></div>
-      <div class="def">简单的</div>
-      <div class="example">✏️ A simple explanation is often more convincing than a complicated one.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">successful</span><span class="phon">/səkˈsesfəl/</span></div>
-      <div class="def">成功的</div>
-      <div class="example">✏️ Successful research requires patience, evidence, and careful reasoning.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">thousand</span><span class="phon">/ˈθaʊzənd/</span></div>
-      <div class="def">一千</div>
-      <div class="example">✏️ Thousands of applicants compete for a limited number of positions.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">theory</span><span class="phon">/ˈθɪəri/</span></div>
-      <div class="def">理论</div>
-      <div class="example">✏️ The theory provides a useful framework for analyzing the problem.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">key</span><span class="phon">/kiː/</span></div>
-      <div class="def">钥匙、关键</div>
-      <div class="example">✏️ Regular practice is the key to improving reading speed.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">image</span><span class="phon">/ˈɪmɪdʒ/</span></div>
-      <div class="def">形象、肖像</div>
-      <div class="example">✏️ The media can influence the public image of a company.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">couple</span><span class="phon">/ˈkʌpəl/</span></div>
-      <div class="def">情侣、夫妻</div>
-      <div class="example">✏️ The study lasted a couple of years and produced reliable results.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">whose</span><span class="phon">/huːz/</span></div>
-      <div class="def">谁的</div>
-      <div class="example">✏️ The question is whose interests are served by the new policy.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">catch</span><span class="phon">/kætʃ/</span></div>
-      <div class="def">抓住</div>
-      <div class="example">✏️ It is difficult to catch every detail during a fast lecture.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">select</span><span class="phon">/sɪˈlekt/</span></div>
-      <div class="def">选择</div>
-      <div class="example">✏️ Researchers must select appropriate data before drawing a conclusion.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">card</span><span class="phon">/kɑːd/</span></div>
-      <div class="def">卡片、纸牌</div>
-      <div class="example">✏️ Each candidate received a card containing the examination instructions.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">cover</span><span class="phon">/ˈkʌvə(r)/</span></div>
-      <div class="def">覆盖</div>
-      <div class="example">✏️ The first chapter covers the basic concepts of statistical analysis.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">earn</span><span class="phon">/ɜːn/</span></div>
-      <div class="def">挣得</div>
-      <div class="example">✏️ Students can earn valuable experience through volunteer work.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">farmer</span><span class="phon">/ˈfɑːmə(r)/</span></div>
-      <div class="def">农民</div>
-      <div class="example">✏️ The new technology helps each farmer use water more efficiently.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"></div>
+  <div class="card-body"><div class="word-row"><span class="word">trend</span><span class="phon">/trend/</span></div>
+      <div class="def">趋势</div>
+      <div class="example">✏️ The latest trend in higher education is to combine online resources with classroom teaching.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">attract</span><span class="phon">/əˈtrækt/</span></div>
+      <div class="def">吸引</div>
+      <div class="example">✏️ A fair policy can attract talented graduates to work in less-developed areas.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">clean</span><span class="phon">/kliːn/</span></div>
+      <div class="def">干净的；清理</div>
+      <div class="example">✏️ The researchers used clean data to reduce errors in the statistical analysis.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">method</span><span class="phon">/ˈmeθəd/</span></div>
+      <div class="def">方法</div>
+      <div class="example">✏️ The paper proposes a new method for evaluating the quality of public services.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">promise</span><span class="phon">/ˈprɒmɪs/</span></div>
+      <div class="def">承诺；有希望</div>
+      <div class="example">✏️ The new technology shows great promise in the treatment of chronic diseases.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">desire</span><span class="phon">/dɪˈzaɪə(r)/</span></div>
+      <div class="def">渴望；愿望</div>
+      <div class="example">✏️ The desire for a better life has encouraged people to pursue higher education.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">lie</span><span class="phon">/laɪ/</span></div>
+      <div class="def">谎话；说谎；位于</div>
+      <div class="example">✏️ The main challenge lies in finding a balance between efficiency and fairness.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">healthy</span><span class="phon">/ˈhelθi/</span></div>
+      <div class="def">健康的；有益健康的</div>
+      <div class="example">✏️ A healthy environment is essential for the long-term development of society.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">rest</span><span class="phon">/rest/</span></div>
+      <div class="def">休息；其余部分</div>
+      <div class="example">✏️ After the experiment, the rest of the samples were stored for further study.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">difficulty</span><span class="phon">/ˈdɪfɪkəlti/</span></div>
+      <div class="def">困难；难度</div>
+      <div class="example">✏️ The difficulty of the task depends largely on the amount of available information.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">network</span><span class="phon">/ˈnetwɜːk/</span></div>
+      <div class="def">网络；关系网</div>
+      <div class="example">✏️ A reliable transport network can promote trade between rural and urban areas.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">billion</span><span class="phon">/ˈbɪljən/</span></div>
+      <div class="def">十亿</div>
+      <div class="example">✏️ The company invested several billion dollars in renewable energy projects.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">detail</span><span class="phon">/ˈdiːteɪl/</span></div>
+      <div class="def">细节；详细说明</div>
+      <div class="example">✏️ The report provides every detail needed to understand the reform.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">daily</span><span class="phon">/ˈdeɪli/</span></div>
+      <div class="def">每日的；日常的</div>
+      <div class="example">✏️ Reading academic articles is part of her daily preparation for the examination.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">normal</span><span class="phon">/ˈnɔːml/</span></div>
+      <div class="def">正常的；普通的</div>
+      <div class="example">✏️ It is normal for scientific conclusions to be revised when new evidence appears.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">reward</span><span class="phon">/rɪˈwɔːd/</span></div>
+      <div class="def">回报；报酬；奖励</div>
+      <div class="example">✏️ The long-term reward of careful research is often greater than immediate profit.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">post</span><span class="phon">/pəʊst/</span></div>
+      <div class="def">发布；张贴；职位</div>
+      <div class="example">✏️ The university will post the admission results on its official website.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">cook</span><span class="phon">/kʊk/</span></div>
+      <div class="def">烹饪；厨师</div>
+      <div class="example">✏️ Learning to cook can help students develop a healthier and more independent lifestyle.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">upon</span><span class="phon">/əˈpɒn/</span></div>
+      <div class="def">在……上；一……就</div>
+      <div class="example">✏️ Upon careful examination, the researchers found that the two results were different.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">thus</span><span class="phon">/ðʌs/</span></div>
+      <div class="def">因此；从而</div>
+      <div class="example">✏️ The sample was too small and thus could not support a reliable conclusion.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"></div>
 </div>
 </div>
 <div class="footer">由 Hermes AI 生成 · 每天 08:00 更新 · 加油 💪</div>
