@@ -60,7 +60,9 @@
     <div class="q">给定一个只包含小写字母的字符串 s，找出数量最多的互不重叠子串，使得每个子串中的每个字符都不会出现在该子串之外。返回任意一种满足条件的子串列表。</div>
     <div class="exp"><b>💡 解题思路：</b>先记录每个字符在字符串中的首次和末次出现位置。对每个字符的首次出现位置尝试构造最小合法区间：扫描区间内字符并不断扩展右端点；若发现某字符的首次出现位置在区间左侧，则该区间不合法。得到所有合法区间后按右端点排序，使用按结束位置优先的贪心策略选择互不重叠区间，即可使区间数量最大。</div>
     <div class="exp"><b>🔧 题解：</b>设区间 [l,r] 从字符 s[l] 的首次出现位置开始，初始 r 为该字符的末次出现位置。扫描 l 到 r：若遇到字符 c 的 first[c] &lt; l，说明 c 在区间外还有出现，当前区间无效；否则令 r=max(r,last[c])。所有合法区间按右端点升序排列后，若当前区间的左端点大于上一个已选区间的右端点，就选入答案。时间复杂度 O(n)，空间复杂度 O(1)（字母表大小固定）。</div>
-    <pre class="code">class Solution:
+    <pre class="code">from typing import List
+
+class Solution:
     def maxNumOfSubstrings(self, s: str) -&gt; List[str]:
         n = len(s)
         first = [n] * 26
