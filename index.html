@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>今日学习清单 · 2026-09-17</title>
+<title>今日学习清单 · 2026-09-18</title>
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Noto Sans SC", sans-serif; background: #f5f6fa; color: #1f2329; max-width: 640px; margin: 0 auto; padding: 16px 14px 40px; }
@@ -50,84 +50,97 @@
 
 <div class="hero">
   <h1>📋 今日学习清单</h1>
-  <div class="date">2026年9月17日</div>
+  <div class="date">2026年9月18日</div>
 </div>
 
 <div class="group"><div class="group-title">🔥 今日重点 <span class="badge">2 项</span></div>
 <div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">🧩 LeetCode 每日一题：Find Two Non-overlapping Sub-arrays Each With Target Sum</span><span class="tag mid">中等</span></div>
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">🧩 LeetCode 每日一题：Maximum Number of Non-Overlapping Substrings</span><span class="tag hard">困难</span></div>
   <div class="card-body">
-    <div class="q">给定正整数数组 arr 和整数 target，寻找两个互不重叠且元素和都等于 target 的连续子数组，使它们长度之和最小；若不存在这样的两个子数组，返回 -1。</div>
-    <div class="exp"><b>💡 解题思路：</b>由于数组元素均为正数，可用滑动窗口在线性时间内枚举每个和为 target 的子数组。用 best[i] 记录完全位于下标 i 之前的子数组中最短者；当当前窗口 [left, right] 命中 target 时，与 best[left] 拼接即可保证不重叠，并更新全局最优。</div>
-    <div class="exp"><b>🔧 题解：</b>维护窗口和 total：右端点右移加入元素，total 超过 target 时不断右移 left。每个窗口恰好等于 target 时，长度为 right-left+1；用此前 best[left] 与它组合。best 还要逐位置传递，最终无解返回 -1。时间复杂度 O(n)，空间复杂度 O(n)。</div>
+    <div class="q">给定一个只包含小写字母的字符串 s，找出数量最多的互不重叠子串，使得每个子串中的每个字符都不会出现在该子串之外。返回任意一种满足条件的子串列表。</div>
+    <div class="exp"><b>💡 解题思路：</b>先记录每个字符在字符串中的首次和末次出现位置。对每个字符的首次出现位置尝试构造最小合法区间：扫描区间内字符并不断扩展右端点；若发现某字符的首次出现位置在区间左侧，则该区间不合法。得到所有合法区间后按右端点排序，使用按结束位置优先的贪心策略选择互不重叠区间，即可使区间数量最大。</div>
+    <div class="exp"><b>🔧 题解：</b>设区间 [l,r] 从字符 s[l] 的首次出现位置开始，初始 r 为该字符的末次出现位置。扫描 l 到 r：若遇到字符 c 的 first[c] &lt; l，说明 c 在区间外还有出现，当前区间无效；否则令 r=max(r,last[c])。所有合法区间按右端点升序排列后，若当前区间的左端点大于上一个已选区间的右端点，就选入答案。时间复杂度 O(n)，空间复杂度 O(1)（字母表大小固定）。</div>
     <pre class="code">class Solution:
-    def minSumOfLengths(self, arr: List[int], target: int) -&gt; int:
-        n = len(arr)
-        inf = n + 1
-        best = [inf] * (n + 1)
-        left = 0
-        total = 0
-        answer = inf
+    def maxNumOfSubstrings(self, s: str) -&gt; List[str]:
+        n = len(s)
+        first = [n] * 26
+        last = [-1] * 26
 
-        for right, value in enumerate(arr):
-            total += value
-            while left &lt;= right and total &gt; target:
-                total -= arr[left]
-                left += 1
+        for i, ch in enumerate(s):
+            idx = ord(ch) - ord('a')
+            first[idx] = min(first[idx], i)
+            last[idx] = i
 
-            best[right + 1] = best[right]
-            if total == target:
-                length = right - left + 1
-                if best[left] &lt; inf:
-                    answer = min(answer, best[left] + length)
-                best[right + 1] = min(best[right + 1], length)
+        intervals = []
+        for left in first:
+            if left == n:
+                continue
+            right = last[ord(s[left]) - ord('a')]
+            i = left
+            valid = True
+            while i &lt;= right:
+                idx = ord(s[i]) - ord('a')
+                if first[idx] &lt; left:
+                    valid = False
+                    break
+                right = max(right, last[idx])
+                i += 1
+            if valid:
+                intervals.append((left, right))
 
-        return -1 if answer == inf else answer</pre>
-    <a class="link" href="https://leetcode.com/problems/find-two-non-overlapping-sub-arrays-each-with-target-sum/" target="_blank">🚀 去 LeetCode 做题 →</a>
+        intervals.sort(key=lambda interval: interval[1])
+        answer = []
+        previous_right = -1
+        for left, right in intervals:
+            if left &gt; previous_right:
+                answer.append(s[left:right + 1])
+                previous_right = right
+        return answer</pre>
+    <a class="link" href="https://leetcode.com/problems/maximum-number-of-non-overlapping-substrings/" target="_blank">🚀 去 LeetCode 做题 →</a>
   </div>
 </div>
 </div>
 <div class="group"><div class="group-title">📐 数学知识点 <span class="badge">4 项</span></div>
 <div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">📐 高数·第3天·积分：积分函数奇偶性</span><span class="tag book">高数·第3天·积分</span></div>
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">📐 高数·第3天·积分：变上限积分可导性汇总</span><span class="tag book">高数·第3天·积分</span></div>
   <div class="card-body">
-    <div class="q">f偶且下限一般a：F=∫_a^x f 一般非奇非偶；f奇：F仍偶</div>
-    <div class="exp"><b>📌 要点：</b>复合函数：外偶必偶；外奇时与内同奇偶。重点掌握从0到x的积分函数的奇偶性判定。</div>
-    <div class="exp">• 若 f 为偶函数，则 ∫_0^x f(t)dt 是奇函数。</div><div class="exp">• 若 f 为奇函数，则 ∫_0^x f(t)dt 是偶函数。</div><div class="exp">• 积分下限不是0时，不能直接套用上述奇偶性结论。</div>
-    <div class="exp" style="margin-top:6px">f偶⟹∫_0^x f=<b style="color:#d48806">＿＿＿</b>；f奇⟹∫_0^x f=<b style="color:#d48806">＿＿＿</b></div><button class="ans-btn" style="font-size:12px;padding:4px 12px">✅ 答案</button><div class="ans-box"><div class="ans">奇函数；偶函数</div></div>
+    <div class="q">F'(x0)=lim f(x)(可去点)；F'_(x0)=f(x0-),F'+(x0)=f(x0+)</div>
+    <div class="exp"><b>📌 要点：</b>F'(x0)=lim f(x)(可去点)；F'_(x0)=f(x0-),F'+(x0)=f(x0+)</div>
+    <div class="exp">• f连续时，变上限积分函数F可导；可去间断点处F连续但通常不可导。</div><div class="exp">• 跳跃间断点处，F仍连续但左右导数分别等于被积函数的左右极限。</div><div class="exp">• 只要f在区间上可积，F(x)=∫_a^x f(t)dt就是连续函数。</div>
+    <div class="exp" style="margin-top:6px">f连续⟹F可导；可去间断⟹F<b style="color:#d48806">＿＿＿</b>；跳跃间断⟹F<b style="color:#d48806">＿＿＿</b>；f可积⟹F<b style="color:#d48806">＿＿＿</b></div><button class="ans-btn" style="font-size:12px;padding:4px 12px">✅ 答案</button><div class="ans-box"><div class="ans">可导；连续不可导；连续</div></div>
     
     
   </div>
  </div>
 <div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">📐 高数·第3天·积分：积分函数周期性</span><span class="tag book">高数·第3天·积分</span></div>
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">📐 高数·第3天·积分：部分分式分解</span><span class="tag book">高数·第3天·积分</span></div>
   <div class="card-body">
-    <div class="q">F(x+T)-F(x)=∫_0^T f</div>
-    <div class="exp"><b>📌 要点：</b>f在(a,b)内有界⟹F有界。对周期函数积分，关键是比较 F(x+T) 与 F(x)，判断一个周期内的积分是否为零。</div>
-    <div class="exp">• 若 f 的周期为T，则 F(x+T)-F(x)=∫_0^T f(t)dt。</div><div class="exp">• 积分函数F成为周期函数的充要条件是一个周期内积分为0。</div><div class="exp">• 周期函数的原函数一般不一定仍为周期函数。</div>
-    <div class="exp" style="margin-top:6px">f周期T连续，F(x)=∫_0^x f为周期函数⟺<b style="color:#d48806">＿＿＿</b></div><button class="ans-btn" style="font-size:12px;padding:4px 12px">✅ 答案</button><div class="ans-box"><div class="ans">∫_0^T f(t)dt=0</div></div>
+    <div class="q">例：(2x²+x+1)/[(x+1)(x²+x+2)]=1/(x+1)+(x-1)/(x²+x+2)</div>
+    <div class="exp"><b>📌 要点：</b>对于重因子(ax+b)^n，要从一次幂到n次幂逐项拆分；一次因子的系数可在适用时用遮盖法快速求出。</div>
+    <div class="exp">• (ax+b)^n重因子必须拆成A1/(ax+b)+…+An/(ax+b)^n。</div><div class="exp">• 互异一次因子可设待定系数并用遮盖法或比较系数求解。</div><div class="exp">• 真分式才能直接作部分分式分解；假分式应先做多项式除法。</div>
+    <div class="exp" style="margin-top:6px">(ax+b)^n重因子需拆<b style="color:#d48806">＿＿＿</b>；一次因子用<b style="color:#d48806">＿＿＿</b>求系数</div><button class="ans-btn" style="font-size:12px;padding:4px 12px">✅ 答案</button><div class="ans-box"><div class="ans">A1/(ax+b)+...+An/(ax+b)^n；遮盖法(Cover-up)</div></div>
     
     
   </div>
  </div>
 <div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">📐 线代·第5章·二次型：正交变换法化标准形</span><span class="tag book">线代·第5章·二次型</span></div>
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">📐 线代·第5章·二次型：规范形与惯性定理</span><span class="tag book">线代·第5章·二次型</span></div>
   <div class="card-body">
-    <div class="q">f=λ1y1²+...+λnyn²（λi为A全部特征值）</div>
-    <div class="exp"><b>📌 要点：</b>步骤：f=x^TAx→求特征值→各λi基础解系→正交化单位化→Q=(η..)→x=Qy；Q^TAQ=Λ。</div>
-    <div class="exp">• 实对称矩阵的不同特征值对应的特征向量相互正交。</div><div class="exp">• 将特征向量单位化后按列组成正交矩阵Q。</div><div class="exp">• 正交变换 x=Qy 后，Q^TAQ 为由特征值组成的对角矩阵。</div>
-    <div class="exp" style="margin-top:6px">默写核心结论：<b style="color:#d48806">＿＿＿</b></div><button class="ans-btn" style="font-size:12px;padding:4px 12px">✅ 答案</button><div class="ans-box"><div class="ans">f=λ1y1²+...+λnyn²（λi为A全部特征值）</div></div>
+    <div class="q">f=y1²+...+yp²-y(p+1)²-...-yr²</div>
+    <div class="exp"><b>📌 要点：</b>规范形的系数只取1、-1、0；p为正惯性指数，r-p为负惯性指数，2p-r为符号差。惯性定理说明正、负惯性指数是不变量，规范形由秩和正惯性指数唯一确定。</div>
+    <div class="exp">• 正惯性指数是规范形中正平方项的个数，负惯性指数是负平方项的个数。</div><div class="exp">• 秩等于正、负惯性指数之和，零惯性指数等于变量总数减秩。</div><div class="exp">• 合同变换保持正、负惯性指数不变。</div>
+    <div class="exp" style="margin-top:6px">默写核心结论：<b style="color:#d48806">＿＿＿</b></div><button class="ans-btn" style="font-size:12px;padding:4px 12px">✅ 答案</button><div class="ans-box"><div class="ans">f=y1²+...+yp²-y(p+1)²-...-yr²</div></div>
     
     
   </div>
  </div>
 <div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">📐 线代·第5章·二次型：配方法(Lagrange)</span><span class="tag book">线代·第5章·二次型</span></div>
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">📐 线代·第5章·二次型：实对称矩阵合同判定</span><span class="tag book">线代·第5章·二次型</span></div>
   <div class="card-body">
-    <div class="q">逐步配方消交叉项</div>
-    <div class="exp"><b>📌 要点：</b>先配含x1项，再x2…；无平方项时先变量替换造平方项。配方法适合直接把二次型化为规范形或标准形。</div>
-    <div class="exp">• 优先处理含有平方项的变量，配方时同步记录变量替换。</div><div class="exp">• 每完成一次配方，就减少相应的交叉项。</div><div class="exp">• 若当前没有平方项，可先作可逆线性替换造出平方项。</div>
-    <div class="exp" style="margin-top:6px">默写核心结论：<b style="color:#d48806">＿＿＿</b></div><button class="ans-btn" style="font-size:12px;padding:4px 12px">✅ 答案</button><div class="ans-box"><div class="ans">逐步配方消交叉项</div></div>
+    <div class="q">合同⟺秩相等且正惯性指数相等</div>
+    <div class="exp"><b>📌 要点：</b>两个n阶实对称矩阵合同的充要条件是秩相等且正惯性指数相等；等价地，它们具有相同的正、负惯性指数。</div>
+    <div class="exp">• 实对称矩阵对应二次型，合同变换对应可逆线性替换。</div><div class="exp">• 判断合同不能只比较秩，还必须比较正惯性指数。</div><div class="exp">• 若两个矩阵合同，则它们的负惯性指数也必然相等。</div>
+    <div class="exp" style="margin-top:6px">默写核心结论：<b style="color:#d48806">＿＿＿</b></div><button class="ans-btn" style="font-size:12px;padding:4px 12px">✅ 答案</button><div class="ans-box"><div class="ans">合同⟺秩相等且正惯性指数相等</div></div>
     
     
   </div>
@@ -147,50 +160,50 @@
   </div>
  </div>
 <div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">某段页式存储系统的逻辑地址字段为 4 位段号、6 位页号和 10 位页内偏移。段3的段表项有效且段长为40页，其段页表中第5页映射到物理块号 0x2A。若逻辑地址字段为 (3, 5, 0x025)，则对应的物理地址是多少？</span><span class="tag book">计算机组成原理</span><span class="tag hard">困难</span></div>
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">某机器指令字长为16位，三地址指令的每个地址字段为4位，主操作码为4位。若将同一主操作码下的三地址指令扩展为一地址指令，并把两个空出的地址字段作为扩展操作码，则最多可扩展出多少条一地址指令？</span><span class="tag book">计算机组成原理</span><span class="tag easy">简单</span></div>
   <div class="card-body">
-    <div class="q"><div class="opt">A. 0xA825</div><div class="opt">B. 0x2A025</div><div class="opt">C. 0xA425</div><div class="opt">D. 0x2A825</div></div>
+    <div class="q"><div class="opt">A. 16条</div><div class="opt">B. 32条</div><div class="opt">C. 256条</div><div class="opt">D. 4096条</div></div>
     
     <button class="ans-btn">✅ 查看答案与解析</button>
     <div class="ans-box">
-      <div class="ans">答案：A</div>
-      <div class="exp"><b>📖 解析：</b>页号5小于段长40，地址有效。页大小为2^10=0x400，物理地址=物理块号0x2A×0x400+页内偏移0x025=0xA800+0x025=0xA825。</div>
+      <div class="ans">答案：C</div>
+      <div class="exp"><b>📖 解析：</b>一地址指令保留4位地址字段，原三地址指令的另外两个地址字段共8位可作为扩展操作码，因此最多有2^8=256种扩展编码，选C。</div>
     </div>
   </div>
  </div>
 <div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">采用页式存储管理，页面大小为4KB。某进程逻辑地址为 0x12345，页表显示页号 0x12 映射到页框号 0x2A 且有效，则该逻辑地址对应的物理地址为多少？</span><span class="tag book">操作系统</span><span class="tag easy">简单</span></div>
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">在32位两级页表系统中，页面大小为4KB，每个页表项占4B。对于逻辑地址0x12345678，页目录索引、二级页表索引和页内偏移分别是多少？</span><span class="tag book">操作系统</span><span class="tag hard">困难</span></div>
   <div class="card-body">
-    <div class="q"><div class="opt">A. 0x2A345</div><div class="opt">B. 0x12345</div><div class="opt">C. 0x2A045</div><div class="opt">D. 0x12300</div></div>
+    <div class="q"><div class="opt">A. 0x48，0x345，0x678</div><div class="opt">B. 0x123，0x456，0x678</div><div class="opt">C. 0x48，0x456，0x678</div><div class="opt">D. 0x12，0x345，0x678</div></div>
     
     <button class="ans-btn">✅ 查看答案与解析</button>
     <div class="ans-box">
       <div class="ans">答案：A</div>
-      <div class="exp"><b>📖 解析：</b>4KB=0x1000，逻辑地址0x12345的页内偏移为0x345，页号为0x12。替换页号后，物理地址=0x2A×0x1000+0x345=0x2A345。</div>
+      <div class="exp"><b>📖 解析：</b>4KB=2^12B，所以页内偏移占12位；剩余20位页号由两级各10位组成，因为一页页表可容纳4096/4=1024=2^10个表项。0x12345678右移22位得到页目录索引0x48；取第12至21位得到二级索引0x345；低12位为0x678。因此选A。</div>
     </div>
   </div>
  </div>
 <div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">某TCP报文段的首部数据偏移字段值为8，固定首部为20字节，且接收窗口字段为65535。下列关于该报文段首部长度的说法正确的是？</span><span class="tag book">计算机网络</span><span class="tag mid">中等</span></div>
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">关于TCP建立连接的三次握手，以下哪项状态变化顺序正确？</span><span class="tag book">计算机网络</span><span class="tag mid">中等</span></div>
   <div class="card-body">
-    <div class="q"><div class="opt">A. 首部长度为20字节，因为TCP固定首部就是20字节</div><div class="opt">B. 首部长度为32字节，因为数据偏移以4字节为单位</div><div class="opt">C. 首部长度为64字节，因为数据偏移字段值为8且按字节计</div><div class="opt">D. 首部长度为80字节，因为窗口值为65535</div></div>
-    
-    <button class="ans-btn">✅ 查看答案与解析</button>
-    <div class="ans-box">
-      <div class="ans">答案：B</div>
-      <div class="exp"><b>📖 解析：</b>TCP数据偏移字段表示首部长度占32位字的数量，每个32位字为4字节。因此首部长度=8×4=32字节；其中20字节是固定部分，其余为选项字段。窗口值与首部长度无关。</div>
-    </div>
-  </div>
- </div>
-<div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">某指令字长为16位，操作码占6位，剩余地址码分成两个等长地址字段。若每个地址字段用于表示一个操作数地址，则每个地址字段有多少位、最多可表示多少个地址？</span><span class="tag book">计算机组成原理</span><span class="tag easy">简单</span></div>
-  <div class="card-body">
-    <div class="q"><div class="opt">A. 5位，32个</div><div class="opt">B. 5位，64个</div><div class="opt">C. 8位，256个</div><div class="opt">D. 10位，1024个</div></div>
+    <div class="q"><div class="opt">A. 客户端发送SYN后进入SYN-SENT；服务器收到后发送SYN+ACK并进入SYN-RECEIVED；客户端收到后发送ACK并进入ESTABLISHED</div><div class="opt">B. 客户端发送SYN后直接进入ESTABLISHED；服务器收到ACK后进入LISTEN</div><div class="opt">C. 服务器发送SYN后进入SYN-SENT；客户端收到后进入CLOSED</div><div class="opt">D. 客户端发送ACK后进入SYN-RECEIVED；服务器发送SYN+ACK后进入ESTABLISHED</div></div>
     
     <button class="ans-btn">✅ 查看答案与解析</button>
     <div class="ans-box">
       <div class="ans">答案：A</div>
-      <div class="exp"><b>📖 解析：</b>地址码总位数为16−6=10位，分成两个等长字段后每个字段为5位；5位二进制地址最多表示2^5=32个地址。因此选A。</div>
+      <div class="exp"><b>📖 解析：</b>主动打开方发送SYN后进入SYN-SENT；被动打开方在LISTEN状态收到SYN，回送SYN+ACK并进入SYN-RECEIVED；主动方收到后回送ACK并进入ESTABLISHED，服务器收到最终ACK后也进入ESTABLISHED。</div>
+    </div>
+  </div>
+ </div>
+<div class="card open">
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">某进程段表中第2段的段基址为0x8000、段长为0x0200。若逻辑地址为(2, 0x00A0)，则变换后的物理地址是多少？</span><span class="tag book">操作系统</span><span class="tag easy">简单</span></div>
+  <div class="card-body">
+    <div class="q"><div class="opt">A. 0x80A0</div><div class="opt">B. 0x81A0</div><div class="opt">C. 0x8200</div><div class="opt">D. 越界，无法形成物理地址</div></div>
+    
+    <button class="ans-btn">✅ 查看答案与解析</button>
+    <div class="ans-box">
+      <div class="ans">答案：A</div>
+      <div class="exp"><b>📖 解析：</b>段内偏移0x00A0小于段长0x0200，地址合法。物理地址=段基址+段内偏移=0x8000+0x00A0=0x80A0，选A。</div>
     </div>
   </div>
  </div>
@@ -198,47 +211,47 @@
 <div class="group"><div class="group-title">🇬🇧 考研单词 <span class="badge">20 词</span></div>
 <div class="card open">
   <div class="card-head"><span class="arrow">▶</span><span class="card-title">🇬🇧 考研单词 ×20</span><span class="tag book">高频词</span></div>
-  <div class="card-body"><div class="word-row"><span class="word">respect</span><span class="phon">/rɪˈspekt/</span></div>
-      <div class="def">尊重；方面</div>
-      <div class="example">✏️ A good researcher should respect evidence and acknowledge uncertainty.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">error</span><span class="phon">/ˈerər/</span></div>
-      <div class="def">错误；误差</div>
-      <div class="example">✏️ The experiment was repeated to reduce measurement error.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">happy</span><span class="phon">/ˈhæpi/</span></div>
-      <div class="def">快乐的；满意的</div>
-      <div class="example">✏️ Students are happy when a difficult problem becomes clear.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">credit</span><span class="phon">/ˈkredɪt/</span></div>
-      <div class="def">信用；学分；赞扬</div>
-      <div class="example">✏️ The article gives credit to earlier studies for the basic idea.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">expensive</span><span class="phon">/ɪkˈspensɪv/</span></div>
-      <div class="def">昂贵的</div>
-      <div class="example">✏️ The expensive equipment is available only in major laboratories.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">finish</span><span class="phon">/ˈfɪnɪʃ/</span></div>
-      <div class="def">完成；结束</div>
-      <div class="example">✏️ You should finish reading the passage before choosing an answer.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">deep</span><span class="phon">/diːp/</span></div>
-      <div class="def">深的；深入的</div>
-      <div class="example">✏️ The paper offers a deep analysis of social change.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">bill</span><span class="phon">/bɪl/</span></div>
-      <div class="def">账单；法案</div>
-      <div class="example">✏️ The new bill aims to improve access to public education.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">fire</span><span class="phon">/faɪər/</span></div>
-      <div class="def">火；开除</div>
-      <div class="example">✏️ The fire destroyed several historic buildings in the city.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">site</span><span class="phon">/saɪt/</span></div>
-      <div class="def">地点；网站；遗址</div>
-      <div class="example">✏️ The researchers selected the site because it was close to the river.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">moment</span><span class="phon">/ˈmoʊmənt/</span></div>
-      <div class="def">片刻；时刻</div>
-      <div class="example">✏️ At that moment, the system began to respond normally.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">belief</span><span class="phon">/bɪˈliːf/</span></div>
-      <div class="def">信仰；相信；看法</div>
-      <div class="example">✏️ The belief that technology alone solves every problem is questionable.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">museum</span><span class="phon">/mjuˈziːəm/</span></div>
-      <div class="def">博物馆</div>
-      <div class="example">✏️ The museum preserves valuable records of local history.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">finally</span><span class="phon">/ˈfaɪnəli/</span></div>
-      <div class="def">最终；终于</div>
-      <div class="example">✏️ The researchers finally reached a consistent conclusion.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">address</span><span class="phon">/əˈdres/</span></div>
-      <div class="def">地址；演说；处理</div>
-      <div class="example">✏️ The policy must address the problem of unequal opportunity.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">concept</span><span class="phon">/ˈkɑːnsept/</span></div>
-      <div class="def">概念；观念</div>
-      <div class="example">✏️ The concept of equality has different meanings in different contexts.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">crime</span><span class="phon">/kraɪm/</span></div>
-      <div class="def">犯罪；罪行</div>
-      <div class="example">✏️ Education can help prevent crime by creating better opportunities.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">damage</span><span class="phon">/ˈdæmɪdʒ/</span></div>
-      <div class="def">损害；损失</div>
-      <div class="example">✏️ Air pollution may cause serious damage to human health.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">negative</span><span class="phon">/ˈneɡətɪv/</span></div>
-      <div class="def">消极的；负的；否定的</div>
-      <div class="example">✏️ The study found a negative relationship between stress and sleep quality.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">size</span><span class="phon">/saɪz/</span></div>
-      <div class="def">大小；尺寸；规模</div>
-      <div class="example">✏️ The sample size must be large enough to support the conclusion.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"></div>
+  <div class="card-body"><div class="word-row"><span class="word">restaurant</span><span class="phon">/ˈrestərɑːnt/</span></div>
+      <div class="def">饭馆</div>
+      <div class="example">✏️ The restaurant introduced a new menu to attract more customers.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">federal</span><span class="phon">/ˈfedərəl/</span></div>
+      <div class="def">联邦的</div>
+      <div class="example">✏️ The federal government announced a plan to support scientific research.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">labor</span><span class="phon">/ˈleɪbər/</span></div>
+      <div class="def">劳动力；劳动</div>
+      <div class="example">✏️ The factory reduced labor costs by introducing automated equipment.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">progress</span><span class="phon">/ˈprɑːɡres/</span></div>
+      <div class="def">进步；进展</div>
+      <div class="example">✏️ The research team has made significant progress in treating the disease.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">robot</span><span class="phon">/ˈroʊbɑːt/</span></div>
+      <div class="def">机器人</div>
+      <div class="example">✏️ The robot can perform dangerous tasks in the laboratory.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">movement</span><span class="phon">/ˈmuːvmənt/</span></div>
+      <div class="def">运动；移动；运动（团体）</div>
+      <div class="example">✏️ The sensor detects even a small movement of the machine.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">weather</span><span class="phon">/ˈweðər/</span></div>
+      <div class="def">天气</div>
+      <div class="example">✏️ Bad weather delayed the construction of the bridge.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">mistake</span><span class="phon">/mɪˈsteɪk/</span></div>
+      <div class="def">错误</div>
+      <div class="example">✏️ A small mistake in the calculation can affect the final result.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">infer</span><span class="phon">/ɪnˈfɜːr/</span></div>
+      <div class="def">推断；推论</div>
+      <div class="example">✏️ From the evidence, we can infer that the policy was ineffective.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">enter</span><span class="phon">/ˈentər/</span></div>
+      <div class="def">进入；输入</div>
+      <div class="example">✏️ Students must enter their answers before the examination ends.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">charge</span><span class="phon">/tʃɑːrdʒ/</span></div>
+      <div class="def">收费；索价；充电；指控</div>
+      <div class="example">✏️ The device should be charged before it is used in the field.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">medicine</span><span class="phon">/ˈmedɪsɪn/</span></div>
+      <div class="def">医药；医学</div>
+      <div class="example">✏️ Advances in medicine have increased the average life expectancy.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">engage</span><span class="phon">/ɪnˈɡeɪdʒ/</span></div>
+      <div class="def">吸引；使参加；从事</div>
+      <div class="example">✏️ Good teachers engage students in active discussion.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">executive</span><span class="phon">/ɪɡˈzekjətɪv/</span></div>
+      <div class="def">实行的；行政的；经理</div>
+      <div class="example">✏️ The executive proposed a long-term strategy for the company.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">wide</span><span class="phon">/waɪd/</span></div>
+      <div class="def">广泛的；宽的</div>
+      <div class="example">✏️ The discovery has a wide range of applications in engineering.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">variety</span><span class="phon">/vəˈraɪəti/</span></div>
+      <div class="def">多样化；种类</div>
+      <div class="example">✏️ The experiment was repeated under a variety of conditions.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">race</span><span class="phon">/reɪs/</span></div>
+      <div class="def">比赛；竞速；种族</div>
+      <div class="example">✏️ The two laboratories are in a race to develop a safer battery.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">object</span><span class="phon">/ˈɑːbdʒekt/</span></div>
+      <div class="def">目标；物体；反对</div>
+      <div class="example">✏️ The main object of the study is to explain the observed phenomenon.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">manage</span><span class="phon">/ˈmænɪdʒ/</span></div>
+      <div class="def">管理；设法做到</div>
+      <div class="example">✏️ The system can manage thousands of requests at the same time.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">hospital</span><span class="phon">/ˈhɑːspɪtl/</span></div>
+      <div class="def">医院</div>
+      <div class="example">✏️ The hospital built a new center for medical research.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"></div>
 </div>
 </div>
 <div class="footer">由 Hermes AI 生成 · 每天 08:00 更新 · 加油 💪</div>
