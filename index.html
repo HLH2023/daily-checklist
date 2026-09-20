@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>今日学习清单 · 2026-09-19</title>
+<title>今日学习清单 · 2026-09-20</title>
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Noto Sans SC", sans-serif; background: #f5f6fa; color: #1f2329; max-width: 640px; margin: 0 auto; padding: 16px 14px 40px; }
@@ -50,132 +50,131 @@
 
 <div class="hero">
   <h1>📋 今日学习清单</h1>
-  <div class="date">2026年9月19日</div>
+  <div class="date">2026年09月20日 星期日</div>
 </div>
 
 <div class="group"><div class="group-title">🔥 今日重点 <span class="badge">2 项</span></div>
 <div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">🧩 LeetCode 每日一题：Circle and Rectangle Overlapping</span><span class="tag mid">中等</span></div>
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">🧩 LeetCode 每日一题：Reverse Degree of a String</span><span class="tag easy">Easy</span></div>
   <div class="card-body">
-    <div class="q">给定一个圆的圆心 (xCenter, yCenter) 和半径 radius，以及一个轴对齐矩形的左下角 (x1, y1) 与右上角 (x2, y2)，判断圆与矩形是否有重叠。边界接触也算重叠。</div>
-    <div class="exp"><b>💡 解题思路：</b>把圆心分别限制到矩形的横纵坐标范围内，得到矩形中距离圆心最近的点 (nearestX, nearestY)。圆心到该点的距离就是圆与矩形之间的最短距离；若这个距离不超过半径，二者就重叠。</div>
-    <div class="exp"><b>🔧 题解：</b>对圆心坐标做 clamp：nearestX=min(max(xCenter,x1),x2)，nearestY=min(max(yCenter,y1),y2)。比较 (xCenter-nearestX)^2+(yCenter-nearestY)^2 与 radius^2，使用平方避免开方。时间复杂度 O(1)，空间复杂度 O(1)。</div>
+    <div class="q">给定只含小写英文字母的字符串 s。对字符串中第 i 个字符（位置从 1 开始），将其在逆字母表中的位置与 i 相乘并求和，其中 a=26、b=25、……、z=1；返回这个总和。</div>
+    <div class="exp"><b>💡 解题思路：</b>从左到右遍历字符串。字符 ch 在逆字母表中的值为 ord('z') - ord(ch) + 1，当前位置为 i（从 1 开始），把 i×该值累加即可。</div>
+    <div class="exp"><b>🔧 题解：</b>单次遍历即可完成计算，每个字符只做常数次运算。时间复杂度 O(n)，空间复杂度 O(1)。例如 abc 的结果为 1×26+2×25+3×24=148。</div>
     <pre class="code">class Solution:
-    def checkOverlap(self, radius: int, xCenter: int, yCenter: int,
-                     x1: int, y1: int, x2: int, y2: int) -&gt; bool:
-        nearest_x = min(max(xCenter, x1), x2)
-        nearest_y = min(max(yCenter, y1), y2)
-        dx = xCenter - nearest_x
-        dy = yCenter - nearest_y
-        return dx * dx + dy * dy &lt;= radius * radius</pre>
-    <a class="link" href="https://leetcode.com/problems/circle-and-rectangle-overlapping/" target="_blank">🚀 去 LeetCode 做题 →</a>
+    def reverseDegree(self, s: str) -&gt; int:
+        total = 0
+        for i, ch in enumerate(s, 1):
+            reverse_value = ord('z') - ord(ch) + 1
+            total += i * reverse_value
+        return total</pre>
+    <a class="link" href="https://leetcode.com/problems/reverse-degree-of-a-string/" target="_blank">🚀 去 LeetCode 做题 →</a>
   </div>
 </div>
 </div>
 <div class="group"><div class="group-title">📐 数学知识点 <span class="badge">4 项</span></div>
 <div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">📐 高数·第3天·积分：三角代换</span><span class="tag book">高数·第3天·积分</span></div>
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">📐 高数·第4天·积分：区间对称代换</span><span class="tag book">高数·第4天·积分</span></div>
   <div class="card-body">
-    <div class="q">√(a²-x²)=a cos t；√(a²+x²)=a sec t；√(x²-a²)=a tan t</div>
-    <div class="exp"><b>📌 要点：</b>处理含有√(a²-x²)、√(a²+x²)、√(x²-a²)的根式积分时，分别优先考虑x=a sin t、x=a tan t、x=a sec t，使根式化为三角函数并利用恒等式积分。</div>
-    <div class="exp">• √(a²-x²)对应x=a sin t，根式化为a cos t。</div><div class="exp">• √(a²+x²)对应x=a tan t，根式化为a sec t。</div><div class="exp">• √(x²-a²)对应x=a sec t，根式化为a tan t。</div>
-    <div class="exp" style="margin-top:6px">√(a²-x²)令x=<b style="color:#d48806">＿＿＿</b>；√(a²+x²)令x=<b style="color:#d48806">＿＿＿</b>；√(x²-a²)令x=<b style="color:#d48806">＿＿＿</b></div><button class="ans-btn" style="font-size:12px;padding:4px 12px">✅ 答案</button><div class="ans-box"><div class="ans">a sin t；a tan t；a sec t</div></div>
-    <div class="exp"><b>🧭 套路：</b>先看根式中a²与x²的符号组合，再选择代换；最后把t换回x，并注意定义域与绝对值。</div>
+    <div class="q">x↔a+b-x 关于中点 (a+b)/2 对称</div>
+    <div class="exp"><b>📌 要点：</b>在积分区间 [a,b] 上作变量代换 x→a+b-x，可把 f(x) 改写为 f(a+b-x)，再与原式平均，常用于利用区间对称性化简定积分。</div>
+    <div class="exp">• 对称变换为 x↔a+b-x，区间端点 a、b 互换</div><div class="exp">• 原积分与变换后的积分相等，可相加后除以 2</div><div class="exp">• 重点识别 f(x)+f(a+b-x) 是否更易计算</div>
+    <div class="exp" style="margin-top:6px">∫_a^b f(x)dx=∫_a^b <b style="color:#d48806">＿＿＿</b>dx=1/2∫_a^b[<b style="color:#d48806">＿＿＿</b>]dx</div><button class="ans-btn" style="font-size:12px;padding:4px 12px">✅ 答案</button><div class="ans-box"><div class="ans">f(a+b-x)；f(x)+f(a+b-x)</div></div>
+    <div class="exp"><b>🧭 套路：</b>看到上下限为 a、b 且被积函数含 x 与 a+b-x 时，优先尝试对称代换并与原积分相加。</div>
     
   </div>
  </div>
 <div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">📐 高数·第4天·积分：反正切恒等式</span><span class="tag book">高数·第4天·积分</span></div>
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">📐 高数·第4天·积分：对称性乘积积分</span><span class="tag book">高数·第4天·积分</span></div>
   <div class="card-body">
-    <div class="q">arctan x+arccot x=π/2</div>
-    <div class="exp"><b>📌 要点：</b>当x≠0时，arctan x与arctan(1/x)的和取值取决于x的正负：x&gt;0时为π/2，x&lt;0时为-π/2。分支符号是反正切恒等式的易错点。</div>
-    <div class="exp">• x&gt;0时，arctan x与arctan(1/x)均为正，和为π/2。</div><div class="exp">• x&lt;0时，两项均为负，和为-π/2。</div><div class="exp">• 使用恒等式时必须先判断x的符号，不能直接写成统一的π/2。</div>
-    <div class="exp" style="margin-top:6px">arctan x+arctan(1/x)=<b style="color:#d48806">＿＿＿</b>（x&gt;0）；=<b style="color:#d48806">＿＿＿</b>（x&lt;0）</div><button class="ans-btn" style="font-size:12px;padding:4px 12px">✅ 答案</button><div class="ans-box"><div class="ans">π/2；-π/2</div></div>
-    <div class="exp"><b>🧭 套路：</b>遇到arctan x+arctan(1/x)，先写x&gt;0与x&lt;0两种情况；x=0不在该式定义域内。</div>
+    <div class="q">∫_a^b f(x)g(x)dx=k∫_a^b f(x)dx</div>
+    <div class="exp"><b>📌 要点：</b>若 f 关于区间中点对称，即 f(a+b-x)=f(x)，且 g 满足 g(a+b-x)+g(x)=2k，则乘积积分可直接化为 k 倍的 f 的积分。</div>
+    <div class="exp">• f 是关于中点 (a+b)/2 的偶对称函数</div><div class="exp">• g 关于该中点呈中心对称，函数值和为常数 2k</div><div class="exp">• 将区间对称代换后的等式与原积分相加即可得到结论</div>
+    <div class="exp" style="margin-top:6px">g(a+b-x)+g(x)=2k且f(a+b-x)=f(x)⟹∫fg=<b style="color:#d48806">＿＿＿</b></div><button class="ans-btn" style="font-size:12px;padding:4px 12px">✅ 答案</button><div class="ans-box"><div class="ans">k∫f</div></div>
+    <div class="exp"><b>🧭 套路：</b>先分别检查 f 的对称性和 g 的函数值和，再直接套用乘积积分公式，避免展开复杂表达式。</div>
     
   </div>
  </div>
 <div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">📐 线代·第5章·二次型：正定二次型</span><span class="tag book">线代·第5章·二次型</span></div>
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">📐 线代·第1章·行列式与矩阵：行列式的三类初等变换性质</span><span class="tag book">线代·第1章·行列式与矩阵</span></div>
   <div class="card-body">
-    <div class="q">x^TAx&gt;0(x≠0)；正定⟺特征值全正⟺顺序主子式全正⟺正惯性指数=n</div>
-    <div class="exp"><b>📌 要点：</b>对实对称矩阵A，二次型x^TAx在任意非零向量x上都为正时称为正定。正定可用特征值、顺序主子式或惯性指数判别；正定矩阵必可逆。</div>
-    <div class="exp">• 正定的定义是对一切x≠0都有x^TAx&gt;0。</div><div class="exp">• 实对称矩阵正定等价于全部特征值为正，也等价于所有顺序主子式为正。</div><div class="exp">• 负定时奇数阶主子式为负、偶数阶主子式为正；不要与正定条件混淆。</div>
-    <div class="exp" style="margin-top:6px">默写核心结论：<b style="color:#d48806">＿＿＿</b></div><button class="ans-btn" style="font-size:12px;padding:4px 12px">✅ 答案</button><div class="ans-box"><div class="ans">x^TAx&gt;0(x≠0)；正定⟺特征值全正⟺顺序主子式全正⟺正惯性指数=n</div></div>
-    <div class="exp"><b>🧭 套路：</b>题目给出实对称矩阵时，优先检查顺序主子式；给出特征值时直接判断是否全为正。</div>
+    <div class="q">交换两行（列）变号；某行（列）乘 k，行列式乘 k；某行（列）加另一行（列）的 k 倍，行列式不变。</div>
+    <div class="exp"><b>📌 要点：</b>三类初等行（列）变换是行列式计算、消元和矩阵求逆的基础，必须区分交换、倍乘与倍加对行列式值的影响。</div>
+    <div class="exp">• 交换两行或两列，行列式变为原来的 −1 倍</div><div class="exp">• 某一行或列乘 k，行列式变为原来的 k 倍</div><div class="exp">• 某行或列加另一行或列的 k 倍，行列式保持不变</div>
+    <div class="exp" style="margin-top:6px">交换两行（列）行列式变为原来的<b style="color:#d48806">＿＿＿</b><b style="color:#d48806">＿＿＿</b>；某行（列）乘 k 变为<b style="color:#d48806">＿＿＿</b><b style="color:#d48806">＿＿＿</b>；某行（列）加另一行（列）的 k 倍<b style="color:#d48806">＿＿＿</b><b style="color:#d48806">＿＿＿</b>。</div><button class="ans-btn" style="font-size:12px;padding:4px 12px">✅ 答案</button><div class="ans-box"><div class="ans">−1 倍；k 倍；不变</div></div>
+    <div class="exp"><b>🧭 套路：</b>用初等变换化简行列式时，先记录交换次数和倍乘因子；倍加操作本身不改变行列式。</div>
     
   </div>
  </div>
 <div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">📐 线代·第1章·行列式：行列式的定义</span><span class="tag book">线代·第1章·行列式</span></div>
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">📐 线代·第1章·行列式与矩阵：行列式展开定理</span><span class="tag book">线代·第1章·行列式与矩阵</span></div>
   <div class="card-body">
-    
-    <div class="exp"><b>📌 要点：</b>n阶行列式按所有排列取项：每一项从每行每列各取一个元素，并乘以对应排列的符号。定义是行列式性质与展开公式的基础；一阶行列式就是它本身。</div>
-    <div class="exp">• 每一项包含n个元素，且来自不同行、不同列。</div><div class="exp">• 排列为偶排列时符号为+1，为奇排列时符号为-1。</div><div class="exp">• 一阶行列式det(a)=a；二阶和三阶展开式都可由排列定义得到。</div>
-    <div class="exp" style="margin-top:6px">n 阶行列式按排列定义为 det(A)=<b style="color:#d48806">＿＿＿</b><b style="color:#d48806">＿＿＿</b>；一阶行列式 det(a)=<b style="color:#d48806">＿＿＿</b><b style="color:#d48806">＿＿＿</b>。</div><button class="ans-btn" style="font-size:12px;padding:4px 12px">✅ 答案</button><div class="ans-box"><div class="ans">Σ_{σ∈S_n}sgn(σ)a_{1σ(1)}⋯a_{nσ(n)}；a</div></div>
-    <div class="exp"><b>🧭 套路：</b>默写定义时同时记住“排列符号×对应元素乘积”，不要遗漏σ∈S_n的求和范围。</div>
+    <div class="q">按第 i 行展开：|A|=Σ_{k=1}^n a_{ik}A_{ik}；按第 j 列展开：|A|=Σ_{k=1}^n a_{kj}A_{kj}。</div>
+    <div class="exp"><b>📌 要点：</b>行列式可按任意一行或任意一列展开，其中 A_ij 表示元素 a_ij 的代数余子式；异行元素与另一行代数余子式乘积之和为 0。</div>
+    <div class="exp">• 按第 i 行展开时固定行号 i，对列指标 k 求和</div><div class="exp">• 按第 j 列展开时固定列号 j，对行指标 k 求和</div><div class="exp">• 代数余子式 A_ij 已包含符号因子 (−1)^(i+j)</div>
+    <div class="exp" style="margin-top:6px">按第 i 行展开：|A|=<b style="color:#d48806">＿＿＿</b><b style="color:#d48806">＿＿＿</b>；按第 j 列展开：|A|=<b style="color:#d48806">＿＿＿</b><b style="color:#d48806">＿＿＿</b>。</div><button class="ans-btn" style="font-size:12px;padding:4px 12px">✅ 答案</button><div class="ans-box"><div class="ans">Σ_{k=1}^n a_{ik}A_{ik}；Σ_{k=1}^n a_{kj}A_{kj}</div></div>
+    <div class="exp"><b>🧭 套路：</b>优先选择零元素较多的行或列展开；不要把余子式 M_ij 与代数余子式 A_ij 混淆。</div>
     
   </div>
  </div>
 </div>
 <div class="group"><div class="group-title">💻 408 选择题 <span class="badge">5 题</span></div>
 <div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">采用除留余数法 h(k)=k mod 13，散列表下标为0～12，使用线性探测。将关键字26、39、52、14依次插入后，四个关键字最终所在下标分别是？</span><span class="tag book">数据结构</span><span class="tag easy">简单</span></div>
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">在长度为 10 的无序顺序表中，成功查找的位置等可能出现在 1～10，采用顺序查找时成功查找的平均查找长度 ASL 为多少？</span><span class="tag book">数据结构</span><span class="tag easy">简单</span></div>
   <div class="card-body">
-    <div class="q"><div class="opt">A. 26→0，39→1，52→2，14→3</div><div class="opt">B. 26→0，39→0，52→1，14→2</div><div class="opt">C. 26→1，39→2，52→3，14→4</div><div class="opt">D. 26→0，39→1，52→3，14→4</div></div>
-    
-    <button class="ans-btn">✅ 查看答案与解析</button>
-    <div class="ans-box">
-      <div class="ans">答案：A</div>
-      <div class="exp"><b>📖 解析：</b>四个关键字对13取模都为0。26先放入0；39冲突后探测到1；52继续探测到2；14继续探测到3。因此最终位置为0、1、2、3，选A。此时装填因子为4/13。</div>
-    </div>
-  </div>
- </div>
-<div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">某机器执行两条指令：ADD #0x1234（立即寻址）和 ADD 0x1234（直接寻址）。下列说法正确的是？</span><span class="tag book">计算机组成原理</span><span class="tag easy">简单</span></div>
-  <div class="card-body">
-    <div class="q"><div class="opt">A. 前者的操作数就是常数0x1234，后者的操作数是主存地址0x1234处的内容</div><div class="opt">B. 前者和后者都把0x1234当作主存地址</div><div class="opt">C. 前者的操作数是主存地址0x1234，后者的操作数就是常数0x1234</div><div class="opt">D. 两种寻址方式都不需要读取指令中的地址字段</div></div>
-    
-    <button class="ans-btn">✅ 查看答案与解析</button>
-    <div class="ans-box">
-      <div class="ans">答案：A</div>
-      <div class="exp"><b>📖 解析：</b>立即寻址把地址字段本身作为操作数，ADD #0x1234使用的就是常数0x1234；直接寻址把地址字段解释为有效地址，需要读取主存单元0x1234中的内容。故选A。</div>
-    </div>
-  </div>
- </div>
-<div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">某系统采用段页式存储，32位逻辑地址格式为：高4位段号、接着10位页号、低12位页内偏移。对于逻辑地址0xA5C12345，段号、页号和页内偏移分别是多少？</span><span class="tag book">操作系统</span><span class="tag hard">困难</span></div>
-  <div class="card-body">
-    <div class="q"><div class="opt">A. 0xA，0x12，0x345</div><div class="opt">B. 0xA，0x5C1，0x345</div><div class="opt">C. 0xA5，0xC1，0x2345</div><div class="opt">D. 0x5，0xA12，0x345</div></div>
-    
-    <button class="ans-btn">✅ 查看答案与解析</button>
-    <div class="ans-box">
-      <div class="ans">答案：A</div>
-      <div class="exp"><b>📖 解析：</b>低12位直接得到页内偏移0x345；去掉低12位后，接下来的10位为页号，即(0xA5C12345&gt;&gt;12)&amp;0x3FF=0x12；最高4位为段号0xA。因此三者为0xA、0x12、0x345，选A。</div>
-    </div>
-  </div>
- </div>
-<div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">TCP发送方先发送序号为1000、长度为500字节的报文段，再发送序号为1500、长度为400字节的报文段。若第二个报文段丢失，接收方收到第一个报文段后发送ACK=1500；重传并收到第二段后，累计确认号应为多少？</span><span class="tag book">计算机网络</span><span class="tag mid">中等</span></div>
-  <div class="card-body">
-    <div class="q"><div class="opt">A. 1500</div><div class="opt">B. 1899</div><div class="opt">C. 1900</div><div class="opt">D. 2000</div></div>
+    <div class="q"><div class="opt">A. 4.5</div><div class="opt">B. 5</div><div class="opt">C. 5.5</div><div class="opt">D. 10</div></div>
     
     <button class="ans-btn">✅ 查看答案与解析</button>
     <div class="ans-box">
       <div class="ans">答案：C</div>
-      <div class="exp"><b>📖 解析：</b>TCP确认号表示接收方期望收到的下一个字节序号。第一个报文段覆盖1000～1499，因此确认号为1500；第二段覆盖1500～1899，收到后下一个期望字节为1900，故累计确认号为1900，选C。</div>
+      <div class="exp"><b>📖 解析：</b>成功查找时第 i 个元素需要比较 i 次，ASL=(1+2+…+10)/10=(10+1)/2=5.5。若采用哨兵，主要减少边界判断，并不改变成功查找的平均比较次数。</div>
     </div>
   </div>
  </div>
 <div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">TCP接收方通告的接收窗口rwnd为3000字节，发送方最近一次收到的确认号为5001，且当前已发送到字节6500（均未计入新的确认）。此时发送方还可发送多少字节而不超过接收窗口？</span><span class="tag book">计算机网络</span><span class="tag easy">简单</span></div>
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">设地址字段 A=1000H，寄存器 R1=2000H，且 M[1000H]=3000H、M[3000H]=4000H。采用寄存器间接寻址（以 R1 为地址寄存器）和一次间接寻址（以 A 为地址字段）时，有效地址 EA 分别是多少？</span><span class="tag book">计算机组成原理</span><span class="tag mid">中等</span></div>
   <div class="card-body">
-    <div class="q"><div class="opt">A. 500字节</div><div class="opt">B. 1500字节</div><div class="opt">C. 3000字节</div><div class="opt">D. 3500字节</div></div>
+    <div class="q"><div class="opt">A. 2000H，1000H</div><div class="opt">B. 2000H，3000H</div><div class="opt">C. 3000H，4000H</div><div class="opt">D. 3000H，2000H</div></div>
     
     <button class="ans-btn">✅ 查看答案与解析</button>
     <div class="ans-box">
       <div class="ans">答案：B</div>
-      <div class="exp"><b>📖 解析：</b>已发送但尚未确认的数据量为6500-5001+1=1500字节。接收窗口还剩3000-1500=1500字节，因此发送方还可发送1500字节，选B。</div>
+      <div class="exp"><b>📖 解析：</b>寄存器间接寻址的有效地址就是寄存器内容，因此 EA=R1=2000H。一次间接寻址先取 M[A] 作为有效地址，因此 EA=M[1000H]=3000H；继续访问 M[3000H] 才是多一次间接。</div>
+    </div>
+  </div>
+ </div>
+<div class="card open">
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">关于分页与分段的比较，下列说法正确的是：</span><span class="tag book">操作系统</span><span class="tag easy">简单</span></div>
+  <div class="card-body">
+    <div class="q"><div class="opt">A. 分页是一维的，页大小固定；分段按逻辑意义划分且段长可变</div><div class="opt">B. 分页和分段都会产生完全相同的碎片，且都只产生外部碎片</div><div class="opt">C. 分段地址由页号和页内地址组成，分页地址由段号和段内位移组成</div><div class="opt">D. 分页便于按逻辑模块共享与保护，分段不支持共享与保护</div></div>
+    
+    <button class="ans-btn">✅ 查看答案与解析</button>
+    <div class="ans-box">
+      <div class="ans">答案：A</div>
+      <div class="exp"><b>📖 解析：</b>分页把进程的逻辑地址空间划分为固定大小的页，属于一维地址空间，主要产生页内碎片；分段按程序的逻辑模块划分为长度可变的段，地址通常写成段号加段内位移，并便于按段共享和保护。</div>
+    </div>
+  </div>
+ </div>
+<div class="card open">
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">TCP 采用慢开始，初始 cwnd=1 MSS，ssthresh=8 MSS；无丢包且每个 RTT 结束后，若 cwnd&lt;ssthresh 则翻倍，若 cwnd≥ssthresh 则增加 1 MSS。经过 4 个 RTT 后，cwnd 为多少？</span><span class="tag book">计算机网络</span><span class="tag hard">困难</span></div>
+  <div class="card-body">
+    <div class="q"><div class="opt">A. 4 MSS</div><div class="opt">B. 8 MSS</div><div class="opt">C. 9 MSS</div><div class="opt">D. 16 MSS</div></div>
+    
+    <button class="ans-btn">✅ 查看答案与解析</button>
+    <div class="ans-box">
+      <div class="ans">答案：C</div>
+      <div class="exp"><b>📖 解析：</b>逐个 RTT 计算：初始 1→第 1 个 RTT 后 2→第 2 个 RTT 后 4→第 3 个 RTT 后 8。此时达到 ssthresh，进入拥塞避免，第 4 个 RTT 后线性增加为 9 MSS，而不是继续翻倍到 16 MSS。</div>
+    </div>
+  </div>
+ </div>
+<div class="card open">
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">有序表 [1,3,5,7,9,11,13,15,17] 的下标为 0～8，折半查找采用 mid=⌊(low+high)/2⌋，查找关键字 13 时需要比较几次？</span><span class="tag book">数据结构</span><span class="tag easy">简单</span></div>
+  <div class="card-body">
+    <div class="q"><div class="opt">A. 1 次</div><div class="opt">B. 2 次</div><div class="opt">C. 3 次</div><div class="opt">D. 4 次</div></div>
+    
+    <button class="ans-btn">✅ 查看答案与解析</button>
+    <div class="ans-box">
+      <div class="ans">答案：B</div>
+      <div class="exp"><b>📖 解析：</b>第一次 low=0、high=8，mid=4，比较 9；因为 13&gt;9，令 low=5。第二次 mid=⌊(5+8)/2⌋=6，比较得到 13，故共 2 次。</div>
     </div>
   </div>
  </div>
@@ -183,47 +182,47 @@
 <div class="group"><div class="group-title">🇬🇧 考研单词 <span class="badge">20 词</span></div>
 <div class="card open">
   <div class="card-head"><span class="arrow">▶</span><span class="card-title">🇬🇧 考研单词 ×20</span><span class="tag book">高频词</span></div>
-  <div class="card-body"><div class="word-row"><span class="word">official</span><span class="phon">/əˈfɪʃəl/</span></div>
-      <div class="def">官方的</div>
-      <div class="example">✏️ The official report emphasized the importance of independent research.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">huge</span><span class="phon">/hjuːdʒ/</span></div>
-      <div class="def">大的</div>
-      <div class="example">✏️ The discovery had a huge impact on the development of modern medicine.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">hire</span><span class="phon">/ˈhaɪər/</span></div>
-      <div class="def">雇佣</div>
-      <div class="example">✏️ The company plans to hire more engineers to develop energy-saving devices.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">hotel</span><span class="phon">/hoʊˈtel/</span></div>
-      <div class="def">酒店</div>
-      <div class="example">✏️ The survey examined how hotel services affect tourists' satisfaction.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">treat</span><span class="phon">/triːt/</span></div>
-      <div class="def">对待</div>
-      <div class="example">✏️ We should treat the evidence carefully before drawing a conclusion.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">perform</span><span class="phon">/pərˈfɔːrm/</span></div>
-      <div class="def">演奏、执行</div>
-      <div class="example">✏️ The computer can perform complex calculations in a few seconds.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">employer</span><span class="phon">/ɪmˈplɔɪər/</span></div>
-      <div class="def">雇主</div>
-      <div class="example">✏️ A responsible employer should provide a safe working environment.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">literature</span><span class="phon">/ˈlɪtərətʃər/</span></div>
-      <div class="def">文学</div>
-      <div class="example">✏️ The review of existing literature provides a basis for the new study.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">profit</span><span class="phon">/ˈprɑːfɪt/</span></div>
-      <div class="def">利润</div>
-      <div class="example">✏️ The firm invested part of its profit in technological innovation.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">article</span><span class="phon">/ˈɑːrtɪkəl/</span></div>
-      <div class="def">文章</div>
-      <div class="example">✏️ The article discusses the relationship between education and social mobility.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">weight</span><span class="phon">/weɪt/</span></div>
-      <div class="def">体重</div>
-      <div class="example">✏️ Researchers found that body weight is influenced by both genes and lifestyle.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">trip</span><span class="phon">/trɪp/</span></div>
-      <div class="def">旅行</div>
-      <div class="example">✏️ The field trip allowed students to observe the ecosystem directly.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">investment</span><span class="phon">/ɪnˈvestmənt/</span></div>
-      <div class="def">投资</div>
-      <div class="example">✏️ Public investment in basic research can promote long-term economic growth.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">due</span><span class="phon">/duː/</span></div>
-      <div class="def">预期的、到期的</div>
-      <div class="example">✏️ The final report is due at the end of the month.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">aspect</span><span class="phon">/ˈæspekt/</span></div>
-      <div class="def">样子、方面</div>
-      <div class="example">✏️ Cost is only one aspect of evaluating the effectiveness of a policy.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">wear</span><span class="phon">/wer/</span></div>
-      <div class="def">穿着</div>
-      <div class="example">✏️ Workers must wear protective equipment in the laboratory.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">define</span><span class="phon">/dɪˈfaɪn/</span></div>
-      <div class="def">定义</div>
-      <div class="example">✏️ The introduction defines the key terms used throughout the paper.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">balance</span><span class="phon">/ˈbæləns/</span></div>
-      <div class="def">平衡</div>
-      <div class="example">✏️ A successful policy must balance economic growth with environmental protection.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">enable</span><span class="phon">/ɪˈneɪbəl/</span></div>
-      <div class="def">使能够</div>
-      <div class="example">✏️ The new software enables researchers to analyze large amounts of data.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">consumption</span><span class="phon">/kənˈsʌmpʃən/</span></div>
-      <div class="def">消费、消耗</div>
-      <div class="example">✏️ Reducing energy consumption is essential for sustainable development.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"></div>
+  <div class="card-body"><div class="word-row"><span class="word">character</span><span class="phon">/ˈkærəktə(r)/</span></div>
+      <div class="def">性格</div>
+      <div class="example">✏️ A person's character is often revealed by how they respond to difficulty.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">crisis</span><span class="phon">/ˈkraɪsɪs/</span></div>
+      <div class="def">危机</div>
+      <div class="example">✏️ The economic crisis forced many companies to reconsider their plans.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">dollar</span><span class="phon">/ˈdɒlə(r)/</span></div>
+      <div class="def">美元</div>
+      <div class="example">✏️ The price rose by several dollars because of higher transport costs.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">green</span><span class="phon">/ɡriːn/</span></div>
+      <div class="def">绿的、未熟的</div>
+      <div class="example">✏️ The green fruit is not yet ready to be picked.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">immigrant</span><span class="phon">/ˈɪmɪɡrənt/</span></div>
+      <div class="def">移民</div>
+      <div class="example">✏️ Many immigrants contribute new skills and ideas to their communities.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">contact</span><span class="phon">/ˈkɒntækt/</span></div>
+      <div class="def">联系</div>
+      <div class="example">✏️ Please contact the department if you need further information.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">cold</span><span class="phon">/kəʊld/</span></div>
+      <div class="def">冷的</div>
+      <div class="example">✏️ Cold weather can reduce the efficiency of some machines.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">reality</span><span class="phon">/riˈæləti/</span></div>
+      <div class="def">现实、真实的事物</div>
+      <div class="example">✏️ The reality of the problem is more serious than the report suggests.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">department</span><span class="phon">/dɪˈpɑːtmənt/</span></div>
+      <div class="def">部门</div>
+      <div class="example">✏️ The research department published its findings in a major journal.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">comment</span><span class="phon">/ˈkɒment/</span></div>
+      <div class="def">评论</div>
+      <div class="example">✏️ The professor made an important comment on the limits of the method.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">board</span><span class="phon">/bɔːd/</span></div>
+      <div class="def">板</div>
+      <div class="example">✏️ The key points of the experiment were written on the board.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">consequence</span><span class="phon">/ˈkɒnsɪkwens/</span></div>
+      <div class="def">后果、结果</div>
+      <div class="example">✏️ Every policy decision may have an unexpected consequence.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">style</span><span class="phon">/staɪl/</span></div>
+      <div class="def">风格</div>
+      <div class="example">✏️ The author's clear style makes the scientific argument easy to follow.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">fight</span><span class="phon">/faɪt/</span></div>
+      <div class="def">打斗</div>
+      <div class="example">✏️ The committee agreed to fight against discrimination in the workplace.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">advice</span><span class="phon">/ədˈvaɪs/</span></div>
+      <div class="def">建议</div>
+      <div class="example">✏️ The tutor gave me useful advice on organizing my review schedule.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">meal</span><span class="phon">/miːl/</span></div>
+      <div class="def">饭</div>
+      <div class="example">✏️ A balanced meal provides energy for a long afternoon of study.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">worry</span><span class="phon">/ˈwʌri/</span></div>
+      <div class="def">担心</div>
+      <div class="example">✏️ There is no need to worry if the results are carefully verified.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">tool</span><span class="phon">/tuːl/</span></div>
+      <div class="def">工具</div>
+      <div class="example">✏️ The computer is a useful tool for analyzing large amounts of data.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">waste</span><span class="phon">/weɪst/</span></div>
+      <div class="def">浪费</div>
+      <div class="example">✏️ Reusing materials can reduce waste and protect the environment.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">predict</span><span class="phon">/prɪˈdɪkt/</span></div>
+      <div class="def">预测</div>
+      <div class="example">✏️ It is difficult to predict how technology will change education.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"></div>
 </div>
 </div>
 <div class="footer">由 Hermes AI 生成 · 每天 08:00 更新 · 加油 💪</div>
