@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>今日学习清单 · 2026-09-25</title>
+<title>今日学习清单 · 2026-09-26</title>
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Noto Sans SC", sans-serif; background: #f5f6fa; color: #1f2329; max-width: 640px; margin: 0 auto; padding: 16px 14px 40px; }
@@ -50,152 +50,141 @@
 
 <div class="hero">
   <h1>📋 今日学习清单</h1>
-  <div class="date">2026年9月25日 星期五</div>
+  <div class="date">2026年9月26日 星期六</div>
 </div>
 
 <div class="group"><div class="group-title">🔥 今日重点 <span class="badge">2 项</span></div>
 <div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">🧩 LeetCode 每日一题：Brace Expansion II</span><span class="tag hard">Hard</span></div>
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">🧩 LeetCode 每日一题：Evaluate the Bracket Pairs of a String</span><span class="tag mid">Medium</span></div>
   <div class="card-body">
-    <div class="q">给定由小写字母、逗号和花括号构成的表达式：字母表示单元素集合；逗号表示集合并集；相邻表达式表示两集合元素的笛卡尔积拼接。返回表达式代表的所有不同单词，按字典序排列。例：{a,b}{c,{d,e}} → [ac,ad,ae,bc,bd,be]。</div>
-    <div class="exp"><b>💡 解题思路：</b>用递归下降解析文法：parse_union 解析逗号分隔的并集，parse_concat 解析相邻项的笛卡尔积拼接，parse_atom 解析字母或花括号子表达式。每层用 set 自动去重，最后排序。</div>
-    <div class="exp"><b>🔧 题解：</b>解析时用共享下标扫描字符串。花括号内递归解析并集，遇到逗号或右花括号结束当前拼接段；拼接通过集合两两组合完成。题目保证表达式合法，复杂度取决于中间结果集合大小。</div>
-    <pre class="code">class Solution:
-    def braceExpansionII(self, expression: str) -&gt; list[str]:
+    <div class="q">给定字符串 s，其中若干括号对各包含一个非空键；knowledge 是键值对列表。把每个 (key) 替换为对应 value，若键不存在则替换为问号 ?。括号不会嵌套，同一个键可在 s 中重复出现。例如 s='(name)is(age)'，knowledge=[['name','bob'],['age','two']]，结果为 'bobistwo'。</div>
+    <div class="exp"><b>💡 解题思路：</b>先把 knowledge 转成哈希表，然后从左到右扫描 s：遇到左括号时定位对应右括号，取出键并查表；已知键追加其值，未知键追加 '?'；普通字符直接追加。用字符列表收集结果，最后 join。</div>
+    <div class="exp"><b>🔧 题解：</b>每个字符至多被扫描常数次，构建映射和扫描均为线性时间。若 n 为 s 长度、k 为 knowledge 项数，则时间 O(n+k)，空间 O(n+k)（映射与输出）。题目保证括号合法且不嵌套。</div>
+    <pre class="code">from typing import List
+
+class Solution:
+    def evaluate(self, s: str, knowledge: List[List[str]]) -&gt; str:
+        values = {key: value for key, value in knowledge}
+        result = []
         i = 0
-        n = len(expression)
-
-        def parse_union():
-            nonlocal i
-            result = parse_concat()
-            while i &lt; n and expression[i] == ',':
+        while i &lt; len(s):
+            if s[i] == '(':
+                j = s.find(')', i + 1)
+                key = s[i + 1:j]
+                result.append(values.get(key, '?'))
+                i = j + 1
+            else:
+                result.append(s[i])
                 i += 1
-                result |= parse_concat()
-            return result
-
-        def parse_concat():
-            nonlocal i
-            result = {""}
-            while i &lt; n and expression[i] not in ',}':
-                if expression[i] == '{':
-                    i += 1
-                    part = parse_union()
-                    i += 1  # 跳过 }
-                else:
-                    part = {expression[i]}
-                    i += 1
-                result = {a + b for a in result for b in part}
-            return result
-
-        return sorted(parse_union())</pre>
-    <a class="link" href="https://leetcode.com/problems/brace-expansion-ii/" target="_blank">🚀 去 LeetCode 做题 →</a>
+        return ''.join(result)</pre>
+    <a class="link" href="https://leetcode.com/problems/evaluate-the-bracket-pairs-of-a-string/" target="_blank">🚀 去 LeetCode 做题 →</a>
   </div>
 </div>
 </div>
 <div class="group"><div class="group-title">📐 数学知识点 <span class="badge">4 项</span></div>
 <div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">📐 高数·第4天·第06章 定积分的应用：物理应用</span><span class="tag book">4</span></div>
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">📐 高数·第4天·第07章 微分方程：非齐次特解求法（算子法）</span><span class="tag book">4</span></div>
   <div class="card-body">
-    <div class="q">W=∫_a^b F(x)dx</div>
-    <div class="exp"><b>📌 要点：</b>变力沿直线做功为力对位移的定积分；液体对平板的压力可按深度积分，均匀液体且平板水平时 F=ρghS；两质点间万有引力大小 F=Gm₁m₂/r²。</div>
+    <div class="q">R(D)y=f(x)，先利用算子对指数函数、幂函数及移位的作用求特解，再与齐次通解相加。</div>
+    <div class="exp"><b>📌 要点：</b>线性常系数非齐次方程的通解为 y=y_h+y_p。对指数型右端可代入特征值；多项式右端可逐次降幂；乘有指数因子的函数可用移位规则。</div>
     
-    <div class="exp" style="margin-top:6px">变力做功W=<b style="color:#d48806">＿＿＿</b>；液体压力F=<b style="color:#d48806">＿＿＿</b>；万有引力F=<b style="color:#d48806">＿＿＿</b></div><button class="ans-btn" style="font-size:12px;padding:4px 12px">✅ 答案</button><div class="ans-box"><div class="ans">∫F(x)dx；ρghS；Gm1m2/r²</div></div>
-    <div class="exp"><b>🧭 套路：</b>变力做功要明确力与位移的函数关系并对位移积分；液压力公式适用于深度相同的水平面，竖直平板需对不同深度的压强积分。</div>
+    <div class="exp" style="margin-top:6px">f=e^kx：1/R(D)e^kx=<b style="color:#d48806">＿＿＿</b>；f=Pn(x)：<b style="color:#d48806">＿＿＿</b>；f=e^kxY(x)：<b style="color:#d48806">＿＿＿</b></div><button class="ans-btn" style="font-size:12px;padding:4px 12px">✅ 答案</button><div class="ans-box"><div class="ans">e^kx/R(k)；一阶一阶降幂；移位e^kxR(D+k)Y</div></div>
+    <div class="exp"><b>🧭 套路：</b>先检查 R(k) 是否为零；若为零需按共振情形处理，不能直接套用 e^kx/R(k)。</div>
     
   </div>
  </div>
 <div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">📐 高数·第4天·第07章 微分方程：二阶常系数齐次通解</span><span class="tag book">4</span></div>
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">📐 高数·第4天·第07章 微分方程：欧拉方程</span><span class="tag book">4</span></div>
   <div class="card-body">
-    <div class="q">特征方程 λ²+pλ+q=0；复根 λ=α±βi</div>
-    <div class="exp"><b>📌 要点：</b>将 y''+py'+qy=0 的特征方程根分类：两个不同实根、二重实根、共轭复根分别对应三类通解。</div>
+    <div class="q">令 t=ln x（即 x=e^t），把欧拉型方程化为关于 t 的常系数线性微分方程。</div>
+    <div class="exp"><b>📌 要点：</b>欧拉方程的各阶导数项带有与阶数相配的 x 的幂次。变量代换 x=e^t 后，变系数结构可转化为常系数形式，再按特征方程求解。</div>
     
-    <div class="exp" style="margin-top:6px">Δ&gt;0：y=<b style="color:#d48806">＿＿＿</b>；Δ=0：y=<b style="color:#d48806">＿＿＿</b>；Δ&lt;0：y=<b style="color:#d48806">＿＿＿</b></div><button class="ans-btn" style="font-size:12px;padding:4px 12px">✅ 答案</button><div class="ans-box"><div class="ans">C1e^λ1x+C2e^λ2x；(C1+C2x)e^λx；e^αx(C1cosβx+C2sinβx)</div></div>
-    <div class="exp"><b>🧭 套路：</b>先求特征根，再按根的类型套通解；二重根的第二个线性无关解要乘 x，复根解要同时包含 cos 与 sin。</div>
+    <div class="exp" style="margin-top:6px">x^n y^(n)+...+a_n y=f(x)令x=<b style="color:#d48806">＿＿＿</b>，t=<b style="color:#d48806">＿＿＿</b></div><button class="ans-btn" style="font-size:12px;padding:4px 12px">✅ 答案</button><div class="ans-box"><div class="ans">e^t；ln x</div></div>
+    <div class="exp"><b>🧭 套路：</b>注意定义域通常取 x&gt;0；代换后要将所有导数一致地改写为 t 的导数。</div>
     
   </div>
  </div>
 <div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">📐 线代·第02章 矩阵及其运算：矩阵运算法则</span><span class="tag book">线代·第02章 矩阵及其运算</span></div>
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">📐 线代·第01章 行列式：范德蒙德行列式</span><span class="tag book">线代·第01章 行列式</span></div>
   <div class="card-body">
-    <div class="q">(AB)C=A(BC)；A(B+C)=AB+AC；(kA)B=k(AB)</div>
-    <div class="exp"><b>📌 要点：</b>矩阵乘法满足结合律和分配律，一般不满足交换律；AB=O 不能推出 A=O 或 B=O，也不能像实数那样随意消去非零因子。</div>
+    <div class="q">D_n=∏(a_j-a_i)，1≤i&lt;j≤n。</div>
+    <div class="exp"><b>📌 要点：</b>范德蒙德行列式的行（列）由变量的连续幂次构成，其值等于所有变量两两差的乘积；变量互异时行列式非零。</div>
     
-    <div class="exp" style="margin-top:6px">默写核心结论：<b style="color:#d48806">＿＿＿</b></div><button class="ans-btn" style="font-size:12px;padding:4px 12px">✅ 答案</button><div class="ans-box"><div class="ans">(AB)C=A(BC)；A(B+C)=AB+AC；(kA)B=k(AB)</div></div>
-    <div class="exp"><b>🧭 套路：</b>矩阵等式需先检查维数是否相容；运算顺序不可交换，判断交换律或消去律时可用具体矩阵反例。</div>
+    <div class="exp" style="margin-top:6px">默写核心结论：<b style="color:#d48806">＿＿＿</b></div><button class="ans-btn" style="font-size:12px;padding:4px 12px">✅ 答案</button><div class="ans-box"><div class="ans">D_n=∏(a_j-a_i)(1≤i&lt;j≤n)</div></div>
+    <div class="exp"><b>🧭 套路：</b>写乘积时固定 j&gt;i 的顺序，避免将差项符号写反；两变量相同时行列式为零。</div>
     
   </div>
  </div>
 <div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">📐 线代·第02章 矩阵及其运算：矩阵乘法</span><span class="tag book">线代·第02章 矩阵及其运算</span></div>
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">📐 线代·第03章 矩阵的初等变换与线性方程组：矩阵秩</span><span class="tag book">线代·第03章 矩阵的初等变换与线性方程组</span></div>
   <div class="card-body">
-    <div class="q">cᵢⱼ=Σₖaᵢₖbₖⱼ；Aₘ×ₛBₛ×ₙ=Cₘ×ₙ</div>
-    <div class="exp"><b>📌 要点：</b>矩阵 A 的列数必须等于矩阵 B 的行数，乘积的行数取 A 的行数、列数取 B 的列数；每个结果元素由 A 的行与 B 的列对应相乘再求和。</div>
+    <div class="q">秩为最高阶非零子式的阶数；可逆矩阵左右乘不改变矩阵秩。</div>
+    <div class="exp"><b>📌 要点：</b>矩阵秩衡量行（列）向量组的最大线性无关数。转置不改变秩，乘以非零数不改变秩；矩阵乘积的秩不超过任一因子的秩。</div>
     
-    <div class="exp" style="margin-top:6px">默写核心结论：<b style="color:#d48806">＿＿＿</b></div><button class="ans-btn" style="font-size:12px;padding:4px 12px">✅ 答案</button><div class="ans-box"><div class="ans">c_ij=Σa_ik·b_kj；A_{m×s}B_{s×n}=C_{m×n}</div></div>
-    <div class="exp"><b>🧭 套路：</b>先核对内维数，再按行乘列计算；一般 AB≠BA。</div>
+    <div class="exp" style="margin-top:6px">默写核心结论：<b style="color:#d48806">＿＿＿</b></div><button class="ans-btn" style="font-size:12px;padding:4px 12px">✅ 答案</button><div class="ans-box"><div class="ans">r(A)≤min{m,n}；r(A^T)=r(A)；r(PAQ)=r(A)(P,Q可逆)</div></div>
+    <div class="exp"><b>🧭 套路：</b>使用秩不等式前核对矩阵的行列数与乘法维数；P、Q 必须为相容的可逆矩阵。</div>
     
   </div>
  </div>
 </div>
 <div class="group"><div class="group-title">💻 408 选择题 <span class="badge">5 题</span></div>
 <div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">无向图有 6 个顶点，度数依次为 1、2、2、3、2、2。该图的边数是多少？</span><span class="tag book">数据结构</span><span class="tag easy">简单</span></div>
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">无向图的边为 A-B、A-C、B-D、B-E、C-E、C-F、E-F。从 A 开始进行 BFS，且每次按字母顺序访问邻接点，顶点出队顺序是什么？</span><span class="tag book">数据结构</span><span class="tag easy">简单</span></div>
   <div class="card-body">
-    <div class="q"><div class="opt">5</div><div class="opt">6</div><div class="opt">7</div><div class="opt">12</div></div>
+    <div class="q"><div class="opt">A，B，C，D，E，F</div><div class="opt">A，B，D，E，C，F</div><div class="opt">A，C，B，F，E，D</div><div class="opt">A，C，E，F，B，D</div></div>
     
     <button class="ans-btn">✅ 查看答案与解析</button>
     <div class="ans-box">
-      <div class="ans">答案：B（6）</div>
-      <div class="exp"><b>📖 解析：</b>无向图所有顶点度数之和等于边数的 2 倍。度数和为 1+2+2+3+2+2=12，因此边数为 12/2=6。</div>
+      <div class="ans">答案：A（A，B，C，D，E，F）</div>
+      <div class="exp"><b>📖 解析：</b>先访问并入队 A 的邻接点 B、C；处理 B 时发现 D、E 并入队，处理 C 时 E 已被发现，只新增 F。队列依次出队 A、B、C、D、E、F。BFS 使用队列，顶点应在首次发现时标记，避免重复入队。</div>
     </div>
   </div>
  </div>
 <div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">关于指令周期，下列说法正确的是哪一项？</span><span class="tag book">计算机组成原理</span><span class="tag easy">简单</span></div>
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">某 16 位 CPU 执行 ADD X（AC←AC+M[X]），当前 AC=0x003A、M[X]=0x0017，且结果不溢出。执行后 AC 的值是多少？</span><span class="tag book">计算机组成原理</span><span class="tag easy">简单</span></div>
   <div class="card-body">
-    <div class="q"><div class="opt">每条指令都必定包含间址周期和中断周期</div><div class="opt">指令周期是取出并执行一条指令所需的时间，可能包含取指、间址、执行和中断等周期</div><div class="opt">取指周期只在程序启动时发生一次</div><div class="opt">中断周期属于下一条指令的执行周期</div></div>
+    <div class="q"><div class="opt">0x004D</div><div class="opt">0x0051</div><div class="opt">0x0061</div><div class="opt">0x0173</div></div>
+    
+    <button class="ans-btn">✅ 查看答案与解析</button>
+    <div class="ans-box">
+      <div class="ans">答案：B（0x0051）</div>
+      <div class="exp"><b>📖 解析：</b>数据通路在执行阶段将 AC 与从存储器读入的操作数送入 ALU 相加，并把结果写回 AC。0x003A=58，0x0017=23，58+23=81=0x0051。</div>
+    </div>
+  </div>
+ </div>
+<div class="card open">
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">关于 HTTP 协议，下列说法正确的是哪一项？</span><span class="tag book">计算机网络</span><span class="tag easy">简单</span></div>
+  <div class="card-body">
+    <div class="q"><div class="opt">HTTP 本身在协议层保存每个用户的会话状态</div><div class="opt">HTTP 是无状态应用层协议；持久连接可让多个请求复用同一 TCP 连接</div><div class="opt">HTTP/1.1 的每个请求都必须新建一个 TCP 连接</div><div class="opt">HTTP 响应只能传输文本，不能传输图像或其他二进制数据</div></div>
     
     <button class="ans-btn">✅ 查看答案与解析</button>
     <div class="ans-box">
       <div class="ans">答案：B</div>
-      <div class="exp"><b>📖 解析：</b>指令周期是CPU取出并执行一条指令所需的时间。不同指令所需阶段不完全相同；中断周期通常在当前指令执行结束且有中断请求时出现，并非每条指令都有。</div>
+      <div class="exp"><b>📖 解析：</b>HTTP 协议本身是无状态的，服务器不会仅凭协议自动记住先前请求的客户端状态；Cookie、会话机制等可在应用层补充状态。持久连接允许多个 HTTP 请求/响应复用 TCP 连接，HTTP 消息体也可承载各类媒体数据。</div>
     </div>
   </div>
  </div>
 <div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">采用 CLOCK 页面置换，当前 3 个页框按环形顺序为 A、B、C，访问位分别为 (1,0,1)，时钟指针指向 A。发生缺页时首先淘汰哪个页面？</span><span class="tag book">操作系统</span><span class="tag mid">中等</span></div>
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">系统采用固定分配策略，为进程 P 分配 4 个页框；P 的当前工作集大小约为 6 页。关于页面分配与置换，下列判断正确的是哪一项？</span><span class="tag book">操作系统</span><span class="tag mid">中等</span></div>
   <div class="card-body">
-    <div class="q"><div class="opt">A</div><div class="opt">B</div><div class="opt">C</div><div class="opt">依赖页面装入时间，无法判断</div></div>
+    <div class="q"><div class="opt">固定分配意味着每次缺页都可从其他进程夺取页框</div><div class="opt">固定分配限定 P 可使用的页框数；若采用局部置换，P 只能在自己的 4 个页框中选择牺牲页</div><div class="opt">工作集有 6 页就说明 P 的逻辑地址空间只有 6 页</div><div class="opt">局部置换与全局置换的区别是页面大小不同</div></div>
     
     <button class="ans-btn">✅ 查看答案与解析</button>
     <div class="ans-box">
       <div class="ans">答案：B</div>
-      <div class="exp"><b>📖 解析：</b>指针检查 A 时访问位为 1，将其清零并前移；检查 B 时访问位为 0，因此淘汰 B。CLOCK 给近期访问过的页第二次机会。</div>
+      <div class="exp"><b>📖 解析：</b>固定分配为进程规定固定数量的页框。若置换范围是局部的，发生缺页时只能从该进程已分配页框中选择牺牲页；全局置换才可能从其他进程占用的页框中选择。工作集是给定时间窗口内近期访问页面的集合，不等同于逻辑地址空间大小。</div>
     </div>
   </div>
  </div>
 <div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">DNS 中，哪个记录类型用于把邮件域名映射到负责接收邮件的邮件服务器？</span><span class="tag book">计算机网络</span><span class="tag easy">简单</span></div>
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">在同一工作集窗口 Δ 下，三个进程的工作集大小分别为 6、5、4 页。系统可供这些进程驻留使用的物理页框共 14 个。按工作集模型判断，哪项结论最合理？</span><span class="tag book">操作系统</span><span class="tag hard">困难</span></div>
   <div class="card-body">
-    <div class="q"><div class="opt">A 记录</div><div class="opt">AAAA 记录</div><div class="opt">MX 记录</div><div class="opt">CNAME 记录</div></div>
+    <div class="q"><div class="opt">总需求为 14 页，恰好不会发生抖动</div><div class="opt">总需求为 15 页，超过 14 个页框；应考虑暂停或换出至少一个进程以降低多道程序度</div><div class="opt">工作集总页数只影响磁盘空间，与驻留页框无关</div><div class="opt">只要采用全局置换，工作集总需求超过页框数也必然不会抖动</div></div>
     
     <button class="ans-btn">✅ 查看答案与解析</button>
     <div class="ans-box">
-      <div class="ans">答案：C（MX 记录）</div>
-      <div class="exp"><b>📖 解析：</b>MX（Mail Exchanger）记录指定域的邮件交换服务器；A 映射 IPv4 地址，AAAA 映射 IPv6 地址，CNAME 指定规范名称别名。</div>
-    </div>
-  </div>
- </div>
-<div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">某机采用单累加器结构，指令为 ADD X（将主存单元 X 的内容加到 AC）。不考虑间址和中断，以下哪组微操作顺序正确体现了该指令的取指、译码与执行流程？</span><span class="tag book">计算机组成原理</span><span class="tag hard">困难</span></div>
-  <div class="card-body">
-    <div class="q"><div class="opt">PC→MAR，M(MAR)→MDR，MDR→IR，(PC)+1；译码；地址码→MAR，M(MAR)→MDR，(AC)+(MDR)→AC</div><div class="opt">PC→IR，IR→MAR，(AC)→PC；译码；MDR→AC</div><div class="opt">地址码→MAR，M(MAR)→IR；译码；PC→AC，(AC)+(MDR)→MAR</div><div class="opt">PC→MAR，M(MAR)→IR；译码；(AC)+(PC)→AC，地址码→PC</div></div>
-    
-    <button class="ans-btn">✅ 查看答案与解析</button>
-    <div class="ans-box">
-      <div class="ans">答案：A</div>
-      <div class="exp"><b>📖 解析：</b>取指阶段用 PC 给出指令地址并取指到 IR，同时 PC 自增；译码后，执行 ADD X 需要将指令地址码送 MAR、读出操作数到 MDR，再将 AC 与 MDR 相加并写回 AC。其余选项混淆了 PC、IR、MAR、MDR 的职责或操作数来源。</div>
+      <div class="ans">答案：B</div>
+      <div class="exp"><b>📖 解析：</b>三个工作集总需求为 6+5+4=15 页，大于可用的 14 个页框，无法同时为所有进程保留其当前工作集。系统可降低多道程序度（例如暂停/换出一个进程），避免频繁缺页导致抖动；全局置换本身不能消除内存过度承诺。</div>
     </div>
   </div>
  </div>
@@ -203,47 +192,47 @@
 <div class="group"><div class="group-title">🇬🇧 考研单词 <span class="badge">20 词</span></div>
 <div class="card open">
   <div class="card-head"><span class="arrow">▶</span><span class="card-title">🇬🇧 考研单词 ×20</span><span class="tag book">高频词</span></div>
-  <div class="card-body"><div class="word-row"><span class="word">electronic</span><span class="phon">/ɪˌlekˈtrɒnɪk/</span></div>
-      <div class="def">电子的；电子设备的</div>
-      <div class="example">✏️ Electronic devices have transformed the way people communicate.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">ignore</span><span class="phon">/ɪɡˈnɔː(r)/</span></div>
-      <div class="def">忽视；不理睬</div>
-      <div class="example">✏️ We should not ignore the social consequences of technological change.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">survive</span><span class="phon">/səˈvaɪv/</span></div>
-      <div class="def">生存；幸存；继续存在</div>
-      <div class="example">✏️ Only species that adapt to environmental change are likely to survive.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">bird</span><span class="phon">/bɜːd/</span></div>
-      <div class="def">鸟；禽类</div>
-      <div class="example">✏️ The decline in bird populations may indicate a wider ecological problem.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">heavy</span><span class="phon">/ˈhevi/</span></div>
-      <div class="def">重的；大量的；严重的</div>
-      <div class="example">✏️ Heavy investment in public transport can reduce urban congestion.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">fuel</span><span class="phon">/ˈfjuːəl/</span></div>
-      <div class="def">燃料；刺激；推动</div>
-      <div class="example">✏️ Rising energy costs have fueled public concern about inflation.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">magazine</span><span class="phon">/ˌmæɡəˈziːn/</span></div>
-      <div class="def">杂志；期刊</div>
-      <div class="example">✏️ The magazine published a detailed report on educational inequality.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">summer</span><span class="phon">/ˈsʌmə(r)/</span></div>
-      <div class="def">夏天；夏季的</div>
-      <div class="example">✏️ The research team collected additional data during the summer.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">complex</span><span class="phon">/ˈkɒmpleks/</span></div>
-      <div class="def">复杂的；综合体</div>
-      <div class="example">✏️ Climate change is a complex issue that requires international cooperation.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">danger</span><span class="phon">/ˈdeɪndʒə(r)/</span></div>
-      <div class="def">危险；风险</div>
-      <div class="example">✏️ The report warns of the danger of relying on a single source of information.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">piece</span><span class="phon">/piːs/</span></div>
-      <div class="def">一件；一片；部分</div>
-      <div class="example">✏️ The study provides an important piece of evidence for the proposed theory.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">option</span><span class="phon">/ˈɒpʃn/</span></div>
-      <div class="def">选择；选项</div>
-      <div class="example">✏️ For many students, online courses are a practical option.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">throughout</span><span class="phon">/θruːˈaʊt/</span></div>
-      <div class="def">遍及；自始至终</div>
-      <div class="example">✏️ The policy was debated throughout the country for several months.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">library</span><span class="phon">/ˈlaɪbrəri/</span></div>
-      <div class="def">图书馆；资料库</div>
-      <div class="example">✏️ A university library gives researchers access to a wide range of sources.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">mention</span><span class="phon">/ˈmenʃn/</span></div>
-      <div class="def">提及；说起</div>
-      <div class="example">✏️ The author mentions several limitations of the survey.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">institution</span><span class="phon">/ˌɪnstɪˈtjuːʃn/</span></div>
-      <div class="def">机构；制度；习俗</div>
-      <div class="example">✏️ Public institutions play a crucial role in protecting individual rights.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">appeal</span><span class="phon">/əˈpiːl/</span></div>
-      <div class="def">呼吁；吸引力；上诉</div>
-      <div class="example">✏️ The proposal may appeal to people who value sustainable development.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">background</span><span class="phon">/ˈbækɡraʊnd/</span></div>
-      <div class="def">背景；经历</div>
-      <div class="example">✏️ Applicants from different backgrounds can bring new perspectives to research.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">colleague</span><span class="phon">/ˈkɒliːɡ/</span></div>
-      <div class="def">同事；同僚</div>
-      <div class="example">✏️ She discussed the findings with a colleague before submitting the paper.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">intend</span><span class="phon">/ɪnˈtend/</span></div>
-      <div class="def">打算；意指</div>
-      <div class="example">✏️ The government intends to expand access to higher education.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"></div>
+  <div class="card-body"><div class="word-row"><span class="word">strategy</span><span class="phon">/ˈstrætədʒi/</span></div>
+      <div class="def">策略；战略</div>
+      <div class="example">✏️ A clear strategy is essential for addressing the long-term challenges of an ageing society.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">paint</span><span class="phon">/peɪnt/</span></div>
+      <div class="def">绘画；油漆；颜料</div>
+      <div class="example">✏️ The researcher used a vivid example to paint a picture of life in the rapidly changing city.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">exact</span><span class="phon">/ɪɡˈzækt/</span></div>
+      <div class="def">确切的；精确的；特定的</div>
+      <div class="example">✏️ It is difficult to determine the exact impact of technology on children's learning.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">journal</span><span class="phon">/ˈdʒɜːnl/</span></div>
+      <div class="def">期刊；日志；日记</div>
+      <div class="example">✏️ The findings were published in an international journal of environmental science.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">grant</span><span class="phon">/ɡrɑːnt/</span></div>
+      <div class="def">授予；准予；拨款</div>
+      <div class="example">✏️ The university received a grant to support research into renewable energy.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">factory</span><span class="phon">/ˈfæktri/</span></div>
+      <div class="def">工厂</div>
+      <div class="example">✏️ The factory has introduced new equipment to reduce its energy consumption.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">authority</span><span class="phon">/ɔːˈθɒrəti/</span></div>
+      <div class="def">权力；当局；权威人士</div>
+      <div class="example">✏️ Local authorities are responsible for improving public transport services.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">association</span><span class="phon">/əˌsəʊsiˈeɪʃn/</span></div>
+      <div class="def">协会；联系；联想</div>
+      <div class="example">✏️ The study found a strong association between regular exercise and better health.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">tree</span><span class="phon">/triː/</span></div>
+      <div class="def">树；树木；爬上树</div>
+      <div class="example">✏️ Planting trees can help reduce air pollution in densely populated areas.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">arrive</span><span class="phon">/əˈraɪv/</span></div>
+      <div class="def">到达；抵达；达成</div>
+      <div class="example">✏️ Many young people arrive at university with limited experience of independent living.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">ready</span><span class="phon">/ˈredi/</span></div>
+      <div class="def">准备好的；愿意的</div>
+      <div class="example">✏️ Students should be ready to adapt to new demands in the workplace.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">cheap</span><span class="phon">/tʃiːp/</span></div>
+      <div class="def">便宜的；廉价的</div>
+      <div class="example">✏️ Cheap products may cost consumers more in the long run if they are poorly made.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">patent</span><span class="phon">/ˈpætnt/</span></div>
+      <div class="def">专利；专利的</div>
+      <div class="example">✏️ A patent gives inventors temporary legal protection for their new ideas.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">flight</span><span class="phon">/flaɪt/</span></div>
+      <div class="def">飞行；航班；逃离</div>
+      <div class="example">✏️ The new airport has increased the number of international flights to the region.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">spread</span><span class="phon">/spred/</span></div>
+      <div class="def">传播；扩散；蔓延</div>
+      <div class="example">✏️ Social media allows information to spread rapidly across national borders.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">expense</span><span class="phon">/ɪkˈspens/</span></div>
+      <div class="def">花费；费用；代价</div>
+      <div class="example">✏️ Economic growth should not come at the expense of environmental protection.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">famous</span><span class="phon">/ˈfeɪməs/</span></div>
+      <div class="def">著名的；出名的</div>
+      <div class="example">✏️ The city is famous for its historic buildings and cultural festivals.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">indeed</span><span class="phon">/ɪnˈdiːd/</span></div>
+      <div class="def">确实；的确；实际上</div>
+      <div class="example">✏️ Access to education is indeed a key factor in reducing social inequality.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">establish</span><span class="phon">/ɪˈstæblɪʃ/</span></div>
+      <div class="def">建立；确立；查明</div>
+      <div class="example">✏️ The government plans to establish a framework for protecting personal data.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">observe</span><span class="phon">/əbˈzɜːv/</span></div>
+      <div class="def">观察；遵守；评论</div>
+      <div class="example">✏️ Scientists observed significant changes in the local climate over several decades.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"></div>
 </div>
 </div>
 <div class="footer">由 Hermes AI 生成 · 每天 08:00 更新 · 加油 💪</div>
