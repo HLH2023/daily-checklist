@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>今日学习清单 · 2026-09-27</title>
+<title>今日学习清单 · 2026-09-28</title>
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Noto Sans SC", sans-serif; background: #f5f6fa; color: #1f2329; max-width: 640px; margin: 0 auto; padding: 16px 14px 40px; }
@@ -50,147 +50,134 @@
 
 <div class="hero">
   <h1>📋 今日学习清单</h1>
-  <div class="date">2026年9月27日 星期日</div>
+  <div class="date">2026年9月28日 星期一</div>
 </div>
 
 <div class="group"><div class="group-title">🔥 今日重点 <span class="badge">2 项</span></div>
 <div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">🧩 LeetCode 每日一题：Reverse Substrings Between Each Pair of Parentheses</span><span class="tag mid">Medium</span></div>
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">🧩 LeetCode 每日一题：Maximum Nesting Depth of the Parentheses</span><span class="tag easy">Easy</span></div>
   <div class="card-body">
-    <div class="q">给定一个由小写英文字母和圆括号组成、括号配对正确的字符串 s。每次遇到一对括号，就反转它们之间的子串；括号可以嵌套。最终返回去掉所有括号后的字符串。例如：s = "(u(love)i)"，结果为 "iloveu"。</div>
-    <div class="exp"><b>💡 解题思路：</b>先用栈配对每个左右括号的下标。随后从左向右扫描字符串；遇到括号就跳到与之配对的位置并反转行进方向，普通字符则加入结果。这样无需真的反转子串，也能正确处理嵌套。</div>
-    <div class="exp"><b>🔧 题解：</b>配对预处理和最终遍历都各访问每个字符常数次，时间复杂度 O(n)，空间复杂度 O(n)。扫描方向翻转等价于逐层执行括号内反转，遍历结束时括号本身不会加入答案。</div>
+    <div class="q">给定一个有效括号字符串 s，定义某一对括号的深度为它内部嵌套的括号对数加 1。返回 s 中括号的最大嵌套深度。例如：s = "(1+(2*3)+((8)/4))+1"，最大深度为 3。</div>
+    <div class="exp"><b>💡 解题思路：</b>从左到右扫描，遇到左括号就把当前深度加一，并更新最大值；遇到右括号就把当前深度减一。由于输入保证括号有效，扫描过程中深度不会小于 0，结束时回到 0。</div>
+    <div class="exp"><b>🔧 题解：</b>时间复杂度 O(n)，额外空间复杂度 O(1)。只需维护当前深度和历史最大深度，不必使用栈。</div>
     <pre class="code">class Solution:
-    def reverseParentheses(self, s: str) -&gt; str:
-        n = len(s)
-        pair = [0] * n
-        stack = []
-        for i, ch in enumerate(s):
+    def maxDepth(self, s: str) -&gt; int:
+        depth = ans = 0
+        for ch in s:
             if ch == '(':
-                stack.append(i)
+                depth += 1
+                ans = max(ans, depth)
             elif ch == ')':
-                j = stack.pop()
-                pair[i] = j
-                pair[j] = i
-
-        ans = []
-        i, direction = 0, 1
-        while 0 &lt;= i &lt; n:
-            if s[i] == '(' or s[i] == ')':
-                i = pair[i]
-                direction = -direction
-            else:
-                ans.append(s[i])
-            i += direction
-        return ''.join(ans)</pre>
-    <a class="link" href="https://leetcode.com/problems/reverse-substrings-between-each-pair-of-parentheses/" target="_blank">🚀 去 LeetCode 做题 →</a>
+                depth -= 1
+        return ans</pre>
+    <a class="link" href="https://leetcode.com/problems/maximum-nesting-depth-of-the-parentheses/" target="_blank">🚀 去 LeetCode 做题 →</a>
   </div>
 </div>
 </div>
 <div class="group"><div class="group-title">📐 数学知识点 <span class="badge">4 项</span></div>
 <div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">📐 高数·第5天·微分方程：一阶非齐次待定系数</span><span class="tag book">高数·第5天·微分方程</span></div>
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">📐 高数·第5天·中值定理：方程根的讨论</span><span class="tag book">高数·第5天·中值定理</span></div>
   <div class="card-body">
-    <div class="q">y_h=Ce^at；y=y_h+y_p</div>
-    <div class="exp"><b>📌 要点：</b>对 y'-ay=P_m(t)e^{qt}，先求齐次解 y_h=Ce^{at}。当 q≠a 时，特解设为 Q_m(t)e^{qt}；当 q=a 发生共振时，特解需乘 t，设为 tQ_m(t)e^{qt}，其中 Q_m 与 P_m 同次数。</div>
-    <div class="exp">• 判断指数参数 q 是否等于齐次特征根 a</div><div class="exp">• 共振时乘 t，避免特解与齐次解重复</div><div class="exp">• 最后叠加通解 y=y_h+y_p</div>
-    <div class="exp" style="margin-top:6px">y'-ay=f(t)=Pm(t)e^qt：q≠a特解<b style="color:#d48806">＿＿＿</b>；q=a特解<b style="color:#d48806">＿＿＿</b></div><button class="ans-btn" style="font-size:12px;padding:4px 12px">✅ 答案</button><div class="ans-box"><div class="ans">Qm(t)e^qt；t·Qm(t)e^qt</div></div>
-    <div class="exp"><b>🧭 套路：</b>先看 q=a 与否，再选待定特解形式；代回方程比较系数。</div>
+    <div class="q">n 个零点 ⟹ f' 至少有 n−1 个零点</div>
+    <div class="exp"><b>📌 要点：</b>讨论方程 f(x)=0 的根：先结合连续性（或零点定理）证明根存在；再用单调性证明根唯一；用罗尔定理及导数零点数关系控制根的个数。</div>
+    <div class="exp">• 存在性关注区间端点函数值异号或构造辅助函数</div><div class="exp">• 唯一性常证明 f' 在区间内恒正/恒负</div><div class="exp">• 若 f 有 n 个互异零点，反复应用罗尔定理可推出 f' 至少有 n−1 个零点</div>
+    <div class="exp" style="margin-top:6px">存在性用<b style="color:#d48806">＿＿＿</b>；唯一性用<b style="color:#d48806">＿＿＿</b>；个数用<b style="color:#d48806">＿＿＿</b></div><button class="ans-btn" style="font-size:12px;padding:4px 12px">✅ 答案</button><div class="ans-box"><div class="ans">零点定理/罗尔；单调性；罗尔定理</div></div>
+    <div class="exp"><b>🧭 套路：</b>先判存在，再判唯一；需要排除多个根时，优先考虑罗尔定理或导数零点个数。</div>
     
   </div>
  </div>
 <div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">📐 高数·第6天·中值定理：微分中值定理</span><span class="tag book">高数·第6天·中值定理</span></div>
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">📐 高数·第5天·中值定理：证明不等式方法</span><span class="tag book">高数·第5天·中值定理</span></div>
   <div class="card-body">
-    <div class="q">Lagrange：f'(ξ)=[f(b)-f(a)]/(b-a)；Cauchy：[f(b)-f(a)]/[g(b)-g(a)]=f'(ξ)/g'(ξ)</div>
-    <div class="exp"><b>📌 要点：</b>罗尔、拉格朗日、柯西中值定理均要求闭区间连续、开区间可导。罗尔定理还要求 f(a)=f(b)，从而存在 ξ∈(a,b) 使 f'(ξ)=0。</div>
-    <div class="exp">• 罗尔定理是拉格朗日中值定理的特殊情形</div><div class="exp">• 拉格朗日定理把区间平均变化率转化为某点瞬时变化率</div><div class="exp">• 柯西中值定理需留意分母 g(b)-g(a) 及 g'(ξ) 的非零条件</div>
-    <div class="exp" style="margin-top:6px">三个定理：<b style="color:#d48806">＿＿＿</b>、<b style="color:#d48806">＿＿＿</b>、<b style="color:#d48806">＿＿＿</b>；Rolle条件f(a)=f(b)⟹<b style="color:#d48806">＿＿＿</b></div><button class="ans-btn" style="font-size:12px;padding:4px 12px">✅ 答案</button><div class="ans-box"><div class="ans">罗尔、拉格朗日、柯西；f'(ξ)=0</div></div>
-    <div class="exp"><b>🧭 套路：</b>证明存在 ξ 时，先核对连续、可导与端点条件，再选用合适的中值定理。</div>
+    <div class="q">f''&gt;0 ⟹ f 凸：f((1−λ)x+λy)≤(1−λ)f(x)+λf(y)；切线不等式 f(y)≥f(x)+f'(x)(y−x)</div>
+    <div class="exp"><b>📌 要点：</b>证明不等式可构造差函数并用导数判单调，利用二阶导数判断凹凸性，或用泰勒公式估计余项；涉及常数不等式时可尝试变量化。</div>
+    <div class="exp">• 把待证式移项构造 F(x)，目标转为证明 F(x)≥0</div><div class="exp">• 凸函数图像在切线上方，可用切线不等式建立下界</div><div class="exp">• 选泰勒展开点时尽量让低阶项简化</div>
+    <div class="exp" style="margin-top:6px">方法：①<b style="color:#d48806">＿＿＿</b>②<b style="color:#d48806">＿＿＿</b>③<b style="color:#d48806">＿＿＿</b>；常数不等式<b style="color:#d48806">＿＿＿</b>化</div><button class="ans-btn" style="font-size:12px;padding:4px 12px">✅ 答案</button><div class="ans-box"><div class="ans">求导判单调；凹凸性；泰勒公式；变量</div></div>
+    <div class="exp"><b>🧭 套路：</b>简简单单作函数，按部就班析导数；注意写清定义域、等号成立条件和估计方向。</div>
     
   </div>
  </div>
 <div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">📐 线代·第3章·行列式与矩阵：秩的拼接与伴随矩阵秩</span><span class="tag book">线代·第3章·行列式与矩阵</span></div>
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">📐 线代·第4章·向量组的线性相关性：向量组等价</span><span class="tag book">线代·第4章·向量组的线性相关性</span></div>
   <div class="card-body">
-    <div class="q">r(A,B)≤r(A)+r(B)；r(A*)={n,1,0}按r(A)={n,n-1,&lt;n-1}</div>
-    <div class="exp"><b>📌 要点：</b>矩阵拼接的秩满足上界 r(A,B)≤r(A)+r(B)，并不小于各部分秩；追加一列至多使秩增加 1。n 阶方阵 A 的伴随矩阵秩分三档：A 满秩时为 n，A 秩为 n−1 时为 1，A 秩小于 n−1 时为 0。</div>
-    <div class="exp">• 横向或纵向拼接时，秩至少为组成块各自秩的最大值</div><div class="exp">• 分块对角矩阵的秩等于各对角块秩之和</div><div class="exp">• 伴随矩阵结论按 r(A)=n、n−1、&lt;n−1 分类记忆</div>
-    <div class="exp" style="margin-top:6px">默写核心结论：<b style="color:#d48806">＿＿＿</b></div><button class="ans-btn" style="font-size:12px;padding:4px 12px">✅ 答案</button><div class="ans-box"><div class="ans">r(A,B)≤r(A)+r(B)；r(A*)={n,1,0}按r(A)={n,n-1,&lt;n-1}</div></div>
-    <div class="exp"><b>🧭 套路：</b>先判断 A 是否可逆；不可逆时再区分 r(A)=n−1 与 r(A)&lt;n−1。</div>
+    <div class="q">A~B ⟺ r(A)=r(B)=r(A,B)</div>
+    <div class="exp"><b>📌 要点：</b>两向量组等价当且仅当它们可以互相线性表示；等价的秩判别为 r(A)=r(B)=r(A,B)。向量组等价具有反身性、对称性和传递性。</div>
+    <div class="exp">• B 可由 A 线性表示推出 r(B)≤r(A)</div><div class="exp">• 互相线性表示推出两个秩相等且等于拼接组的秩</div><div class="exp">• 等价意味着张成空间相同，不要求向量个数相同</div>
+    <div class="exp" style="margin-top:6px">默写核心结论：<b style="color:#d48806">＿＿＿</b></div><button class="ans-btn" style="font-size:12px;padding:4px 12px">✅ 答案</button><div class="ans-box"><div class="ans">A~B⟺r(A)=r(B)=r(A,B)</div></div>
+    <div class="exp"><b>🧭 套路：</b>证明等价可分别证明两个方向的线性表示，或计算两个组及拼接组的秩。</div>
     
   </div>
  </div>
 <div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">📐 线代·第4章·向量：线性组合与线性表示</span><span class="tag book">线代·第4章·向量</span></div>
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">📐 线代·第4章·向量组的线性相关性：线性相关与线性无关</span><span class="tag book">线代·第4章·向量组的线性相关性</span></div>
   <div class="card-body">
-    <div class="q">β=λ1α1+...+λsαs</div>
-    <div class="exp"><b>📌 要点：</b>向量 β 能由 α1,…,αs 线性表示，等价于向量方程 Ax=β 有解，也等价于增广矩阵与系数矩阵同秩：r(A,β)=r(A)。</div>
-    <div class="exp">• 线性组合的系数 λ1,…,λs 为标量</div><div class="exp">• 把给定向量作为矩阵列向量，可转化为线性方程组</div><div class="exp">• 判定可表示性可比较 r(A,β) 与 r(A)</div>
-    <div class="exp" style="margin-top:6px">默写核心结论：<b style="color:#d48806">＿＿＿</b></div><button class="ans-btn" style="font-size:12px;padding:4px 12px">✅ 答案</button><div class="ans-box"><div class="ans">β=λ1α1+...+λsαs</div></div>
-    <div class="exp"><b>🧭 套路：</b>将表示问题写成 Ax=β，再用秩判定有解；若要求系数则继续求解方程组。</div>
-    
+    <div class="q">相关 ⟺ 存在不全为零的系数使线性组合为零 ⟺ Ax=0 有非零解 ⟺ r(A)&lt;s</div>
+    <div class="exp"><b>📌 要点：</b>含 s 个向量的向量组线性相关，当且仅当存在不全为零的系数使其线性组合为零；等价地，齐次方程 Ax=0 有非零解，或矩阵列秩 r(A)&lt;s。线性无关时 Ax=0 只有零解且 r(A)=s。</div>
+    <div class="exp">• 向量组线性无关要求线性组合为零时所有系数都为零</div><div class="exp">• 列数 s 大于行数 m 时，m×s 矩阵的列向量必相关</div><div class="exp">• 含零向量或有向量可由其余向量线性表示的向量组必相关</div>
+    <div class="exp" style="margin-top:6px">默写核心结论：<b style="color:#d48806">＿＿＿</b></div><button class="ans-btn" style="font-size:12px;padding:4px 12px">✅ 答案</button><div class="ans-box"><div class="ans">相关⟺∃不全为零k使Σkα=0⟺Ax=0有非零解⟺r(A)&lt;s</div></div>
+    <div class="exp"><b>🧭 套路：</b>把向量作为列组成矩阵 A，再通过齐次方程解的情况或矩阵秩判断。</div>
+    <img src="images/2026-09-28_3.png" style="width:100%;border-radius:10px;margin-top:10px;border:1px solid #e5e7eb">
   </div>
  </div>
 </div>
 <div class="group"><div class="group-title">💻 408 选择题 <span class="badge">5 题</span></div>
 <div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">无向图的邻接关系为：A:{B,C}，B:{A,D,E}，C:{A,E,F}，D:{B,E}，E:{B,C,D,F}，F:{C,E}。从 A 开始递归执行 DFS，每次按字母序访问尚未访问的邻接点，顶点首次访问序列是什么？</span><span class="tag book">数据结构</span><span class="tag hard">困难</span></div>
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">无向图 G 有 6 个顶点，边集为 {(1,2),(2,3),(4,5)}，顶点 6 没有 incident edge。从任一未访问顶点开始进行 DFS，直到所有顶点都被访问；需要启动几次 DFS，且 G 有几个连通分量？</span><span class="tag book">数据结构</span><span class="tag easy">简单</span></div>
   <div class="card-body">
-    <div class="q"><div class="opt">A、B、D、E、C、F</div><div class="opt">A、B、E、D、C、F</div><div class="opt">A、C、E、B、D、F</div><div class="opt">A、B、D、C、E、F</div></div>
-    
-    <button class="ans-btn">✅ 查看答案与解析</button>
-    <div class="ans-box">
-      <div class="ans">答案：A</div>
-      <div class="exp"><b>📖 解析：</b>从 A 先到 B，再由 B 到 D；D 的未访问邻点为 E，进入 E 后按字母序先访问 C，再从 C 访问 F。因此发现序列为 A、B、D、E、C、F。DFS 的访问序列取决于邻接点次序。</div>
-    </div>
-  </div>
- </div>
-<div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">关于硬布线控制器，下列说法正确的是？</span><span class="tag book">计算机组成原理</span><span class="tag easy">简单</span></div>
-  <div class="card-body">
-    <div class="q"><div class="opt">控制信号主要由组合逻辑电路根据指令和时序状态产生</div><div class="opt">控制信号全部由微指令存储器逐条读出</div><div class="opt">修改指令系统时通常只需改写控制存储器</div><div class="opt">其主要特点是控制灵活且译码速度较慢</div></div>
-    
-    <button class="ans-btn">✅ 查看答案与解析</button>
-    <div class="ans-box">
-      <div class="ans">答案：A</div>
-      <div class="exp"><b>📖 解析：</b>硬布线控制器以组合逻辑电路实现控制信号的产生，通常速度较快，但逻辑设计复杂且不易修改。微程序控制器才是从控制存储器读取微指令，灵活性较好。</div>
-    </div>
-  </div>
- </div>
-<div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">进程 P、Q 将同一文件以共享映射方式映射到各自地址空间。P 修改映射区中的某个字节并完成所需同步后，通常可以期待什么结果？</span><span class="tag book">操作系统</span><span class="tag mid">中等</span></div>
-  <div class="card-body">
-    <div class="q"><div class="opt">Q 的共享映射可观察到该修改，文件内容也会按映射与回写机制更新</div><div class="opt">Q 必须重新启动后才能读取到修改，文件内容永远不变</div><div class="opt">该修改只存在于 P 的私有副本中，与映射类型无关</div><div class="opt">修改会自动改变两个进程的虚拟地址布局</div></div>
-    
-    <button class="ans-btn">✅ 查看答案与解析</button>
-    <div class="ans-box">
-      <div class="ans">答案：A</div>
-      <div class="exp"><b>📖 解析：</b>共享映射使多个进程映射到同一文件页的共享物理页缓存，修改可被其他共享映射观察，脏页由操作系统按机制回写。若使用私有映射，写入通常采用写时复制，不会作为共享修改传播。</div>
-    </div>
-  </div>
- </div>
-<div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">关于 HTTP 方法的安全性与幂等性，下列说法正确的是？</span><span class="tag book">计算机网络</span><span class="tag easy">简单</span></div>
-  <div class="card-body">
-    <div class="q"><div class="opt">GET 通常是安全且幂等的；PUT 通常具有幂等性</div><div class="opt">POST 必定安全且幂等</div><div class="opt">GET 用于修改资源，因此通常不安全</div><div class="opt">幂等表示重复请求会产生重复副作用</div></div>
-    
-    <button class="ans-btn">✅ 查看答案与解析</button>
-    <div class="ans-box">
-      <div class="ans">答案：A</div>
-      <div class="exp"><b>📖 解析：</b>安全方法不应改变服务器资源状态；幂等表示同一请求执行一次或多次，其预期效果相同。GET 通常安全且幂等，PUT 通常幂等；POST 一般不保证幂等。具体语义仍取决于服务端实现。</div>
-    </div>
-  </div>
- </div>
-<div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">客户端携带有效缓存验证信息请求资源，服务器确认资源自缓存后未改变，并要求客户端继续使用缓存副本。最恰当的状态码是？</span><span class="tag book">计算机网络</span><span class="tag easy">简单</span></div>
-  <div class="card-body">
-    <div class="q"><div class="opt">200 OK</div><div class="opt">301 Moved Permanently</div><div class="opt">304 Not Modified</div><div class="opt">404 Not Found</div></div>
+    <div class="q"><div class="opt">A. 1 次；1 个</div><div class="opt">B. 2 次；2 个</div><div class="opt">C. 3 次；3 个</div><div class="opt">D. 4 次；4 个</div></div>
     
     <button class="ans-btn">✅ 查看答案与解析</button>
     <div class="ans-box">
       <div class="ans">答案：C</div>
-      <div class="exp"><b>📖 解析：</b>304 Not Modified 表示条件请求中的资源未修改，客户端可继续使用缓存表示；它不是资源内容本身的完整响应。200 表示成功返回表示，301 是永久重定向，404 表示未找到资源。</div>
+      <div class="exp"><b>📖 解析：</b>{1,2,3}、{4,5}、{6} 是三个连通分量。每次从一个尚未访问的顶点启动 DFS，恰好遍历一个连通分量，因此需启动 3 次。</div>
+    </div>
+  </div>
+ </div>
+<div class="card open">
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">关于微程序控制器，下列说法正确的是？</span><span class="tag book">计算机组成原理</span><span class="tag mid">中等</span></div>
+  <div class="card-body">
+    <div class="q"><div class="opt">A. 一条机器指令必定只对应一条微指令</div><div class="opt">B. 微程序由微指令序列组成，通常存放在控制存储器中</div><div class="opt">C. 微指令直接存放在主存的数据区</div><div class="opt">D. 控制存储器中的每一位都对应一条机器指令</div></div>
+    
+    <button class="ans-btn">✅ 查看答案与解析</button>
+    <div class="ans-box">
+      <div class="ans">答案：B</div>
+      <div class="exp"><b>📖 解析：</b>机器指令的执行通常分解为若干微操作，由控制存储器中的微程序（微指令序列）产生相应控制信号。机器指令与微指令不是一一对应关系；控制存储器存放微程序，不是主存数据区。</div>
+    </div>
+  </div>
+ </div>
+<div class="card open">
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">在文件系统中，下列哪一项最能体现文件属性（元数据）而非文件内容？</span><span class="tag book">操作系统</span><span class="tag easy">简单</span></div>
+  <div class="card-body">
+    <div class="q"><div class="opt">A. 文本文档中的段落文字</div><div class="opt">B. 图片像素的 RGB 数值</div><div class="opt">C. 文件的访问权限和最后修改时间</div><div class="opt">D. 可执行文件中的机器指令</div></div>
+    
+    <button class="ans-btn">✅ 查看答案与解析</button>
+    <div class="ans-box">
+      <div class="ans">答案：C</div>
+      <div class="exp"><b>📖 解析：</b>访问权限、时间戳、文件类型和大小等属于文件属性/元数据，用于描述和管理文件；段落、像素和机器指令则是文件内容。</div>
+    </div>
+  </div>
+ </div>
+<div class="card open">
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">客户端通过 HTTPS 访问服务器。采用基于证书认证、临时密钥协商的常见 TLS 握手后，以下说法最准确的是？</span><span class="tag book">计算机网络</span><span class="tag hard">困难</span></div>
+  <div class="card-body">
+    <div class="q"><div class="opt">A. 服务器证书本身会加密之后传输的全部应用数据</div><div class="opt">B. 客户端验证证书链及访问域名等信息以认证服务器，握手协商会话密钥，应用数据通常使用对称密码保护</div><div class="opt">C. 只要证书签名有效，客户端就无需检查证书有效期和域名</div><div class="opt">D. TLS 握手完成后，HTTP 数据仍以明文传输，只有 TCP 首部被加密</div></div>
+    
+    <button class="ans-btn">✅ 查看答案与解析</button>
+    <div class="ans-box">
+      <div class="ans">答案：B</div>
+      <div class="exp"><b>📖 解析：</b>证书用于绑定服务器身份，客户端还需进行证书链、有效期、用途及主机名等检查。握手通过密钥协商建立会话密钥，之后通常以高效的对称加密和完整性保护传输应用数据；TLS 保护的是上层数据，不是 TCP 首部。</div>
+    </div>
+  </div>
+ </div>
+<div class="card open">
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">对含 n 个顶点的连通带权无向图，下列关于最小生成树的说法正确的是？</span><span class="tag book">数据结构</span><span class="tag easy">简单</span></div>
+  <div class="card-body">
+    <div class="q"><div class="opt">A. 它必须包含原图的全部边</div><div class="opt">B. 它是包含全部顶点、总权值最小的生成树，恰有 n−1 条边</div><div class="opt">C. 只要边权互不相同，原图就只有 n−1 条边</div><div class="opt">D. 若存在相同权值边，最小生成树一定不存在</div></div>
+    
+    <button class="ans-btn">✅ 查看答案与解析</button>
+    <div class="ans-box">
+      <div class="ans">答案：B</div>
+      <div class="exp"><b>📖 解析：</b>生成树连通且无环，覆盖原图所有顶点，因而有 n−1 条边；最小生成树是在所有生成树中总权值最小者。边权相同可能导致多棵最小生成树，但不会使其不存在。</div>
     </div>
   </div>
  </div>
@@ -198,47 +185,47 @@
 <div class="group"><div class="group-title">🇬🇧 考研单词 <span class="badge">20 词</span></div>
 <div class="card open">
   <div class="card-head"><span class="arrow">▶</span><span class="card-title">🇬🇧 考研单词 ×20</span><span class="tag book">高频词</span></div>
-  <div class="card-body"><div class="word-row"><span class="word">chief</span><span class="phon">/tʃiːf/</span></div>
-      <div class="def">首领、主要的</div>
-      <div class="example">✏️ The chief purpose of the survey is to identify the causes of unemployment.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">safe</span><span class="phon">/seɪf/</span></div>
-      <div class="def">安全的</div>
-      <div class="example">✏️ The report argues that the new policy is safe for the environment.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">nor</span><span class="phon">/nɔːr/</span></div>
-      <div class="def">也不</div>
-      <div class="example">✏️ The evidence was neither complete nor reliable enough to support the claim.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">foot</span><span class="phon">/fʊt/</span></div>
-      <div class="def">脚；走</div>
-      <div class="example">✏️ The researchers travelled on foot to reach the remote villages.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">debate</span><span class="phon">/dɪˈbeɪt/</span></div>
-      <div class="def">讨论；辩论</div>
-      <div class="example">✏️ There is considerable debate about the effects of technology on employment.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">agency</span><span class="phon">/ˈeɪdʒənsi/</span></div>
-      <div class="def">机构；代理处</div>
-      <div class="example">✏️ The government agency released new data on regional development.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">educate</span><span class="phon">/ˈedʒukeɪt/</span></div>
-      <div class="def">教育</div>
-      <div class="example">✏️ Schools should educate students to evaluate information critically.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">compete</span><span class="phon">/kəmˈpiːt/</span></div>
-      <div class="def">竞争</div>
-      <div class="example">✏️ Small firms must compete with larger companies for skilled workers.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">wish</span><span class="phon">/wɪʃ/</span></div>
-      <div class="def">希望；愿望</div>
-      <div class="example">✏️ Many graduates wish to find work that matches their qualifications.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">staff</span><span class="phon">/stæf/</span></div>
-      <div class="def">员工；全体职员</div>
-      <div class="example">✏️ The hospital plans to train its staff in new safety procedures.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">adapt</span><span class="phon">/əˈdæpt/</span></div>
-      <div class="def">适应；改编</div>
-      <div class="example">✏️ Businesses have had to adapt to rapid changes in consumer demand.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">boss</span><span class="phon">/bɔːs/</span></div>
-      <div class="def">老板；上司</div>
-      <div class="example">✏️ A supportive boss can improve communication within a team.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">unless</span><span class="phon">/ənˈles/</span></div>
-      <div class="def">除非；如果不</div>
-      <div class="example">✏️ The project will fail unless adequate funding is provided.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">unemployment</span><span class="phon">/ˌʌnɪmˈplɔɪmənt/</span></div>
-      <div class="def">失业；失业人数</div>
-      <div class="example">✏️ Investment in education may help reduce long-term unemployment.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">fix</span><span class="phon">/fɪks/</span></div>
-      <div class="def">固定；修理；解决</div>
-      <div class="example">✏️ The committee proposed measures to fix weaknesses in the system.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">scale</span><span class="phon">/skeɪl/</span></div>
-      <div class="def">规模；刻度；天平</div>
-      <div class="example">✏️ The study was conducted on a national scale.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">possibility</span><span class="phon">/ˌpɑːsəˈbɪləti/</span></div>
-      <div class="def">可能性；可能的事</div>
-      <div class="example">✏️ Researchers are examining the possibility of using renewable energy.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">application</span><span class="phon">/ˌæplɪˈkeɪʃn/</span></div>
-      <div class="def">应用；申请</div>
-      <div class="example">✏️ The practical application of the theory remains a subject of discussion.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">participant</span><span class="phon">/pɑːrˈtɪsɪpənt/</span></div>
-      <div class="def">参与者</div>
-      <div class="example">✏️ Each participant was asked to complete a questionnaire.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">union</span><span class="phon">/ˈjuːniən/</span></div>
-      <div class="def">联合；联盟；工会</div>
-      <div class="example">✏️ The union called for better working conditions and fair wages.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"></div>
+  <div class="card-body"><div class="word-row"><span class="word">threat</span><span class="phon">/θret/</span></div>
+      <div class="def">威胁；构成威胁</div>
+      <div class="example">✏️ Climate change poses a serious threat to coastal communities.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">emotion</span><span class="phon">/ɪˈmoʊʃən/</span></div>
+      <div class="def">情感；情绪</div>
+      <div class="example">✏️ Strong emotion can influence the way people make decisions.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">western</span><span class="phon">/ˈwestərn/</span></div>
+      <div class="def">西方的；西部的</div>
+      <div class="example">✏️ The study compares educational systems in eastern and western regions.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">marriage</span><span class="phon">/ˈmærɪdʒ/</span></div>
+      <div class="def">婚姻；结婚</div>
+      <div class="example">✏️ The article examines how economic conditions affect marriage decisions.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">capacity</span><span class="phon">/kəˈpæsəti/</span></div>
+      <div class="def">容量；能力；生产力</div>
+      <div class="example">✏️ The new policy may increase the capacity of local hospitals.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">score</span><span class="phon">/skɔːr/</span></div>
+      <div class="def">分数；得分</div>
+      <div class="example">✏️ Students who read regularly tend to score higher on vocabulary tests.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">obvious</span><span class="phon">/ˈɑːbviəs/</span></div>
+      <div class="def">明显的；显然的</div>
+      <div class="example">✏️ It is obvious that reliable data are essential to sound research.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">relation</span><span class="phon">/rɪˈleɪʃən/</span></div>
+      <div class="def">关系；联系</div>
+      <div class="example">✏️ Researchers found a close relation between sleep and memory.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">lesson</span><span class="phon">/ˈlesən/</span></div>
+      <div class="def">课；教训</div>
+      <div class="example">✏️ One important lesson of the experiment is that assumptions must be tested.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">passenger</span><span class="phon">/ˈpæsɪndʒər/</span></div>
+      <div class="def">乘客</div>
+      <div class="example">✏️ Each passenger is required to present a valid ticket before boarding.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">represent</span><span class="phon">/ˌreprɪˈzent/</span></div>
+      <div class="def">代表；象征；体现</div>
+      <div class="example">✏️ The figures represent the average annual cost for each household.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">mile</span><span class="phon">/maɪl/</span></div>
+      <div class="def">英里</div>
+      <div class="example">✏️ The research station is located several miles from the nearest town.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">regular</span><span class="phon">/ˈreɡjələr/</span></div>
+      <div class="def">定期的；有规律的；常规的</div>
+      <div class="example">✏️ Regular exercise has been linked to improved mental health.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">adopt</span><span class="phon">/əˈdɑːpt/</span></div>
+      <div class="def">采用；采纳；收养</div>
+      <div class="example">✏️ Many universities have adopted new methods of online instruction.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">voice</span><span class="phon">/vɔɪs/</span></div>
+      <div class="def">声音；表达意见</div>
+      <div class="example">✏️ The report gives a voice to groups that are often overlooked.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">movie</span><span class="phon">/ˈmuːvi/</span></div>
+      <div class="def">电影</div>
+      <div class="example">✏️ The documentary uses personal stories to explain a complex social issue.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">characteristic</span><span class="phon">/ˌkærəktəˈrɪstɪk/</span></div>
+      <div class="def">特征；典型的</div>
+      <div class="example">✏️ Adaptability is a characteristic shared by many successful species.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">join</span><span class="phon">/dʒɔɪn/</span></div>
+      <div class="def">参加；加入；连接</div>
+      <div class="example">✏️ More volunteers joined the campaign after seeing its early results.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">operate</span><span class="phon">/ˈɑːpəreɪt/</span></div>
+      <div class="def">运转；操作；动手术</div>
+      <div class="example">✏️ The laboratory operates around the clock to monitor air quality.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">pollution</span><span class="phon">/pəˈluːʃən/</span></div>
+      <div class="def">污染</div>
+      <div class="example">✏️ Strict regulations have helped reduce pollution in urban rivers.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"></div>
 </div>
 </div>
 <div class="footer">由 Hermes AI 生成 · 每天 08:00 更新 · 加油 💪</div>
