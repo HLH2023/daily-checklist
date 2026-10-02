@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>今日学习清单 · 2026-10-01</title>
+<title>今日学习清单 · 2026-10-02</title>
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Noto Sans SC", sans-serif; background: #f5f6fa; color: #1f2329; max-width: 640px; margin: 0 auto; padding: 16px 14px 40px; }
@@ -50,136 +50,144 @@
 
 <div class="hero">
   <h1>📋 今日学习清单</h1>
-  <div class="date">2026年10月1日</div>
+  <div class="date">2026年10月02日</div>
 </div>
 
 <div class="group"><div class="group-title">🔥 今日重点 <span class="badge">2 项</span></div>
 <div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">🧩 LeetCode 每日一题：Valid Parentheses</span><span class="tag easy">Easy</span></div>
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">🧩 LeetCode 每日一题：Generate Parentheses</span><span class="tag mid">Medium</span></div>
   <div class="card-body">
-    <div class="q">给定只包含字符 '('、')'、'{'、'}'、'['、']' 的字符串 s，判断括号是否有效。有效字符串须满足：左括号必须由相同类型的右括号闭合，闭合顺序正确，且每个右括号都有对应左括号。</div>
-    <div class="exp"><b>💡 解题思路：</b>使用栈保存尚未匹配的左括号。遇到左括号就入栈；遇到右括号时，若栈为空或栈顶不是对应的左括号，立即判无效，否则弹栈。扫描结束后栈必须为空。</div>
-    <div class="exp"><b>🔧 题解：</b>用字典建立右括号到左括号的映射，逐字符检查。时间复杂度 O(n)，最坏额外空间复杂度 O(n)。</div>
+    <div class="q">给定 n 对括号，编写函数生成所有由 n 对括号组成且有效的括号组合。有效括号串要求任意前缀中左括号数量不少于右括号数量，且最终左右括号数量相等。</div>
+    <div class="exp"><b>💡 解题思路：</b>回溯构造字符串，分别记录已使用的左、右括号数。左括号数小于 n 时可以追加“(”；只有右括号数小于左括号数时才可以追加“)”，从而保证任意前缀有效。长度达到 2n 时收集结果。</div>
+    <div class="exp"><b>🔧 题解：</b>采用深度优先搜索枚举合法前缀，剪枝掉右括号多于左括号的分支。除输出结果外，递归栈深度为 O(n)；结果数量为第 n 个 Catalan 数。</div>
     <pre class="code">class Solution:
-    def isValid(self, s: str) -&gt; bool:
-        pairs = {')': '(', ']': '[', '}': '{'}
-        stack = []
-        for ch in s:
-            if ch in pairs:
-                if not stack or stack[-1] != pairs[ch]:
-                    return False
-                stack.pop()
-            else:
-                stack.append(ch)
-        return not stack</pre>
-    <a class="link" href="https://leetcode.com/problems/valid-parentheses/" target="_blank">🚀 去 LeetCode 做题 →</a>
+    def generateParenthesis(self, n: int) -&gt; list[str]:
+        ans = []
+        path = []
+
+        def dfs(left: int, right: int) -&gt; None:
+            if len(path) == 2 * n:
+                ans.append("".join(path))
+                return
+            if left &lt; n:
+                path.append("(")
+                dfs(left + 1, right)
+                path.pop()
+            if right &lt; left:
+                path.append(")")
+                dfs(left, right + 1)
+                path.pop()
+
+        dfs(0, 0)
+        return ans</pre>
+    <a class="link" href="https://leetcode.com/problems/generate-parentheses/" target="_blank">🚀 去 LeetCode 做题 →</a>
   </div>
 </div>
 </div>
 <div class="group"><div class="group-title">📐 数学知识点 <span class="badge">4 项</span></div>
 <div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">📐 高数·第6天·第09章 多元函数微分法及其应用：条件极值与Lagrange乘子法</span><span class="tag book">高数·第6天·第09章 多元函数微分法及其应用</span></div>
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">📐 高数·第6天·第09章：复合函数求偏导数</span><span class="tag book">高数·第6天·第09章</span></div>
   <div class="card-body">
-    <div class="q">F(x,y)=f(x,y)+λφ(x,y)，满足 φ(x,y)=0；联立 F_x=0、F_y=0 和约束方程求候选点。</div>
-    <div class="exp"><b>📌 要点：</b>在约束 φ(x,y)=0 下求 f(x,y) 的条件极值，可构造 Lagrange 函数并联立两个驻点方程与约束方程。解得候选点后，还需结合题目定义域、边界或实际题意判断。</div>
-    <div class="exp">• 约束方程必须与两个偏导方程一起联立。</div><div class="exp">• 乘子法给出候选点，不能省略对题目范围的核验。</div><div class="exp">• 乘子项的正负约定可一致采用；本题按讲义中的加号形式。</div>
-    <div class="exp" style="margin-top:6px">条件极值 φ(x,y)=0 的 Lagrange 函数为 F(x,y)=f(x,y)+λ<b style="color:#d48806">＿＿＿</b><b style="color:#d48806">＿＿＿</b>；求解时联立 f_x+λφ_x=0、f_y+λφ_y=0 与<b style="color:#d48806">＿＿＿</b><b style="color:#d48806">＿＿＿</b>。</div><button class="ans-btn" style="font-size:12px;padding:4px 12px">✅ 答案</button><div class="ans-box"><div class="ans">φ(x,y)；φ(x,y)=0</div></div>
-    <div class="exp"><b>🧭 套路：</b>先写出 F=f+λφ，再分别对 x、y 求偏导，最后补上 φ(x,y)=0。</div>
+    <div class="q">z_x=f_u u_x+f_v v_x；z_y=f_u u_y+f_v v_y。</div>
+    <div class="exp"><b>📌 要点：</b>当 z=f(u,v)，且 u、v 都依赖 x、y 时，对 x 求偏导要把所有从 x 到 z 的依赖路径相加；对 y 同理。每个偏导因子在相同对应点计算，按多元链式法则逐层展开。</div>
+    <div class="exp">• 分别沿 u、v 两条中间变量路径求和。</div><div class="exp">• 求 z_x 时对 y 视为无关自变量，求 z_y 时对 x 视为无关自变量。</div><div class="exp">• 不要遗漏任一中间变量对当前自变量的偏导。</div>
+    <div class="exp" style="margin-top:6px">若 z=f(u,v)，u=φ(x,y)，v=ψ(x,y)，则 z_x=<b style="color:#d48806">＿＿＿</b><b style="color:#d48806">＿＿＿</b>，z_y=<b style="color:#d48806">＿＿＿</b><b style="color:#d48806">＿＿＿</b>。</div><button class="ans-btn" style="font-size:12px;padding:4px 12px">✅ 答案</button><div class="ans-box"><div class="ans">f_u u_x+f_v v_x；f_u u_y+f_v v_y</div></div>
+    <div class="exp"><b>🧭 套路：</b>画出 x、y→u、v→z 的依赖关系，再对每条路径连乘并求和。</div>
     
   </div>
  </div>
 <div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">📐 高数·第6天·第09章 多元函数微分法及其应用：闭区域上连续函数的最值</span><span class="tag book">高数·第6天·第09章 多元函数微分法及其应用</span></div>
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">📐 高数·第7天·第09章：隐函数求偏导数</span><span class="tag book">高数·第7天·第09章</span></div>
   <div class="card-body">
-    <div class="q">有界闭区域上连续函数必取得最大值和最小值；候选位置包括内部驻点与边界。</div>
-    <div class="exp"><b>📌 要点：</b>由闭区域上的最值定理，有界闭区域上的连续二元函数一定能取得最大值和最小值。实际求值时，应检查区域内部驻点、边界上的极值以及边界端点，并比较函数值。</div>
-    <div class="exp">• 定理条件是区域有界闭且函数连续。</div><div class="exp">• 内部驻点不是全部候选点，边界也必须考察。</div><div class="exp">• 有边界分段或角点时，端点/角点不能遗漏。</div>
-    <div class="exp" style="margin-top:6px">有界闭区域上连续的二元函数一定存在最大值和最小值，且最大值和最小值在<b style="color:#d48806">＿＿＿</b><b style="color:#d48806">＿＿＿</b>、<b style="color:#d48806">＿＿＿</b><b style="color:#d48806">＿＿＿</b>处取得。</div><button class="ans-btn" style="font-size:12px;padding:4px 12px">✅ 答案</button><div class="ans-box"><div class="ans">区域内部驻点；边界</div></div>
-    <div class="exp"><b>🧭 套路：</b>把区域拆为内部与边界分别求候选值，最后统一比较最大、最小值。</div>
+    <div class="q">由 F(x,y,z)=0 确定 z=f(x,y)，且 F_z≠0：z_x=−F_x/F_z，z_y=−F_y/F_z。</div>
+    <div class="exp"><b>📌 要点：</b>将 z 视作 x、y 的隐函数，对 F(x,y,z(x,y))=0 分别关于 x、y 求偏导并使用链式法则；在 F_z≠0 时移项即可得到 z_x、z_y。各偏导数在同一点计算。</div>
+    <div class="exp">• 对 x 求偏导时：F_x+F_z z_x=0。</div><div class="exp">• 对 y 求偏导时：F_y+F_z z_y=0。</div><div class="exp">• 分母是 F_z，且题设 F_z≠0 保证可解出相应偏导。</div>
+    <div class="exp" style="margin-top:6px">由 F(x,y,z)=0 确定 z=f(x,y)，且 F_z≠0，则 z_x=<b style="color:#d48806">＿＿＿</b><b style="color:#d48806">＿＿＿</b>，z_y=<b style="color:#d48806">＿＿＿</b><b style="color:#d48806">＿＿＿</b>。</div><button class="ans-btn" style="font-size:12px;padding:4px 12px">✅ 答案</button><div class="ans-box"><div class="ans">−F_x/F_z；−F_y/F_z</div></div>
+    <div class="exp"><b>🧭 套路：</b>对隐式方程逐变量求偏导，把 z 的变化项写成 F_z z_x 或 F_z z_y，再移项。</div>
     
   </div>
  </div>
 <div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">📐 线代·第04章 向量组的线性相关性：求极大无关组步骤</span><span class="tag book">线代·第04章 向量组的线性相关性</span></div>
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">📐 线代·第03章：方程组解判定定理</span><span class="tag book">线代·第03章</span></div>
   <div class="card-body">
-    <div class="q">向量按列组成矩阵，初等行变换化为阶梯形；主元所在列对应的原向量构成极大无关组。</div>
-    <div class="exp"><b>📌 要点：</b>将向量组按列组成矩阵并作初等行变换化为阶梯形。非零行数等于矩阵秩；阶梯形中主元所在列的列号对应原矩阵中的向量，这些原向量组成一个极大线性无关组。</div>
-    <div class="exp">• 初等行变换保持列向量组的秩与列间线性关系判定。</div><div class="exp">• 选取的是主元列号对应的原向量，不是变换后矩阵的列向量。</div><div class="exp">• 极大无关组所含向量个数等于向量组的秩。</div>
-    <div class="exp" style="margin-top:6px">默写核心结论：<b style="color:#d48806">＿＿＿</b></div><button class="ans-btn" style="font-size:12px;padding:4px 12px">✅ 答案</button><div class="ans-box"><div class="ans">A=(α1..αn)列排→初等行变换→阶梯形</div></div>
-    <div class="exp"><b>🧭 套路：</b>按列排矩阵→行变换化阶梯形→标出主元列→回到原向量组取相同列号。</div>
+    <div class="q">非齐次方程组有解当且仅当 r(A)=r(Ā)；齐次方程组有非零解当且仅当 r(A)&lt;n。</div>
+    <div class="exp"><b>📌 要点：</b>判断非齐次线性方程组是否有解，要比较系数矩阵 A 与增广矩阵 Ā 的秩；齐次方程组有非零解的条件是 r(A)&lt;n，若 r(A)=n 则只有零解。向量组 β 能由 α 组线性表示，当且仅当把 β 加入后秩不增加，即 r(A)=r(Ā)。</div>
+    <div class="exp">• r(A)≠r(Ā)：非齐次方程组无解。</div><div class="exp">• r(A)=r(Ā)&lt;n：非齐次方程组有无穷多解。</div><div class="exp">• 齐次方程组的自由变量个数为 n−r(A)。</div>
+    <div class="exp" style="margin-top:6px">默写核心结论：<b style="color:#d48806">＿＿＿</b></div><button class="ans-btn" style="font-size:12px;padding:4px 12px">✅ 答案</button><div class="ans-box"><div class="ans">β可由α组表示⟺r(A)=r(Ā)</div></div>
+    <div class="exp"><b>🧭 套路：</b>先比较系数矩阵与增广矩阵的秩，再与未知数个数 n 比较。</div>
     
   </div>
  </div>
 <div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">📐 线代·第03章 矩阵的初等变换与线性方程组：非齐次方程组解判别</span><span class="tag book">线代·第03章 矩阵的初等变换与线性方程组</span></div>
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">📐 线代·第03章：基础解系</span><span class="tag book">线代·第03章</span></div>
   <div class="card-body">
-    <div class="q">r(A)≠r(Ā)：无解；r(A)=r(Ā)=n：唯一解；r(A)=r(Ā)&lt;n：无穷多解。</div>
-    <div class="exp"><b>📌 要点：</b>比较系数矩阵 A 与增广矩阵 Ā 的秩：秩不等则方程组无解；两秩相等且等于未知数个数 n 时有唯一解；两秩相等但小于 n 时有自由未知数，故有无穷多解。后一情形自由未知数个数为 n−r(A)。</div>
-    <div class="exp">• 先比较 r(A) 与 r(Ā)，再判断是否等于未知数个数 n。</div><div class="exp">• r(A)≠r(Ā) 是无解的判据。</div><div class="exp">• 有解且 r(A)&lt;n 时，通解由一个特解加齐次方程组通解构成。</div>
-    <div class="exp" style="margin-top:6px">默写核心结论：<b style="color:#d48806">＿＿＿</b></div><button class="ans-btn" style="font-size:12px;padding:4px 12px">✅ 答案</button><div class="ans-box"><div class="ans">r(A)≠r(Ā)无解；r(A)=r(Ā)=n唯一解；r(A)=r(Ā)&lt;n无穷多解</div></div>
-    <div class="exp"><b>🧭 套路：</b>记忆顺序：秩不等无解；秩相等看是否满列秩，满秩唯一，未满秩无穷多解。</div>
+    <div class="q">基础解系含 n−r(A) 个线性无关解向量。</div>
+    <div class="exp"><b>📌 要点：</b>齐次方程组 Ax=0 的基础解系是一组线性无关的解，且方程组任一解都可由这组解线性表示。基础解系中向量的个数等于解空间维数 n−r(A)，其中 n 为未知数个数。</div>
+    <div class="exp">• 基础解系中的每个向量都必须是原齐次方程组的解。</div><div class="exp">• 向量之间线性无关，且能表示全部解。</div><div class="exp">• 基础解系向量个数为 n−r(A)。</div>
+    <div class="exp" style="margin-top:6px">默写核心结论：<b style="color:#d48806">＿＿＿</b></div><button class="ans-btn" style="font-size:12px;padding:4px 12px">✅ 答案</button><div class="ans-box"><div class="ans">基础解系含n-r(A)个线性无关解向量</div></div>
+    <div class="exp"><b>🧭 套路：</b>先求 r(A)，再识别自由变量数 n−r(A)；最终解向量应线性无关并张成全部解。</div>
     
   </div>
  </div>
 </div>
 <div class="group"><div class="group-title">💻 408 选择题 <span class="badge">5 题</span></div>
 <div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">有向带权图的边为 S→A(4)、S→B(1)、B→A(2)、A→C(1)、B→C(5)、C→D(3)、A→D(7)，边权均非负。以 S 为源点运行 Dijkstra 算法，D 的最短距离是多少？</span><span class="tag book">数据结构</span><span class="tag mid">中等</span></div>
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">有向图的边及权值为 A→B(4)、A→C(11)、B→C(2)、B→D(9)、C→D(3)、D→B(1)，其余边不存在。用 Floyd 算法求 A 到 D 的最短距离是多少？</span><span class="tag book">数据结构</span><span class="tag mid">中等</span></div>
   <div class="card-body">
-    <div class="q"><div class="opt">A. 6</div><div class="opt">B. 7</div><div class="opt">C. 8</div><div class="opt">D. 9</div></div>
+    <div class="q"><div class="opt">A. 7</div><div class="opt">B. 9</div><div class="opt">C. 11</div><div class="opt">D. 13</div></div>
     
     <button class="ans-btn">✅ 查看答案与解析</button>
     <div class="ans-box">
       <div class="ans">答案：B</div>
-      <div class="exp"><b>📖 解析：</b>先得 dist(B)=1；经 B→A 得 dist(A)=1+2=3（优于直接边权4）；再得 dist(C)=3+1=4；最后 dist(D)=4+3=7。其他候选如 S→A→D=11、S→B→C→D=9，故最短距离为7，路径为 S→B→A→C→D。Dijkstra 要求边权非负。</div>
+      <div class="exp"><b>📖 解析：</b>经 B、C 中转的路径 A→B→C→D 长度为 4+2+3=9；A→C→D 为 11+3=14，A→B→D 为 4+9=13。Floyd 逐个允许中间顶点更新距离，最终 d(A,D)=9。</div>
     </div>
   </div>
  </div>
 <div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">经典 5 段流水线（IF、ID、EX、MEM、WB）每段 1 周期，无转发；寄存器在 WB 周期前半段写入、ID 后半段读出。执行 I1: ADD R1,R2,R3；I2: SUB R4,R1,R5；I3: AND R6,R7,R8。除 I2 对 I1 的 RAW 冒险外无其他停顿。完成全部 3 条指令共需多少周期？</span><span class="tag book">计算机组成原理</span><span class="tag hard">困难</span></div>
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">关于流水线中的控制冒险及其处理，下列说法正确的是？</span><span class="tag book">计算机组成原理</span><span class="tag easy">简单</span></div>
   <div class="card-body">
-    <div class="q"><div class="opt">A. 7 周期</div><div class="opt">B. 8 周期</div><div class="opt">C. 9 周期</div><div class="opt">D. 10 周期</div></div>
+    <div class="q"><div class="opt">A. 分支预测错误时，可清空错误路径上已进入流水线的指令，并从正确目标地址取指</div><div class="opt">B. 控制冒险只由数据相关引起，与分支指令无关</div><div class="opt">C. 延迟槽是通过改变程序语义来避免分支指令</div><div class="opt">D. 采用分支预测后，预测错误也不可能产生性能损失</div></div>
+    
+    <button class="ans-btn">✅ 查看答案与解析</button>
+    <div class="ans-box">
+      <div class="ans">答案：A</div>
+      <div class="exp"><b>📖 解析：</b>条件分支的结果或目标地址尚未确定时，后续取指可能走错路径。预测错误后须冲刷流水线中的错误路径指令并从正确地址继续；延迟槽安排的是分支后的指令位置，不改变程序语义，预测错误仍有冲刷代价。</div>
+    </div>
+  </div>
+ </div>
+<div class="card open">
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">文件采用链接分配，目录项记录首个数据块，块内指针指向下一块。下列关于这种分配方式的说法正确的是？</span><span class="tag book">操作系统</span><span class="tag easy">简单</span></div>
+  <div class="card-body">
+    <div class="q"><div class="opt">A. 文件必须占用连续的物理块，否则无法读取</div><div class="opt">B. 支持按块号直接随机定位任意文件块，且不需要指针</div><div class="opt">C. 可消除外部碎片，但随机访问第 k 块通常需要沿链遍历前面的块</div><div class="opt">D. 文件大小受单个连续空闲区长度限制</div></div>
+    <img src="images/2026-10-02_p2.png" style="width:100%;border-radius:10px;margin-top:10px;border:1px solid #e5e7eb">
+    <button class="ans-btn">✅ 查看答案与解析</button>
+    <div class="ans-box">
+      <div class="ans">答案：C</div>
+      <div class="exp"><b>📖 解析：</b>链接分配把文件块串成链，块可分散存放，因此没有外部碎片，也不要求连续空间；但目录通常只给出首块，定位中间块需顺链访问，随机访问效率较低。</div>
+    </div>
+  </div>
+ </div>
+<div class="card open">
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">关于电子邮件协议 SMTP 与 POP3，下列说法正确的是？</span><span class="tag book">计算机网络</span><span class="tag easy">简单</span></div>
+  <div class="card-body">
+    <div class="q"><div class="opt">A. SMTP 常用于发送/转发邮件（服务器间 SMTP 常用 TCP 25 端口），POP3 用于从邮件服务器接收邮件（常用 TCP 110 端口）</div><div class="opt">B. POP3 用于服务器间转发邮件，SMTP 用于从收件箱下载邮件</div><div class="opt">C. SMTP 与 POP3 都是网络层协议，分别使用 IP 协议号 25 和 110</div><div class="opt">D. POP3 只能发送邮件，SMTP 只能读取附件</div></div>
+    
+    <button class="ans-btn">✅ 查看答案与解析</button>
+    <div class="ans-box">
+      <div class="ans">答案：A</div>
+      <div class="exp"><b>📖 解析：</b>SMTP 用于邮件提交与传送，服务器间 SMTP 的传统端口为 TCP 25；POP3 是邮件访问协议，传统明文端口为 TCP 110。端口号属于传输层端口，不是 IP 协议号。</div>
+    </div>
+  </div>
+ </div>
+<div class="card open">
+  <div class="card-head"><span class="arrow">▶</span><span class="card-title">某文件系统的盘块大小为 1 KiB，块指针占 4 B。一个文件控制块有 10 个直接地址项和 1 个一级间接地址项；间接索引块全部用于存放数据块地址，索引块自身不计入文件数据容量。该文件最多可存放多少字节的数据？</span><span class="tag book">操作系统</span><span class="tag hard">困难</span></div>
+  <div class="card-body">
+    <div class="q"><div class="opt">A. 262,144 B（256 KiB）</div><div class="opt">B. 266,240 B（260 KiB）</div><div class="opt">C. 272,384 B（266 KiB）</div><div class="opt">D. 1,048,576 B（1 MiB）</div></div>
     
     <button class="ans-btn">✅ 查看答案与解析</button>
     <div class="ans-box">
       <div class="ans">答案：C</div>
-      <div class="exp"><b>📖 解析：</b>无停顿的 5 段流水线执行 n=3 条指令需 k+n−1=5+3−1=7 周期。I2 在 ID 等待 I1 将 R1 写回：I1 于第5周期 WB，因该周期前半写、后半可读，I2 可在第5周期完成 ID 并于第6周期进入 EX；相较原本第4周期进入 EX，插入 2 个停顿周期。总周期数 7+2=9。I3 的取指/译码随停顿冻结，但额外延迟仍是这2周期。</div>
-    </div>
-  </div>
- </div>
-<div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">某文件采用连续分配，起始物理块号为 120，块大小为 1 KiB。文件内偏移量为 3.5 KiB（块内偏移从 0 开始），该字节所在的物理块号及块内偏移分别是多少？</span><span class="tag book">操作系统</span><span class="tag easy">简单</span></div>
-  <div class="card-body">
-    <div class="q"><div class="opt">A. 块号 123，偏移 512 B</div><div class="opt">B. 块号 124，偏移 512 B</div><div class="opt">C. 块号 123，偏移 3.5 KiB</div><div class="opt">D. 块号 120，偏移 512 B</div></div>
-    
-    <button class="ans-btn">✅ 查看答案与解析</button>
-    <div class="ans-box">
-      <div class="ans">答案：A</div>
-      <div class="exp"><b>📖 解析：</b>3.5 KiB ÷ 1 KiB 得块内序号为3、余数为0.5 KiB=512 B。连续分配下物理块号=起始块号+块内序号=120+3=123，因此答案为块123、块内偏移512 B。</div>
-    </div>
-  </div>
- </div>
-<div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">关于 Internet 电子邮件系统中 SMTP、POP3/IMAP 与 MIME 的作用，下列说法正确的是？</span><span class="tag book">计算机网络</span><span class="tag easy">简单</span></div>
-  <div class="card-body">
-    <div class="q"><div class="opt">A. SMTP 主要用于发送邮件；POP3/IMAP 用于接收或访问邮件；MIME 扩展邮件内容格式</div><div class="opt">B. POP3 负责在邮件服务器之间转发邮件，SMTP 只负责下载附件</div><div class="opt">C. MIME 是可靠传输协议，可以替代 TCP</div><div class="opt">D. IMAP 只能把邮件下载后从服务器删除，不能在服务器端管理文件夹</div></div>
-    
-    <button class="ans-btn">✅ 查看答案与解析</button>
-    <div class="ans-box">
-      <div class="ans">答案：A</div>
-      <div class="exp"><b>📖 解析：</b>SMTP 用于邮件提交和邮件服务器间传送；POP3 和 IMAP 用于用户代理访问/接收邮件，IMAP通常支持服务器端文件夹和状态管理；MIME 通过类型标记与编码等机制支持非 ASCII 文本、附件和多媒体内容，并非传输层协议。</div>
-    </div>
-  </div>
- </div>
-<div class="card open">
-  <div class="card-head"><span class="arrow">▶</span><span class="card-title">关于流水线中的数据冒险及其处理，下列说法正确的是？</span><span class="tag book">计算机组成原理</span><span class="tag easy">简单</span></div>
-  <div class="card-body">
-    <div class="q"><div class="opt">A. 旁路/转发可缩短 RAW 相关等待；即使有转发，经典流水线中的紧邻 load-use 相关通常仍需停顿</div><div class="opt">B. 旁路转发只能解决控制冒险，不能处理数据相关</div><div class="opt">C. 插入气泡会改变程序指令的语义执行顺序</div><div class="opt">D. WAR 和 WAW 属于所有简单顺序 5 段流水线必然出现的结构冒险</div></div>
-    
-    <button class="ans-btn">✅ 查看答案与解析</button>
-    <div class="ans-box">
-      <div class="ans">答案：A</div>
-      <div class="exp"><b>📖 解析：</b>数据旁路把后续指令所需结果从流水段间直接送到执行部件，减少 RAW 冒险造成的等待；但 load 的数据通常到 MEM 阶段末才产生，紧邻的下一条指令可能来不及在 EX 使用，因此即使有旁路也常需至少一个气泡。气泡保持程序语义，只延迟执行。</div>
+      <div class="exp"><b>📖 解析：</b>一个索引块可存放 1024 B÷4 B=256 个块地址，加上 10 个直接地址，共可寻址 266 个数据块。最大数据容量为 266×1024 B=272,384 B，即 266 KiB；索引块本身不算文件数据块。</div>
     </div>
   </div>
  </div>
@@ -187,47 +195,47 @@
 <div class="group"><div class="group-title">🇬🇧 考研单词 <span class="badge">20 词</span></div>
 <div class="card open">
   <div class="card-head"><span class="arrow">▶</span><span class="card-title">🇬🇧 考研单词 ×20</span><span class="tag book">高频词</span></div>
-  <div class="card-body"><div class="word-row"><span class="word">resident</span><span class="phon">/ˈrezɪdənt/</span></div>
-      <div class="def">居民、居住的</div>
-      <div class="example">✏️ The study followed each resident for five years to examine changes in health and income.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">equal</span><span class="phon">/ˈiːkwəl/</span></div>
-      <div class="def">平等的；相等的</div>
-      <div class="example">✏️ All applicants should have equal access to the information required for the examination.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">senior</span><span class="phon">/ˈsiːniər/</span></div>
-      <div class="def">年长的；高级的；资格较老的</div>
-      <div class="example">✏️ Senior researchers reviewed the evidence before the committee reached a conclusion.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">dinner</span><span class="phon">/ˈdɪnər/</span></div>
-      <div class="def">正餐；晚餐</div>
-      <div class="example">✏️ The survey found that families who eat dinner together often exchange ideas about education.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">innovation</span><span class="phon">/ˌɪnəˈveɪʃən/</span></div>
-      <div class="def">革新；创新；新方法</div>
-      <div class="example">✏️ Innovation in public transport can reduce both traffic congestion and urban pollution.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">pick</span><span class="phon">/pɪk/</span></div>
-      <div class="def">挑选；采摘</div>
-      <div class="example">✏️ Researchers must pick a method that is appropriate to the question under investigation.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">overall</span><span class="phon">/ˌoʊvərˈɔːl/</span></div>
-      <div class="def">全面的；总体上</div>
-      <div class="example">✏️ Overall, the results suggest that early education benefits children from different backgrounds.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">succeed</span><span class="phon">/səkˈsiːd/</span></div>
-      <div class="def">成功；接替</div>
-      <div class="example">✏️ A policy is more likely to succeed when local communities take part in its design.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">strike</span><span class="phon">/straɪk/</span></div>
-      <div class="def">击打；罢工；突然想到</div>
-      <div class="example">✏️ It may strike readers as surprising that small changes can produce such large effects.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">examine</span><span class="phon">/ɪɡˈzæmɪn/</span></div>
-      <div class="def">检查；考察；审视</div>
-      <div class="example">✏️ The report examines how changes in housing costs affect young adults.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">instruction</span><span class="phon">/ɪnˈstrʌkʃən/</span></div>
-      <div class="def">指令；说明；教导</div>
-      <div class="example">✏️ Clear instruction enables participants to complete the task consistently.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">cancer</span><span class="phon">/ˈkænsər/</span></div>
-      <div class="def">癌症</div>
-      <div class="example">✏️ Researchers are studying whether air pollution increases the risk of certain types of cancer.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">judge</span><span class="phon">/dʒʌdʒ/</span></div>
-      <div class="def">判断；法官；评判</div>
-      <div class="example">✏️ It is difficult to judge the success of a program without reliable long-term data.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">divide</span><span class="phon">/dɪˈvaɪd/</span></div>
-      <div class="def">划分；分开；除</div>
-      <div class="example">✏️ The researchers divide the participants into groups according to age and education.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">rely</span><span class="phon">/rɪˈlaɪ/</span></div>
-      <div class="def">依靠；信赖</div>
-      <div class="example">✏️ Many rural communities rely on local clinics for basic medical services.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">former</span><span class="phon">/ˈfɔːrmər/</span></div>
-      <div class="def">以前的；前者</div>
-      <div class="example">✏️ The former approach is less expensive, whereas the latter produces more precise results.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">instance</span><span class="phon">/ˈɪnstəns/</span></div>
-      <div class="def">例子；实例</div>
-      <div class="example">✏️ For instance, public libraries provide access to resources that some families cannot afford.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">release</span><span class="phon">/rɪˈliːs/</span></div>
-      <div class="def">释放；发布；解除</div>
-      <div class="example">✏️ The agency will release the full report after an independent review is completed.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">front</span><span class="phon">/frʌnt/</span></div>
-      <div class="def">前面的；前部；前线</div>
-      <div class="example">✏️ At the front of the book, the author explains the purpose of the research.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">harm</span><span class="phon">/hɑːrm/</span></div>
-      <div class="def">伤害；损害</div>
-      <div class="example">✏️ Excessive working hours may harm employees' health and reduce their productivity.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"></div>
+  <div class="card-body"><div class="word-row"><span class="word">partner</span><span class="phon">/ˈpɑːrtnər/</span></div>
+      <div class="def">伙伴</div>
+      <div class="example">✏️ The research team worked with a local partner to collect reliable data.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">floor</span><span class="phon">/flɔːr/</span></div>
+      <div class="def">地面</div>
+      <div class="example">✏️ The new laboratory occupies the second floor of the university building.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">imply</span><span class="phon">/ɪmˈplaɪ/</span></div>
+      <div class="def">暗示</div>
+      <div class="example">✏️ The findings imply that access to education can affect social mobility.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">remove</span><span class="phon">/rɪˈmuːv/</span></div>
+      <div class="def">移除</div>
+      <div class="example">✏️ The revised policy aims to remove barriers that prevent young people from finding work.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">tradition</span><span class="phon">/trəˈdɪʃən/</span></div>
+      <div class="def">传统</div>
+      <div class="example">✏️ The tradition of public debate has helped shape the country’s political culture.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">radio</span><span class="phon">/ˈreɪdioʊ/</span></div>
+      <div class="def">收音机</div>
+      <div class="example">✏️ For many rural residents, radio remains an important source of public information.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">vocabulary</span><span class="phon">/voʊˈkæbjəleri/</span></div>
+      <div class="def">词汇</div>
+      <div class="example">✏️ A broad vocabulary enables readers to understand arguments in academic texts.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">hunt</span><span class="phon">/hʌnt/</span></div>
+      <div class="def">打猎</div>
+      <div class="example">✏️ The investigators had to hunt for evidence across several historical records.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">clock</span><span class="phon">/klɑːk/</span></div>
+      <div class="def">时钟、计时</div>
+      <div class="example">✏️ The researchers used a clock to keep each experiment within the same time limit.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">assume</span><span class="phon">/əˈsuːm/</span></div>
+      <div class="def">假设、揣测</div>
+      <div class="example">✏️ We should not assume that economic growth automatically reduces inequality.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">invite</span><span class="phon">/ɪnˈvaɪt/</span></div>
+      <div class="def">邀请</div>
+      <div class="example">✏️ The university plans to invite participants from different social backgrounds.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">collect</span><span class="phon">/kəˈlekt/</span></div>
+      <div class="def">收集</div>
+      <div class="example">✏️ The survey will collect information about employment and household income.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">campaign</span><span class="phon">/kæmˈpeɪn/</span></div>
+      <div class="def">运动、战役</div>
+      <div class="example">✏️ A national campaign encouraged citizens to use public transport.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">native</span><span class="phon">/ˈneɪtɪv/</span></div>
+      <div class="def">本地的、天生的</div>
+      <div class="example">✏️ The program supports native speakers and language learners in local schools.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">interesting</span><span class="phon">/ˈɪntrəstɪŋ/</span></div>
+      <div class="def">有趣的</div>
+      <div class="example">✏️ It is interesting that the same policy produced different results across regions.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">shortage</span><span class="phon">/ˈʃɔːrtɪdʒ/</span></div>
+      <div class="def">不足</div>
+      <div class="example">✏️ A shortage of affordable housing has become a serious concern in many cities.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">reform</span><span class="phon">/rɪˈfɔːrm/</span></div>
+      <div class="def">改革</div>
+      <div class="example">✏️ The proposed reform would make public services more accessible.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">corporate</span><span class="phon">/ˈkɔːrpərət/</span></div>
+      <div class="def">公司的、法人的</div>
+      <div class="example">✏️ Corporate investment can support research, although public oversight remains necessary.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">powerful</span><span class="phon">/ˈpaʊərfəl/</span></div>
+      <div class="def">强有力的</div>
+      <div class="example">✏️ Education is a powerful means of improving people’s long-term opportunities.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><div class="word-row"><span class="word">central</span><span class="phon">/ˈsentrəl/</span></div>
+      <div class="def">中心的</div>
+      <div class="example">✏️ Trust is central to the successful cooperation of scientific teams.</div><hr style="border:none;border-top:1px solid #eee;margin:8px 0"></div>
 </div>
 </div>
 <div class="footer">由 Hermes AI 生成 · 每天 08:00 更新 · 加油 💪</div>
